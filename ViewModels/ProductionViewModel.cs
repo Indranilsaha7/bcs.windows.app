@@ -271,7 +271,6 @@ namespace BarodaPOS.ViewModels
                     Note = Note,
                     UnitCost = UnitCost,
                     TotalCost = TotalProductionCost,
-                    ProducedBy = new Dictionary<string, object> { { "id", user?.Id ?? "" }, { "name", user?.Name ?? "" } },
                     RawMaterials = materialsUsed
                 };
                 batch.Set(prodRef, prodData);
