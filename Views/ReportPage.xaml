@@ -1,0 +1,14 @@
+<Page x:Class="BarodaPOS.Views.ReportPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ReportPage">
+    <Grid>
+        <TextBox Style="{DynamicResource SelectableText}" Text="Welcome to ReportPage"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="24"/>
+    </Grid>
+</Page>
+
+
+

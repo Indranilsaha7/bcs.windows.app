@@ -1,0 +1,351 @@
+<Page x:Class="BarodaPOS.Views.PurchasePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:viewmodels="clr-namespace:BarodaPOS.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="1200" d:DesignWidth="1400"
+      Title="PurchasePage"
+      VerticalAlignment="Stretch"
+      HorizontalAlignment="Stretch">
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
+            <StackPanel MaxWidth="1400" HorizontalAlignment="Stretch">
+                <!-- Page Header -->
+                <Grid Margin="0,0,0,28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28" Background="#1A3B82F6" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="Cart24" FontSize="28" Foreground="#3B82F6"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBox Style="{DynamicResource SelectableText}" Text="Add Purchase" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <TextBox Style="{DynamicResource SelectableText}" Text="Record incoming inventory from suppliers and adjust acquisition pricing." FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="24"/>
+                        <ColumnDefinition Width="4*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Left Column (Product Entry & Cart) -->
+                    <StackPanel Grid.Column="0">
+                        <!-- Add Product to Purchase Card -->
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="24" Margin="0,0,0,24" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Add Products to Purchase" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,20"/>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Product Search -->
+                                    <StackPanel Grid.Column="0" Margin="0,0,0,16">
+                                        <TextBox Style="{DynamicResource SelectableText}" Text="Product *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                        <Grid>
+                                            <ui:TextBox x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search product by name, barcode, or brand..." Icon="{ui:SymbolIcon Symbol=Search24}" Padding="10">
+                                                <ui:TextBox.InputBindings>
+                                                    <KeyBinding Key="Enter" Command="{Binding SelectFirstProductCommand}" />
+                                                </ui:TextBox.InputBindings>
+                                            </ui:TextBox>
+                                            <Popup IsOpen="{Binding IsProductSearchResultsVisible}" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False" MaxHeight="300" Width="{Binding ActualWidth, ElementName=SearchBox}">
+                                                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="4">
+                                                    <ScrollViewer MaxHeight="290" VerticalScrollBarVisibility="Auto">
+                                                        <ItemsControl ItemsSource="{Binding FilteredProducts}" Background="Transparent" BorderThickness="0">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Button Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="8,4" Cursor="Hand">
+                                                                        <StackPanel>
+                                                                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                                                                            <TextBlock Text="{Binding Barcode, StringFormat='Barcode: {0}'}" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                                                        </StackPanel>
+                                                                    </Button>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                    </ScrollViewer>
+                                                </Border>
+                                            </Popup>
+                                        </Grid>
+                                    </StackPanel>
+
+                                    <!-- Unit Select -->
+                                    <StackPanel Grid.Column="2">
+                                        <TextBox Style="{DynamicResource SelectableText}" Text="Unit *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                        <ComboBox ItemsSource="{Binding Units}" SelectedItem="{Binding SelectedUnit}" HorizontalAlignment="Stretch" Padding="12,10" FontSize="14"/>
+                                    </StackPanel>
+
+                                    <!-- Quantity -->
+                                    <StackPanel Grid.Column="4">
+                                        <TextBox Style="{DynamicResource SelectableText}" Text="Quantity *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                        <ui:TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="1" Padding="10">
+                                            <ui:TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding AddToCartCommand}" />
+                                            </ui:TextBox.InputBindings>
+                                        </ui:TextBox>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Dynamic Price Editor based on Unit -->
+                                <StackPanel Visibility="{Binding SelectedProduct, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=NotNull}">
+                                    <TextBox Style="{DynamicResource SelectableText}" Text="Adjust Pricing for this Purchase" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,16,0,8"/>
+                                    
+                                    <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Background="#05FFFFFF" Margin="0,0,0,16">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="16"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,12">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                                <!-- Box -->
+                                                <ui:TextBox Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding BuyPriceBox, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Kg -->
+                                                <ui:TextBox Visibility="{Binding IsKgPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding BuyPriceKg, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Liter -->
+                                                <ui:TextBox Visibility="{Binding IsLiterPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding BuyPriceLiter, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Packet -->
+                                                <ui:TextBox Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding BuyPricePacket, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Pcs -->
+                                                <ui:TextBox Visibility="{Binding IsStandardPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding BuyPrice, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,12">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                                <!-- Box -->
+                                                <ui:TextBox Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding WholesalePriceBoxNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Kg -->
+                                                <ui:TextBox Visibility="{Binding IsKgPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding WholesalePriceKgNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Liter -->
+                                                <ui:TextBox Visibility="{Binding IsLiterPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding WholesalePriceLiterNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Packet -->
+                                                <ui:TextBox Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding WholesalePricePacketNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Pcs -->
+                                                <ui:TextBox Visibility="{Binding IsStandardPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding WholesalePriceNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                                <!-- Box -->
+                                                <ui:TextBox Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceBoxNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Kg -->
+                                                <ui:TextBox Visibility="{Binding IsKgPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceKgNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Liter -->
+                                                <ui:TextBox Visibility="{Binding IsLiterPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceLiterNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Packet -->
+                                                <ui:TextBox Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPricePacketNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Pcs -->
+                                                <ui:TextBox Visibility="{Binding IsStandardPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceNormal, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                            </StackPanel>
+                                            
+                                            <StackPanel Grid.Row="1" Grid.Column="2">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Shop / Dealer Sale Rate" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                                <!-- Box -->
+                                                <ui:TextBox Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceBoxShop, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Kg -->
+                                                <ui:TextBox Visibility="{Binding IsKgPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceKgShop, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Liter -->
+                                                <ui:TextBox Visibility="{Binding IsLiterPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceLiterShop, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Packet -->
+                                                <ui:TextBox Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPricePacketShop, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                                <!-- Pcs -->
+                                                <ui:TextBox Visibility="{Binding IsStandardPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding SellPriceShop, UpdateSourceTrigger=PropertyChanged}" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="3*"/>
+                                        <ColumnDefinition Width="16"/>
+                                        <ColumnDefinition Width="1.5*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Lot Number -->
+                                    <StackPanel Grid.Column="0">
+                                        <TextBox Style="{DynamicResource SelectableText}" Text="Lot #" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                        <ui:TextBox Text="{Binding LotNumber, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="{Binding LotNumberPlaceholder}" Padding="10">
+                                            <ui:TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding AddToCartCommand}" />
+                                            </ui:TextBox.InputBindings>
+                                        </ui:TextBox>
+                                    </StackPanel>
+
+                                    <!-- Add Button -->
+                                    <ui:Button Grid.Column="2" Content="Add to Cart" Command="{Binding AddToCartCommand}" Appearance="Primary" Padding="0,10" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Cursor="Hand"/>
+                                </Grid>
+
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Cart Items -->
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="24" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <Grid Margin="0,0,0,16">
+                                    <TextBox Style="{DynamicResource SelectableText}" Text="Current Purchase Items" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" VerticalAlignment="Center" BorderThickness="0" Background="Transparent" IsReadOnly="True" Margin="0" Padding="0"/>
+                                    <ui:Button Content="Clear Items" Command="{Binding ClearCartCommand}" Appearance="Danger" HorizontalAlignment="Right" VerticalAlignment="Center" Cursor="Hand" Padding="12,6"/>
+                                </Grid>
+                                <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,20"/>
+
+                                <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#05000000" BorderThickness="1" BorderBrush="{DynamicResource ControlElevationBorderBrush}" RowHeight="48" MinHeight="200">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Product" Binding="{Binding Name}" Width="3*" IsReadOnly="True" />
+                                        <DataGridTextColumn Header="Unit" Binding="{Binding PurchaseUnit}" Width="*" IsReadOnly="True" />
+                                        <DataGridTextColumn Header="Cost" Binding="{Binding Cost}" Width="1.5*" IsReadOnly="True" />
+                                        <DataGridTemplateColumn Header="Qty" Width="140">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                        <ui:Button Command="{Binding DataContext.DecreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Icon="{ui:SymbolIcon Symbol=Subtract24}" Appearance="Secondary" Width="32" Height="32" Margin="0,0,4,0" Cursor="Hand"/>
+                                                        <ui:TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Width="50" Height="32" Padding="4" VerticalAlignment="Center" TextAlignment="Center"/>
+                                                        <ui:Button Command="{Binding DataContext.IncreaseQuantityCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Icon="{ui:SymbolIcon Symbol=Add24}" Appearance="Secondary" Width="32" Height="32" Margin="4,0,0,0" Cursor="Hand"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                        <DataGridTextColumn Header="Lot #" Binding="{Binding LotNumber}" Width="1.5*" IsReadOnly="True" />
+                                        <DataGridTextColumn Header="Total" Binding="{Binding Total}" Width="1.5*" IsReadOnly="True" />
+                                        <DataGridTemplateColumn Header="" Width="60">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ui:Button Command="{Binding DataContext.RemoveFromCartCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" CommandParameter="{Binding}" Icon="{ui:SymbolIcon Symbol=Delete24}" Appearance="Danger" Padding="4" Margin="0" Cursor="Hand" HorizontalAlignment="Center"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Right Column (Summary) -->
+                    <StackPanel Grid.Column="2">
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="24" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                            <StackPanel>
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Purchase Summary" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,16"/>
+                                <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,20"/>
+
+                                <!-- Supplier -->
+                                <StackPanel Margin="0,0,0,16">
+                                    <TextBox Style="{DynamicResource SelectableText}" Text="Supplier *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                    <ComboBox ItemsSource="{Binding Suppliers}" SelectedItem="{Binding SelectedSupplier}" DisplayMemberPath="ShopName" HorizontalAlignment="Stretch" Padding="12,10" FontSize="14"/>
+                                </StackPanel>
+
+                                <!-- Date -->
+                                <StackPanel Margin="0,0,0,24">
+                                    <TextBox Style="{DynamicResource SelectableText}" Text="Purchase Date *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                    <DatePicker SelectedDate="{Binding PurchaseDate}" Padding="8,8"/>
+                                </StackPanel>
+
+                                <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,20"/>
+
+                                <!-- Financials -->
+                                <Grid Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Subtotal" FontSize="16" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding Subtotal, StringFormat={}{0:N2}}" FontSize="16" FontWeight="SemiBold"/>
+                                </Grid>
+
+                                <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                                    <TextBlock Text="Discount" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <ui:TextBox Text="{Binding Discount, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                                    <TextBlock Text="Tax" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <ui:TextBox Text="{Binding Tax, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                                    <TextBlock Text="Shipping" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <ui:TextBox Text="{Binding Shipping, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,8" Orientation="Horizontal">
+                                    <TextBlock Text="Carry Charge" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <ui:TextBox Text="{Binding CarryCharge, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,16" Orientation="Horizontal">
+                                    <TextBlock Text="Maintenance" Width="100" VerticalAlignment="Center" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <ui:TextBox Text="{Binding Maintenance, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+
+                                <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,16"/>
+
+                                <Grid Margin="0,0,0,20">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Grand Total" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding TotalAmount, StringFormat={}{0:N2}}" FontSize="18" FontWeight="Bold" Foreground="#3B82F6"/>
+                                </Grid>
+
+                                <StackPanel Margin="0,0,0,16" Orientation="Horizontal">
+                                    <TextBlock Text="Paid Amount" Width="100" VerticalAlignment="Center" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                    <ui:TextBox Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}" Width="150" Padding="8,6" Background="#1A10B981">
+                                        <ui:TextBox.InputBindings>
+                                            <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}" />
+                                        </ui:TextBox.InputBindings>
+                                    </ui:TextBox>
+                                </StackPanel>
+
+                                <Grid Margin="0,0,0,24">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Due" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                    <TextBlock Grid.Column="1" Text="{Binding DueAmount, StringFormat={}{0:N2}}" FontSize="16" FontWeight="Bold" Foreground="#EF4444"/>
+                                </Grid>
+
+                                <ui:Button Content="Complete Purchase" Command="{Binding CompletePurchaseCommand}" Appearance="Primary" Padding="0,14" FontSize="16" FontWeight="Bold" HorizontalAlignment="Stretch" Cursor="Hand">
+                                    <ui:Button.Icon>
+                                        <ui:SymbolIcon Symbol="Checkmark24"/>
+                                    </ui:Button.Icon>
+                                </ui:Button>
+
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

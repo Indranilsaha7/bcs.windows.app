@@ -1,0 +1,454 @@
+<Page x:Class="BarodaPOS.Views.DashboardPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.WPF;assembly=LiveChartsCore.SkiaSharpView.WPF"
+      mc:Ignorable="d" 
+      d:DesignHeight="900" d:DesignWidth="1200"
+      Title="DashboardPage"
+      Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+        <ScrollViewer MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="24" Background="Transparent" HorizontalAlignment="Stretch">
+        <StackPanel HorizontalAlignment="Stretch">
+            <TextBox Style="{DynamicResource SelectableText}" Text="Dashboard" FontSize="28" FontWeight="Bold" Margin="0,0,0,16" Background="Transparent" BorderThickness="0" />
+                <UniformGrid Columns="4">
+                    
+                    <!-- 1. Total Sale (BDT) -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Sale" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalRevenue}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A10B981" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Money24" FontSize="24" Foreground="#10B981"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 2. Total Purchase -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Purchase" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalPurchase}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1AEF4444" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Receipt24" FontSize="24" Foreground="#EF4444"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 3. Total Sales Count -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Sales" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalSalesCount}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A06B6D4" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ShoppingBag24" FontSize="24" Foreground="#06B6D4"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 4. Net Profit -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Net Profit" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding NetProfit}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A3B82F6" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="DataLine24" FontSize="24" Foreground="#3B82F6"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    </UniformGrid>
+                <UniformGrid Columns="3">
+                    <!-- 5. Total Purchase Due -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Purchase Due" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalPurchaseDue}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A64748B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Hourglass24" FontSize="24" Foreground="#64748B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 6. Total Sale Due -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Sale Due" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalSaleDue}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1AF59E0B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Hourglass24" FontSize="24" Foreground="#F59E0B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 7. Total Orders -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Orders" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalOrders}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A3B82F6" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Cart24" FontSize="24" Foreground="#3B82F6"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    </UniformGrid>
+                <UniformGrid Columns="4">
+                    <!-- 8. Sale Return (TSR) -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Sale Return" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalSaleReturn}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1AF59E0B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ArrowUndo24" FontSize="24" Foreground="#F59E0B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 9. Purchase Return (TPR) -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Purchase Return" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalPurchaseReturn}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A64748B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ArrowReply24" FontSize="24" Foreground="#64748B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 10. Total Products -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Products" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalProducts}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A3B82F6" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Box24" FontSize="24" Foreground="#3B82F6"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 11. Items In Stock -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Items In Stock" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding InStockProducts}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A10B981" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="CheckmarkCircle24" FontSize="24" Foreground="#10B981"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    </UniformGrid>
+                <UniformGrid Columns="3">
+                    <!-- 12. Out of Stock -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Out of Stock" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding OutOfStockProducts}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1AEF4444" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="ErrorCircle24" FontSize="24" Foreground="#EF4444"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 13. Categories -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Categories" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding CategoriesCount}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A06B6D4" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Grid24" FontSize="24" Foreground="#06B6D4"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 14. Stock Alert -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Stock Alert" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding AlertStockProducts}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1AF59E0B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Warning24" FontSize="24" Foreground="#F59E0B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    </UniformGrid>
+                <UniformGrid Columns="3">
+                    <!-- 15. Total Customers -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Customers" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalCustomers}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A64748B" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="People24" FontSize="24" Foreground="#64748B"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 16. Total Suppliers -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Suppliers" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalSuppliers}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A1F2937" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Building24" FontSize="24" Foreground="#1F2937"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- 17. Total Employees -->
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" Margin="8" CornerRadius="12" Padding="20" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <TextBlock Text="Total Employees" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,8" TextWrapping="Wrap"/>
+                                <TextBlock Text="{Binding TotalEmployees}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+      VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap"/>
+                            </StackPanel>
+                            <Border Grid.Column="1" Width="48" Height="48" CornerRadius="24" Background="#1A10B981" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Person24" FontSize="24" Foreground="#10B981"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                                </UniformGrid>
+
+                                                <!-- Charts Section -->
+                <Grid Margin="0,16,0,16" HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <!-- Products by Category -->
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8,8,4,8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" HorizontalAlignment="Stretch">
+                            <StackPanel>
+                                <TextBlock Text="Products by Category" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                                <lvc:PieChart Background="Transparent" Series="{Binding CategorySeries}" Height="250" LegendPosition="Right"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Top Selling Products -->
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8,8,4,8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" HorizontalAlignment="Stretch">
+                            <StackPanel>
+                                <TextBlock Text="Top Selling Products" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                                <DataGrid ItemsSource="{Binding TopProducts}" AutoGenerateColumns="False" IsReadOnly="True" HeadersVisibility="Column" Background="Transparent" BorderThickness="0" RowBackground="Transparent">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Product" Binding="{Binding Name}" Width="*"/>
+                                        <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*"/>
+                                        <DataGridTextColumn Header="Units Sold" Binding="{Binding UnitsSold}" Width="Auto"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <!-- Product Stock Distribution -->
+                        <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="4,8,8,8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" HorizontalAlignment="Stretch">
+                            <StackPanel>
+                                <TextBlock Text="Product Stock Distribution" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                                <lvc:PieChart Background="Transparent" Series="{Binding StockSeries}" Height="250" LegendPosition="Bottom"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+
+                <StackPanel Margin="0,0,0,16">
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Sales Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDaySalesSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Sale Due Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDaySaleDueSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Sale Return Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDaySaleReturnSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Purchase Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDayPurchaseSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Purchase Due Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDayPurchaseDueSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="30-Day Purchase Return Overview" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding ThirtyDayPurchaseReturnSeries}" XAxes="{Binding ThirtyDayXAxes}" YAxes="{Binding ThirtyDayYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Sales" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearSalesSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Sale Due" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearSaleDueSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Purchase Due" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearPurchaseDueSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Purchase" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearPurchaseSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Sell Return" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearSellReturnSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                    <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="20" Margin="8" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Current Financial Year Purchase Return" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,10"/>
+                            <lvc:CartesianChart Background="Transparent" Series="{Binding FinancialYearPurchaseReturnSeries}" XAxes="{Binding FinancialYearXAxes}" YAxes="{Binding FinancialYearYAxes}" Height="300" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+</Page>

@@ -1,0 +1,113 @@
+<Page x:Class="BarodaPOS.Views.TaskPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:viewmodels="clr-namespace:BarodaPOS.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="800" d:DesignWidth="1000"
+      Title="TaskPage">
+
+    <Page.DataContext>
+        <viewmodels:TaskViewModel />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Margin="32,28,40,32">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Page Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28" Background="#1A8B5CF6" Margin="0,0,16,0" VerticalAlignment="Center">
+                <ui:SymbolIcon Symbol="CheckmarkSquare24" FontSize="28" Foreground="#8B5CF6"/>
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <TextBox Style="{DynamicResource SelectableText}" Text="Shop Tasks" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                <TextBox Style="{DynamicResource SelectableText}" Text="Manage your daily to-dos and shop responsibilities." FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <Border Grid.Row="1" Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Add Task Row -->
+                <Grid Grid.Row="0" Margin="24">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="16"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBox Grid.Column="0" Text="{Binding NewTaskTitle, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="What needs to be done?" Padding="16,12" FontSize="16">
+                        <ui:TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding AddTaskCommand}" />
+                        </ui:TextBox.InputBindings>
+                    </ui:TextBox>
+                    <ui:Button Grid.Column="2" Content="Add Task" Icon="{ui:SymbolIcon Symbol=Add24}" Appearance="Primary" Command="{Binding AddTaskCommand}" Padding="20,12" FontSize="16"/>
+                </Grid>
+
+                <Border Grid.Row="0" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="0,0,0,1" VerticalAlignment="Bottom"/>
+
+                <!-- Task List -->
+                <ScrollViewer Grid.Row="1" Margin="24" VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Tasks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="{DynamicResource ControlFillColorSecondaryBrush}" CornerRadius="8" Padding="16,12" Margin="0,0,0,12">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <CheckBox Grid.Column="0" IsChecked="{Binding IsCompleted}" Margin="0,0,16,0" VerticalAlignment="Center">
+                                            <CheckBox.LayoutTransform>
+                                                <ScaleTransform ScaleX="1.2" ScaleY="1.2"/>
+                                            </CheckBox.LayoutTransform>
+                                        </CheckBox>
+                                        
+                                        <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="16" VerticalAlignment="Center" TextWrapping="Wrap">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsCompleted}" Value="True">
+                                                            <Setter Property="Foreground" Value="{DynamicResource TextFillColorDisabledBrush}"/>
+                                                            <Setter Property="TextDecorations" Value="Strikethrough"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                        <ui:Button Grid.Column="2" Icon="{ui:SymbolIcon Symbol=Delete24}" Appearance="Danger" Command="{Binding DataContext.DeleteTaskCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" ToolTip="Delete Task" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Loading -->
+        <Grid Grid.RowSpan="2" Background="#80000000" Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ui:ProgressRing IsIndeterminate="True" Width="60" Height="60"/>
+        </Grid>
+    </Grid>
+</Page>

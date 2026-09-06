@@ -1,0 +1,699 @@
+<Page x:Class="BarodaPOS.Views.AddProductPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:viewmodels="clr-namespace:BarodaPOS.ViewModels"
+      mc:Ignorable="d" 
+      d:DesignHeight="1400" d:DesignWidth="1000"
+      Title="AddProductPage"
+      VerticalAlignment="Stretch"
+      HorizontalAlignment="Stretch">
+
+    <Page.DataContext>
+        <viewmodels:AddProductViewModel />
+    </Page.DataContext>
+
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </Page.Resources>
+
+    <Grid>
+        <ScrollViewer MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
+            <StackPanel MaxWidth="1050" HorizontalAlignment="Stretch">
+                <!-- Page Header -->
+                <Grid Margin="0,0,0,28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" Width="56" Height="56" CornerRadius="28" Background="#1A3B82F6" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <ui:SymbolIcon Symbol="Box24" FontSize="28" Foreground="#3B82F6"/>
+                    </Border>
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                        <TextBox Style="{DynamicResource SelectableText}" Text="{Binding PageTitle, Mode=OneWay}" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                        <TextBox Style="{DynamicResource SelectableText}" Text="Configure details, categorization, barcodes, and pricing tiers for inventory tracking." FontSize="14" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,4,0,0"/>
+                    </StackPanel>
+                    <ui:Button Grid.Column="2" Content="{Binding SaveButtonText}" Command="{Binding SaveProductAsyncCommand}" Icon="{ui:SymbolIcon Symbol=Save24}" Appearance="Primary" Padding="22,10" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center" Cursor="Hand"/>
+                </Grid>
+
+                <!-- Basic Information Card -->
+                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="28" Margin="0,0,0,24" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                    <StackPanel>
+                        <!-- Card Title Band -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Background="#1A3B82F6" Margin="0,0,16,0" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Info24" FontSize="22" Foreground="#3B82F6"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Basic Information" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Enter general identification, brand, and category specifics" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,24"/>
+                        
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="24"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Row 0: Name & Barcode -->
+                            <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Product Name *" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ui:TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Enter official product title..." Icon="{ui:SymbolIcon Symbol=Tag24}" Padding="10,10" FontSize="14" TabIndex="1" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="PBR (Barcode) *" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ui:TextBox Grid.Column="0" Text="{Binding Barcode, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Product Barcode / UPC / SKU" Icon="{ui:SymbolIcon Symbol=BarcodeScanner24}" Padding="10,10" FontSize="14" TabIndex="2" Margin="0,0,10,0"/>
+                                    <ui:Button Grid.Column="1" Content="Generate" Command="{Binding GenerateBarcodeCommand}" Icon="{ui:SymbolIcon Symbol=Wand24}" Padding="16,10" FontSize="14" Cursor="Hand"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <!-- Row 1: Barcode Type & Unit -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Barcode Format" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ComboBox SelectedItem="{Binding BarcodeType}" IsEnabled="False" HorizontalAlignment="Stretch" Padding="12,10" FontSize="14">
+                                    <ComboBoxItem Content="Code 128" />
+                                    <ComboBoxItem Content="EAN-13" />
+                                    <ComboBoxItem Content="UPC-A" />
+                                    <ComboBoxItem Content="QR Code" />
+                                </ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Grid.Column="2" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Measurement Unit *" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ComboBox ItemsSource="{Binding Units}" SelectedItem="{Binding SelectedUnit}" HorizontalAlignment="Stretch" Padding="12,10" FontSize="14" Cursor="Hand"/>
+                            </StackPanel>
+
+                            <!-- Row 2: Packaging Fields (Dynamic Box & Packet) -->
+                            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Border Background="#0C3B82F6" BorderBrush="#333B82F6" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                            <Border Width="32" Height="32" CornerRadius="16" Background="#1A3B82F6" Margin="0,0,10,0" VerticalAlignment="Center">
+                                                <ui:SymbolIcon Symbol="Box24" Foreground="#3B82F6" FontSize="18"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Box Packaging Configuration" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontSize="15"/>
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Specify how many packets and pieces are contained in each master box" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="24"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Packets per Box *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                                <ui:TextBox Text="{Binding PacketPerBox, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="e.g. 10, 12, 24" Icon="{ui:SymbolIcon Symbol=Box24}" Padding="10"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="2">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Total Pcs per Box (Optional)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                                <ui:TextBox Text="{Binding PcsPerBox, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Total individual units" Icon="{ui:SymbolIcon Symbol=Box24}" Padding="10"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <Border Background="#0C3B82F6" BorderBrush="#333B82F6" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,16">
+                                            <Border Width="32" Height="32" CornerRadius="16" Background="#1A3B82F6" Margin="0,0,10,0" VerticalAlignment="Center">
+                                                <ui:SymbolIcon Symbol="Box24" Foreground="#3B82F6" FontSize="18"/>
+                                            </Border>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Packet Packaging Configuration" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" FontSize="15"/>
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Specify individual piece count per packet" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="24"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel Grid.Column="0">
+                                                <TextBox Style="{DynamicResource SelectableText}" Text="Pieces per Packet *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                                <ui:TextBox Text="{Binding PcsPerPacket, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="e.g. 6, 12, 50" Icon="{ui:SymbolIcon Symbol=Box24}" Padding="10"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- Row 3: Brand & Category -->
+                            <StackPanel Grid.Row="3" Grid.Column="0" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Brand Name" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ui:TextBox Text="{Binding Brand, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Manufacturer or brand" Icon="{ui:SymbolIcon Symbol=Building24}" Padding="10,10" FontSize="14" />
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="3" Grid.Column="2" Margin="0,0,0,20">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Category *" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ui:TextBox Text="{Binding Category, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Type or select a department / category..." Icon="{ui:SymbolIcon Symbol=Folder24}" Padding="10,10" FontSize="14" />
+                            </StackPanel>
+
+                            <!-- Row 4: Alert Qty & Image -->
+                            <StackPanel Grid.Row="4" Grid.Column="0" Margin="0,0,0,0">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Low Stock Alert Quantity *" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ui:TextBox Text="{Binding AlertQuantity, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="1" Icon="{ui:SymbolIcon Symbol=Alert24}" Padding="10,10" FontSize="14" />
+                            </StackPanel>
+                            
+                            <StackPanel Grid.Row="4" Grid.Column="2" Margin="0,0,0,0">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Product Image Path / URL" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                                <ui:TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="images\no_image_--product.png" Icon="{ui:SymbolIcon Symbol=Image24}" Padding="10,10" FontSize="14" />
+                            </StackPanel>
+
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Pricing Information Card -->
+                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="28" Margin="0,0,0,24" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                    <StackPanel>
+                        <!-- Card Title Band -->
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Background="#1A10B981" Margin="0,0,16,0" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="Money24" FontSize="22" Foreground="#10B981"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Pricing &amp; Rate Structure" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Set acquisition costs, wholesale dealer tariffs, and general customer retail prices" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,24"/>
+
+                        <!-- Box Pricing -->
+                        <StackPanel Visibility="{Binding IsBoxPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <!-- Tier: Complete Box -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,20" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A10B981" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#10B981"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Master Box Pricing" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set purchasing cost and wholesale/retail sales tariffs per complete box" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Box) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPriceBox}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceBoxNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceBoxShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceBoxNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceBoxShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tier: Pack Pricing (Optional) -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,20" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1AF59E0B" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#F59E0B"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Pack Pricing (Optional Sub-Unit)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set pricing for inner packs when breaking master boxes" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Pack)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPricePack}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePackNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePackShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Tier: PCS Pricing (Optional) -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,0" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A8B5CF6" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#8B5CF6"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Individual Piece (PCS) Pricing (Optional Sub-Unit)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set unit pricing when selling single pieces" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Pcs)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPricePcs}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePcsNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePcsShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Kg Pricing -->
+                        <StackPanel Visibility="{Binding IsKgPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <!-- Tier: Kilogram -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,20" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A10B981" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#10B981"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Kilogram (Kg) Pricing" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set standard rates per full kilogram" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Kg) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPriceKg}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceKgNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceKgShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceKgNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceKgShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Tier: Gram Pricing -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,0" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1AF59E0B" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#F59E0B"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Gram Pricing (Optional Sub-Unit)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set fractional rates per gram for precise quantities" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Gram)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPriceGram}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceGramNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceGramShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceGramNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceGramShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Liter Pricing -->
+                        <StackPanel Visibility="{Binding IsLiterPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <!-- Tier: Liter -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,20" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A10B981" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#10B981"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Liter Pricing" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set rates per complete liter volume" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Liter) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPriceLiter}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceLiterNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceLiterShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceLiterNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceLiterShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Tier: ML Pricing -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,0" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1AF59E0B" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#F59E0B"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Milliliter (ML) Pricing (Optional Sub-Unit)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set fractional volume rates per milliliter" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / ML)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPriceMl}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceMlNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceMlShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceMlNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceMlShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Packet Pricing -->
+                        <StackPanel Visibility="{Binding IsPacketPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <!-- Tier: Packet -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,20" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A10B981" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#10B981"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Packet Pricing" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set rates per complete packet unit" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Packet) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPricePacket}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePacketNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePacketShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePacketNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePacketShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Tier: PCS inside Packet -->
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,0" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A8B5CF6" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#8B5CF6"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Individual Piece (PCS) Pricing (Optional Sub-Unit)" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set individual piece rates when selling broken packet contents" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / PCS)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPricePacketPcs}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePacketPcsNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePricePacketPcsShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePacketPcsNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPricePacketPcsShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <!-- Standard PCS Pricing (Fallback / Default) -->
+                        <StackPanel Visibility="{Binding IsStandardPriceVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Border BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="22" Margin="0,0,0,0" Background="#05FFFFFF">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                                        <Border Width="36" Height="36" CornerRadius="18" Background="#1A10B981" Margin="0,0,12,0" VerticalAlignment="Center">
+                                            <ui:SymbolIcon Symbol="Money24" FontSize="18" Foreground="#10B981"/>
+                                        </Border>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Standard Piece (PCS) Pricing" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Set standard acquisition cost and wholesale/retail selling rates per piece" FontSize="12" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </StackPanel>
+
+                                    <Grid Margin="0,0,0,16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Buy Price (Cost / Pcs) *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding BuyPrice}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+                                        <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="0" Grid.Column="2" Margin="0,0,0,14">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Wholesale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding WholesalePriceShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="0">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Normal Customer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceNormal}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                        <StackPanel Grid.Row="1" Grid.Column="2">
+                                            <TextBox Style="{DynamicResource SelectableText}" Text="Retail Sale Rate (Shop / Dealer)" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,0,0,6"/>
+                                            <ui:TextBox Text="{Binding SellPriceShop}" Icon="{ui:SymbolIcon Symbol=Money24}" Padding="10,10"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- Additional Information Card -->
+                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="28" Margin="0,0,0,28" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Background="#1AF59E0B" Margin="0,0,16,0" VerticalAlignment="Center">
+                                <ui:SymbolIcon Symbol="DocumentEdit24" FontSize="22" Foreground="#F59E0B"/>
+                            </Border>
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Additional Information" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                                <TextBox Style="{DynamicResource SelectableText}" Text="Optional detailed descriptions, internal storage notes, and product specifications" FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,2,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,24"/>
+
+                        <StackPanel Margin="0,0,0,0">
+                            <TextBox Style="{DynamicResource SelectableText}" Text="Product Description &amp; Notes" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,8"/>
+                            <TextBox Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="110" Padding="12" FontSize="14" />
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Actions Footer Card -->
+                <Border Background="{DynamicResource ControlFillColorDefaultBrush}" CornerRadius="12" Padding="24" Margin="0,0,0,40" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBox Style="{DynamicResource SelectableText}" Text="Ready to save product details?" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}"/>
+                            <TextBox Style="{DynamicResource SelectableText}" Text="Verify pricing tiers, category assignment, and barcodes before saving to inventory." FontSize="13" Foreground="{DynamicResource TextFillColorSecondaryBrush}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                        <ui:Button Grid.Column="1" Content="{Binding SaveButtonText}" Command="{Binding SaveProductAsyncCommand}" Icon="{ui:SymbolIcon Symbol=Save24}" Appearance="Primary" Padding="32,12" FontSize="15" FontWeight="SemiBold" Cursor="Hand"/>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>
+
+
+

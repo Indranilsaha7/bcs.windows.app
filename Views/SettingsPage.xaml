@@ -1,0 +1,23 @@
+<Page x:Class="BarodaPOS.Views.SettingsPage" 
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:local="clr-namespace:BarodaPOS.Views"
+      Title="SettingsPage">
+    <Grid>
+        <ui:NavigationView x:Name="SettingsNav" PaneDisplayMode="Left" IsBackButtonVisible="Collapsed" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ui:NavigationView.AutoSuggestBox>
+                <ui:AutoSuggestBox PlaceholderText="Search settings..." Icon="{ui:SymbolIcon Symbol=Search24}" />
+            </ui:NavigationView.AutoSuggestBox>
+            <ui:NavigationView.MenuItems>
+                <ui:NavigationViewItem Content="System Info" TargetPageType="{x:Type local:SettingsSystemPage}" Icon="{ui:SymbolIcon Symbol=Desktop24}" />
+                <ui:NavigationViewItem Content="Hardware" TargetPageType="{x:Type local:SettingsHardwarePage}" Icon="{ui:SymbolIcon Symbol=Print24}" />
+                <ui:NavigationViewItem Content="Maintenance" TargetPageType="{x:Type local:SettingsMaintenancePage}" Icon="{ui:SymbolIcon Symbol=Wrench24}" />
+                <ui:NavigationViewItem Content="Login &amp; Security" TargetPageType="{x:Type local:SettingsLoginPage}" Icon="{ui:SymbolIcon Symbol=Key24}" />
+            </ui:NavigationView.MenuItems>
+        </ui:NavigationView>
+    </Grid>
+</Page>
+
+
+
