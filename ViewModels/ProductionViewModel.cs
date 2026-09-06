@@ -259,7 +259,6 @@ namespace BarodaPOS.ViewModels
                 }).ToList();
 
                 // 1. Create Production Record
-                var user = SessionManager.CurrentUser;
                 var prodRef = db.Collection("productions").Document();
                 var prodData = new ProductionRecord
                 {

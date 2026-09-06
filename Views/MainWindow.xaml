@@ -54,6 +54,7 @@
                     <ui:NavigationViewItem.MenuItems>
                         <ui:NavigationViewItem Content="All Products" TargetPageType="{x:Type local:ProductPage}" Icon="{ui:SymbolIcon Symbol=List24}" />
                         <ui:NavigationViewItem Content="Add Product" TargetPageType="{x:Type local:AddProductPage}" Icon="{ui:SymbolIcon Symbol=Add24}" />
+                        <ui:NavigationViewItem Content="Production" TargetPageType="{x:Type local:ProductionPage}" Icon="{ui:SymbolIcon Symbol=Wrench24}" />
                         <ui:NavigationViewItem Content="Import Products" TargetPageType="{x:Type local:ImportProductPage}" Icon="{ui:SymbolIcon Symbol=ArrowUpload24}" />
                     </ui:NavigationViewItem.MenuItems>
                 </ui:NavigationViewItem>
