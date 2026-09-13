@@ -381,7 +381,7 @@ namespace BarodaPOS.ViewModels
             else
             {
                 if (tiers.TryGetValue("pcs", out var pcs)) { BuyPrice = pcs.Buy ?? 0; WholesalePriceNormal = pcs.Wholesale ?? 0; WholesalePriceShop = pcs.ShopWholesale ?? 0; SellPriceNormal = pcs.Sell ?? 0; SellPriceShop = pcs.ShopSell ?? 0; }
-                else { BuyPrice = p.BuyPrice ?? 0; WholesalePriceNormal = p.WholesalePrice ?? 0; SellPriceNormal = p.SellPrice ?? 0; }
+                else { BuyPrice = p.DisplayBuyPrice; WholesalePriceNormal = p.DisplayWholesalePrice; SellPriceNormal = p.DisplaySellPrice; }
             }
         }
 
@@ -421,14 +421,16 @@ namespace BarodaPOS.ViewModels
 
         private void UpdateLotNumberRequirement()
         {
-            bool requireLot = CheckIfPricesEdited();
-            if (SelectedProduct != null && (SelectedProduct.Quantity ?? 0) == 0)
+            if (SelectedProduct != null && (SelectedProduct.Quantity ?? 0) > 0)
             {
-                requireLot = false; // No stock means we can change default price without lot
+                IsLotNumberRequired = true;
+                LotNumberPlaceholder = "Lot # (Required because in stock)";
             }
-            
-            IsLotNumberRequired = requireLot;
-            LotNumberPlaceholder = requireLot ? "Lot # (Required due to price change)" : "Any code (Optional)";
+            else
+            {
+                IsLotNumberRequired = false;
+                LotNumberPlaceholder = "Any code (Optional)";
+            }
         }
 
         private Dictionary<string, PriceTier> CaptureNewPriceTiers()
@@ -481,7 +483,7 @@ namespace BarodaPOS.ViewModels
 
             if (IsLotNumberRequired && string.IsNullOrWhiteSpace(LotNumber))
             {
-                await DialogHelper.ShowMessageAsync("Validation", "Lot # is required because prices were edited.");
+                await DialogHelper.ShowMessageAsync("Validation", "Lot # is required because the product is in stock.");
                 return;
             }
 
@@ -652,18 +654,16 @@ namespace BarodaPOS.ViewModels
                             updatedTiers = item.NewPriceTiers;
                         }
 
-                        if (!string.IsNullOrEmpty(item.LotNumber))
+                        string targetLot = string.IsNullOrWhiteSpace(item.LotNumber) ? "Default" : item.LotNumber.Trim();
+                        var lot = lots.FirstOrDefault(l => l.LotNumber == targetLot);
+                        if (lot != null)
                         {
-                            var lot = lots.FirstOrDefault(l => l.LotNumber == item.LotNumber);
-                            if (lot != null)
-                            {
-                                lot.Quantity = (lot.Quantity ?? 0) + item.Quantity;
-                                lot.BuyPrice = item.Cost;
-                            }
-                            else
-                            {
-                                lots.Add(new Lot { LotNumber = item.LotNumber, Quantity = item.Quantity, BuyPrice = item.Cost });
-                            }
+                            lot.Quantity = (lot.Quantity ?? 0) + item.Quantity;
+                            lot.BuyPrice = item.Cost;
+                        }
+                        else
+                        {
+                            lots.Add(new Lot { LotNumber = targetLot, Quantity = item.Quantity, BuyPrice = item.Cost });
                         }
                     }
 

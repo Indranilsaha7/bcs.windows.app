@@ -296,11 +296,14 @@ namespace BarodaPOS.ViewModels
                         Barcode = barcode,
                         Brand = dto.Brand ?? "",
                         Category = dto.Category ?? "",
-                        Unit = unit,
+                        Unit = dto.Unit ?? "Pcs",
                         AlertQuantity = dto.AlertQuantity ?? 1,
                         Description = dto.Description ?? "",
                         Quantity = 0,
-                        PriceTiers = priceTiers
+                        PriceTiers = priceTiers,
+                        BuyPrice = dto.BuyPrice,
+                        WholesalePrice = dto.WholesalePriceNormal,
+                        SellPrice = dto.SellPriceNormal
                     };
 
                     var docRef = collection.Document(barcode);

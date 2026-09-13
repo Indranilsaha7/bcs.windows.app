@@ -7,7 +7,9 @@
       xmlns:viewmodels="clr-namespace:BarodaPOS.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
-      Title="PurchasePreDraftProductPage">
+      Title="PurchasePreDraftProductPage"
+      VerticalAlignment="Stretch"
+      HorizontalAlignment="Stretch">
 
     <Page.DataContext>
         <viewmodels:PurchasePreDraftProductViewModel />
@@ -18,7 +20,7 @@
     </Page.Resources>
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
+        <ScrollViewer MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
             <StackPanel MaxWidth="1200" HorizontalAlignment="Stretch">
                 
                 <!-- Page Header -->
@@ -64,19 +66,18 @@
                                     <StackPanel Grid.Column="0">
                                         <TextBox Style="{DynamicResource SelectableText}" Text="Search Product *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
                                         <Grid>
-                                            <ui:TextBox x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search by name or barcode..." Icon="{ui:SymbolIcon Symbol=Search24}" Padding="10"/>
+                                            <ui:TextBox x:Name="SearchBox" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" PlaceholderText="Search by name or barcode..." Icon="{ui:SymbolIcon Symbol=Search24}" Padding="10">
+                                                <ui:TextBox.InputBindings>
+                                                    <KeyBinding Key="Enter" Command="{Binding SelectFirstProductCommand}"/>
+                                                </ui:TextBox.InputBindings>
+                                            </ui:TextBox>
                                             <Popup IsOpen="{Binding IsProductSearchResultsVisible}" PlacementTarget="{Binding ElementName=SearchBox}" StaysOpen="False" MaxHeight="300" Width="{Binding ActualWidth, ElementName=SearchBox}">
                                                 <Border Background="{DynamicResource ControlFillColorDefaultBrush}" BorderBrush="{DynamicResource ControlElevationBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="4">
                                                     <ScrollViewer MaxHeight="290" VerticalScrollBarVisibility="Auto">
                                                         <ItemsControl ItemsSource="{Binding FilteredProducts}" Background="Transparent" BorderThickness="0">
                                                             <ItemsControl.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <Button Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Padding="8,4" Cursor="Hand">
-                                                                        <StackPanel>
-                                                                            <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                                                            <TextBlock Text="{Binding Barcode, StringFormat='Barcode: {0}'}" FontSize="11" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
-                                                                        </StackPanel>
-                                                                    </Button>
+                                                                    <ui:Button Content="{Binding Name}" Command="{Binding DataContext.SelectProductCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" CommandParameter="{Binding}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Background="Transparent" BorderThickness="0" Padding="12,10"/>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
                                                         </ItemsControl>
@@ -88,14 +89,22 @@
 
                                     <!-- Cost -->
                                     <StackPanel Grid.Column="2">
-                                        <TextBox Style="{DynamicResource SelectableText}" Text="Est. Cost *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
-                                        <ui:TextBox Text="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" Padding="10"/>
+                                        <TextBox Style="{DynamicResource SelectableText}" Text="Est. Cost" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
+                                        <ui:TextBox Text="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" Padding="10">
+                                            <ui:TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding AddToCartCommand}"/>
+                                            </ui:TextBox.InputBindings>
+                                        </ui:TextBox>
                                     </StackPanel>
 
                                     <!-- Quantity -->
                                     <StackPanel Grid.Column="4">
                                         <TextBox Style="{DynamicResource SelectableText}" Text="Qty *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
-                                        <ui:TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Padding="10"/>
+                                        <ui:TextBox Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" Padding="10">
+                                            <ui:TextBox.InputBindings>
+                                                <KeyBinding Key="Enter" Command="{Binding AddToCartCommand}"/>
+                                            </ui:TextBox.InputBindings>
+                                        </ui:TextBox>
                                     </StackPanel>
 
                                     <!-- Add Button -->
@@ -104,7 +113,7 @@
                                 
                                 <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,24,0,24"/>
                                 
-                                <DataGrid ItemsSource="{Binding Cart}" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" RowHeight="45" Background="Transparent" BorderThickness="0">
+                                <DataGrid ItemsSource="{Binding Cart}" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" RowHeight="45" Background="Transparent" BorderThickness="0" PreviewMouseWheel="DataGrid_PreviewMouseWheel">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Item Name" Binding="{Binding Name}" Width="2*" IsReadOnly="True"/>
                                         

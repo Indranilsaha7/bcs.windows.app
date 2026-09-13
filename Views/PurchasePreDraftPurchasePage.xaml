@@ -7,7 +7,9 @@
       xmlns:viewmodels="clr-namespace:BarodaPOS.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
-      Title="PurchasePreDraftPurchasePage">
+      Title="PurchasePreDraftPurchasePage"
+      VerticalAlignment="Stretch"
+      HorizontalAlignment="Stretch">
 
     <Page.DataContext>
         <viewmodels:PurchasePreDraftPurchaseViewModel />
@@ -18,7 +20,7 @@
     </Page.Resources>
 
     <Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
+        <ScrollViewer MaxHeight="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType=Page}}" VerticalScrollBarVisibility="Auto" PanningMode="VerticalOnly" Padding="32,28,40,32" Background="Transparent">
             <StackPanel MaxWidth="1200" HorizontalAlignment="Stretch">
                 
                 <!-- Page Header -->
@@ -69,14 +71,14 @@
                                     
                                     <ui:Button Grid.Column="2" Content="Load" Appearance="Primary" Command="{Binding LoadDraftCommand}" Icon="{ui:SymbolIcon Symbol=Search24}" Margin="0,25,0,0" Padding="20,10" VerticalAlignment="Top"/>
                                     
-                                    <ui:Button Grid.Column="4" Content="Upload QR Image" Appearance="Secondary" Command="{Binding UploadImageCommand}" Icon="{ui:SymbolIcon Symbol=Image24}" Margin="0,25,0,0" Padding="20,10" VerticalAlignment="Top" ToolTip="Upload an image containing the QR code"/>
+                                    <ui:Button Grid.Column="4" Content="Upload QR / PDF" Appearance="Secondary" Command="{Binding UploadImageCommand}" Icon="{ui:SymbolIcon Symbol=Image24}" Margin="0,25,0,0" Padding="20,10" VerticalAlignment="Top" ToolTip="Upload an image or PDF containing the QR code"/>
                                 </Grid>
                                 
                                 <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,24"/>
                                 
                                 <TextBox Style="{DynamicResource SelectableText}" Text="Draft Items" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,16"/>
 
-                                <DataGrid ItemsSource="{Binding DraftItems}" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" RowHeight="45" Background="Transparent" BorderThickness="0">
+                                <DataGrid PreviewMouseWheel="DataGrid_PreviewMouseWheel" ItemsSource="{Binding DraftItems}" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" GridLinesVisibility="Horizontal" RowHeight="45" Background="Transparent" BorderThickness="0">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Item Name" Binding="{Binding Name}" Width="2*" IsReadOnly="True"/>
                                         <DataGridTextColumn Header="Supplier" Binding="{Binding TargetSupplierName}" Width="1.5*" IsReadOnly="True"/>
@@ -97,6 +99,14 @@
                                             </DataGridTemplateColumn.CellTemplate>
                                         </DataGridTemplateColumn>
                                         
+                                        <DataGridTemplateColumn Header="Lot #" Width="120">
+                                            <DataGridTemplateColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <ui:TextBox Text="{Binding LotNumber, UpdateSourceTrigger=PropertyChanged}" Padding="6" Margin="4,0"/>
+                                                </DataTemplate>
+                                            </DataGridTemplateColumn.CellTemplate>
+                                        </DataGridTemplateColumn>
+
                                         <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat={}{0:N2}}" Width="100" IsReadOnly="True" FontWeight="SemiBold"/>
                                         
                                         <DataGridTemplateColumn Header="Remove" Width="80">
@@ -135,7 +145,11 @@
                                 </Grid>
                                 
                                 <TextBox Style="{DynamicResource SelectableText}" Text="Paid Amount *" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Margin="0,0,0,6"/>
-                                <ui:TextBox Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,0,0,16" Icon="{ui:SymbolIcon Symbol=Money24}"/>
+                                <ui:TextBox Text="{Binding PaidAmount, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,0,0,16" Icon="{ui:SymbolIcon Symbol=Money24}">
+                                    <ui:TextBox.InputBindings>
+                                        <KeyBinding Key="Enter" Command="{Binding CompletePurchaseCommand}"/>
+                                    </ui:TextBox.InputBindings>
+                                </ui:TextBox>
 
                                 <ui:Button Content="Complete Purchase" Command="{Binding CompletePurchaseCommand}" Icon="{ui:SymbolIcon Symbol=Checkmark24}" Appearance="Primary" Padding="16,12" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Stretch" ToolTip="Convert this draft into a completed Purchase"/>
                             </StackPanel>

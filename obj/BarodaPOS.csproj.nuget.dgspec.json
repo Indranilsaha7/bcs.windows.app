@@ -74,6 +74,10 @@
               "target": "Package",
               "version": "[1.8.0, )"
             },
+            "UglyToad.PdfPig": {
+              "target": "Package",
+              "version": "[1.7.0-custom-5, )"
+            },
             "WPF-UI": {
               "target": "Package",
               "version": "[4.3.0, )"

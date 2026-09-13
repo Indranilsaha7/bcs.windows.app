@@ -343,6 +343,13 @@ namespace BarodaPOS.ViewModels
                     priceTiers["pcs"] = new PriceTier { Buy = BuyPrice, Wholesale = WholesalePriceNormal, ShopWholesale = WholesalePriceShop, Sell = SellPriceNormal, ShopSell = SellPriceShop };
                 }
 
+                double rootBuy = 0, rootWholesale = 0, rootSell = 0;
+                if (SelectedUnit == "Box") { rootBuy = BuyPriceBox; rootWholesale = WholesalePriceBoxNormal; rootSell = SellPriceBoxNormal; }
+                else if (SelectedUnit == "Kg") { rootBuy = BuyPriceKg; rootWholesale = WholesalePriceKgNormal; rootSell = SellPriceKgNormal; }
+                else if (SelectedUnit == "Liter") { rootBuy = BuyPriceLiter; rootWholesale = WholesalePriceLiterNormal; rootSell = SellPriceLiterNormal; }
+                else if (SelectedUnit == "Packet") { rootBuy = BuyPricePacket; rootWholesale = WholesalePricePacketNormal; rootSell = SellPricePacketNormal; }
+                else { rootBuy = BuyPrice; rootWholesale = WholesalePriceNormal; rootSell = SellPriceNormal; }
+
                 var productData = new Dictionary<string, object>
                 {
                     { "name", Name },
@@ -357,7 +364,10 @@ namespace BarodaPOS.ViewModels
                     { "priceTiers", priceTiers },
                     { "packetPerBox", PacketPerBox },
                     { "pcsPerBox", PcsPerBox },
-                    { "pcsPerPacket", PcsPerPacket }
+                    { "pcsPerPacket", PcsPerPacket },
+                    { "buyPrice", rootBuy },
+                    { "wholesalePrice", rootWholesale },
+                    { "sellPrice", rootSell }
                 };
 
                 if (IsEditing)

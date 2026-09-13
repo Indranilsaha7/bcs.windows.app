@@ -49,8 +49,19 @@ namespace BarodaPOS.Models
             }
         }
 
+        private double _cost;
         [FirestoreProperty("cost")]
-        public double Cost { get; set; }
+        public double Cost 
+        { 
+            get => _cost; 
+            set 
+            {
+                if (SetProperty(ref _cost, value))
+                {
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
+        }
 
         [FirestoreProperty("purchaseUnit")]
         public string PurchaseUnit { get; set; }
@@ -155,8 +166,19 @@ namespace BarodaPOS.Models
             }
         }
 
+        private double _cost;
         [FirestoreProperty("cost")]
-        public double Cost { get; set; }
+        public double Cost 
+        { 
+            get => _cost; 
+            set 
+            {
+                if (SetProperty(ref _cost, value))
+                {
+                    OnPropertyChanged(nameof(Total));
+                }
+            }
+        }
         
         public double Total => Quantity * Cost;
     }

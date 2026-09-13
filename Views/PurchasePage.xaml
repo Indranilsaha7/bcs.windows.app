@@ -212,7 +212,7 @@
                                 </Grid>
                                 <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0,0,0,20"/>
 
-                                <DataGrid ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#05000000" BorderThickness="1" BorderBrush="{DynamicResource ControlElevationBorderBrush}" RowHeight="48" MinHeight="200">
+                                <DataGrid PreviewMouseWheel="DataGrid_PreviewMouseWheel" ItemsSource="{Binding CartItems}" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column" Background="Transparent" RowBackground="Transparent" AlternatingRowBackground="#05000000" BorderThickness="1" BorderBrush="{DynamicResource ControlElevationBorderBrush}" RowHeight="48" MinHeight="200">
                                     <DataGrid.Columns>
                                         <DataGridTextColumn Header="Product" Binding="{Binding Name}" Width="3*" IsReadOnly="True" />
                                         <DataGridTextColumn Header="Unit" Binding="{Binding PurchaseUnit}" Width="*" IsReadOnly="True" />

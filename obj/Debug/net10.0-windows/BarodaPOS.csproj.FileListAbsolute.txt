@@ -212,3 +212,11 @@ C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sa
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftProductPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftProductPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftPurchasePage.g.cs
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\zxing.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\ZXing.Windows.Compatibility.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftPurchasePage.baml
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\UglyToad.PdfPig.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\UglyToad.PdfPig.Core.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\UglyToad.PdfPig.Fonts.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\UglyToad.PdfPig.Tokenization.dll
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\bin\Debug\net10.0-windows\UglyToad.PdfPig.Tokens.dll

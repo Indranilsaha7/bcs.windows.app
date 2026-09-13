@@ -21,7 +21,7 @@ namespace BarodaPOS.ViewModels
         private ObservableCollection<Product> _filteredProducts = new();
 
         [ObservableProperty]
-        private Product _selectedProduct;
+        private Product _SelectedProduct;
 
         partial void OnSelectedProductChanged(Product value)
         {
@@ -295,7 +295,7 @@ namespace BarodaPOS.ViewModels
                 var lot = product.Lots?.FirstOrDefault(l => l.LotNumber == lotNumber);
                 if (lot != null)
                 {
-                    double markup = (product.SellPrice ?? 0) - (product.BuyPrice ?? 0);
+                    double markup = (product.DisplaySellPrice) - (product.DisplayBuyPrice);
                     return (lot.BuyPrice ?? 0) + markup;
                 }
             }
@@ -314,8 +314,8 @@ namespace BarodaPOS.ViewModels
 
             return saleMode switch
             {
-                "normal_wholesale" or "shop_wholesale" => product.WholesalePrice ?? product.SellPrice ?? 0,
-                _ => product.SellPrice ?? 0
+                "normal_wholesale" or "shop_wholesale" => product.WholesalePrice ?? product.DisplaySellPrice,
+                _ => product.DisplaySellPrice
             };
         }
 
@@ -366,7 +366,7 @@ namespace BarodaPOS.ViewModels
             double price = DeterminePrice(SelectedProduct, unitKey, SelectedSaleMode, lotNumber);
             double buyPrice = lotNumber != null
                 ? SelectedProduct.Lots?.FirstOrDefault(l => l.LotNumber == lotNumber)?.BuyPrice ?? 0
-                : SelectedProduct.BuyPrice ?? 0;
+                : SelectedProduct.DisplayBuyPrice;
 
             if (existingItem != null)
             {

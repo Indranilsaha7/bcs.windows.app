@@ -155,7 +155,7 @@ namespace BarodaPOS.ViewModels
             {
                 if (!RawMaterials.Any(m => m.Id == product.Id))
                 {
-                    double buyPrice = product.BuyPrice ?? 0;
+                    double buyPrice = product.DisplayBuyPrice;
                     if (product.PriceTiers != null && product.PriceTiers.ContainsKey("pcs"))
                     {
                         var t = product.PriceTiers["pcs"];

@@ -94,8 +94,33 @@ namespace BarodaPOS.ViewModels
                 SelectedProduct = product;
                 SearchText = product.Name;
                 IsProductSearchResultsVisible = false;
-                Cost = product.BuyPrice ?? 0;
+                Cost = product.DisplayBuyPrice;
                 Quantity = 1;
+            }
+        }
+
+        [RelayCommand]
+        private async Task SelectFirstProductAsync()
+        {
+            if (FilteredProducts != null && FilteredProducts.Count > 0)
+            {
+                var product = FilteredProducts.First();
+
+                if (SelectedProduct == product)
+                {
+                    AddToCart();
+                    return;
+                }
+
+                SelectProduct(product);
+
+                if (!string.IsNullOrWhiteSpace(product.Barcode) && 
+                    !string.IsNullOrWhiteSpace(SearchText) && 
+                    SearchText.Trim().Equals(product.Barcode, StringComparison.OrdinalIgnoreCase))
+                {
+                    await Task.Delay(100);
+                    AddToCart();
+                }
             }
         }
 
