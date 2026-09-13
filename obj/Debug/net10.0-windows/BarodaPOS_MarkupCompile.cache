@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET10_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NET10_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\App.xaml
-30-1883955918
+291456970901
 1-1246840891
-71-1113419998
-250354961233
-Views\AddProductPage.xaml;Views\AddSaleHistoryPage.xaml;Views\AddSupplierPage.xaml;Views\CalendarPage.xaml;Views\DashboardPage.xaml;Views\FastPurchasePage.xaml;Views\ImportProductPage.xaml;Views\LoginPage.xaml;Views\MainWindow.xaml;Views\PeoplePage.xaml;Views\PosPage.xaml;Views\PrePurchasePage.xaml;Views\ProductionPage.xaml;Views\ProductPage.xaml;Views\PurchaseHistoryPage.xaml;Views\PurchasePage.xaml;Views\PurchaseReturnPage.xaml;Views\ReportPage.xaml;Views\SaleDetailsWindow.xaml;Views\SalePage.xaml;Views\SettingsHardwarePage.xaml;Views\SettingsLoginPage.xaml;Views\SettingsMaintenancePage.xaml;Views\SettingsPage.xaml;Views\SettingsSidebarPage.xaml;Views\SettingsSystemPage.xaml;Views\SupplierDetailsWindow.xaml;Views\SupplierPage.xaml;Views\SyncDashboardPage.xaml;Views\TaskPage.xaml;
+101-482788458
+504-870425266
+Views\AddProductPage.xaml;Views\AddSaleHistoryPage.xaml;Views\AddSupplierPage.xaml;Views\CalendarPage.xaml;Views\DashboardPage.xaml;Views\ImportProductPage.xaml;Views\LoginPage.xaml;Views\MainWindow.xaml;Views\PeoplePage.xaml;Views\PosPage.xaml;Views\ProductionPage.xaml;Views\ProductPage.xaml;Views\PurchasePage.xaml;Views\PurchasePreDraftProductPage.xaml;Views\PurchasePreDraftPurchasePage.xaml;Views\PurchaseReturnPage.xaml;Views\ReportPage.xaml;Views\SaleDetailsWindow.xaml;Views\SalePage.xaml;Views\SettingsHardwarePage.xaml;Views\SettingsLoginPage.xaml;Views\SettingsMaintenancePage.xaml;Views\SettingsPage.xaml;Views\SettingsSidebarPage.xaml;Views\SettingsSystemPage.xaml;Views\SupplierDetailsWindow.xaml;Views\SupplierPage.xaml;Views\SyncDashboardPage.xaml;Views\TaskPage.xaml;
 
-False
+True
 

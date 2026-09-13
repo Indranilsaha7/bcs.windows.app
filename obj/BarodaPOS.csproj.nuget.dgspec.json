@@ -77,6 +77,14 @@
             "WPF-UI": {
               "target": "Package",
               "version": "[4.3.0, )"
+            },
+            "ZXing.Net": {
+              "target": "Package",
+              "version": "[0.16.11, )"
+            },
+            "ZXing.Net.Bindings.Windows.Compatibility": {
+              "target": "Package",
+              "version": "[0.16.16, )"
             }
           },
           "imports": [

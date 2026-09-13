@@ -155,14 +155,11 @@ C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sa
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\AddSupplierPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\CalendarPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\DashboardPage.g.cs
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\FastPurchasePage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ImportProductPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\LoginPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\MainWindow.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PeoplePage.g.cs
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PrePurchasePage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ProductPage.g.cs
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchaseHistoryPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchaseReturnPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ReportPage.g.cs
@@ -187,13 +184,10 @@ C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sa
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\AddSaleHistoryPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\AddSupplierPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\CalendarPage.baml
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\FastPurchasePage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ImportProductPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\LoginPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\MainWindow.baml
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PrePurchasePage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ProductPage.baml
-C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchaseHistoryPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchaseReturnPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\SalePage.baml
@@ -215,3 +209,6 @@ C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sa
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PosPage.g.cs
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\SettingsSidebarPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\SettingsSidebarPage.g.cs
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftProductPage.g.cs
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftProductPage.baml
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PurchasePreDraftPurchasePage.g.cs

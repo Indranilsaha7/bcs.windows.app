@@ -57,6 +57,22 @@ namespace BarodaPOS.Models
 
         [FirestoreProperty("lotNumber")]
         public string LotNumber { get; set; }
+
+        private string _targetSupplierId;
+        [FirestoreProperty("targetSupplierId")]
+        public string TargetSupplierId 
+        {
+            get => _targetSupplierId;
+            set => SetProperty(ref _targetSupplierId, value);
+        }
+
+        private string _targetSupplierName;
+        [FirestoreProperty("targetSupplierName")]
+        public string TargetSupplierName 
+        {
+            get => _targetSupplierName;
+            set => SetProperty(ref _targetSupplierName, value);
+        }
         
         // Not saved to Firestore in Purchase document, but used locally during the transaction
         public Dictionary<string, PriceTier> NewPriceTiers { get; set; }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jNCknejoYzY=",
+  "dgSpecHash": "xnyZvW4mvgA=",
   "success": true,
   "projectFilePath": "C:\\Users\\Indranil saha\\Desktop\\coding\\shop management\\1. Baroda Computure And Sales\\windows app\\BarodaPOS.csproj",
   "expectedPackageFiles": [
@@ -51,7 +51,9 @@
     "C:\\Users\\Indranil saha\\.nuget\\packages\\skiasharp.views.wpf\\3.119.0\\skiasharp.views.wpf.3.119.0.nupkg.sha512",
     "C:\\Users\\Indranil saha\\.nuget\\packages\\system.management\\7.0.2\\system.management.7.0.2.nupkg.sha512",
     "C:\\Users\\Indranil saha\\.nuget\\packages\\wpf-ui\\4.3.0\\wpf-ui.4.3.0.nupkg.sha512",
-    "C:\\Users\\Indranil saha\\.nuget\\packages\\wpf-ui.abstractions\\4.3.0\\wpf-ui.abstractions.4.3.0.nupkg.sha512"
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\wpf-ui.abstractions\\4.3.0\\wpf-ui.abstractions.4.3.0.nupkg.sha512",
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\zxing.net\\0.16.11\\zxing.net.0.16.11.nupkg.sha512",
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\zxing.net.bindings.windows.compatibility\\0.16.16\\zxing.net.bindings.windows.compatibility.0.16.16.nupkg.sha512"
   ],
   "logs": [
     {

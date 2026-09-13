@@ -35,6 +35,7 @@ namespace BarodaPOS.Views
                     LoginFrame.Visibility = Visibility.Collapsed;
                     AppTitleBarHeader.Visibility = Visibility.Visible;
                     RootNavigation.Navigate(typeof(DashboardPage));
+                    _ = LoadSidebarSettingsAsync();
                 };
             }
             else
@@ -73,6 +74,86 @@ namespace BarodaPOS.Views
             
             // Auto-navigate to DashboardPage
             RootNavigation.Navigate(typeof(DashboardPage));
+            _ = LoadSidebarSettingsAsync();
+        }
+
+        private async System.Threading.Tasks.Task LoadSidebarSettingsAsync()
+        {
+            try
+            {
+                var firestore = new BarodaPOS.Services.FirestoreService();
+                var settings = await firestore.GetSettingsAsync();
+
+                string position = settings.ContainsKey("sidebarPosition") ? settings["sidebarPosition"]?.ToString() : "Left";
+                bool openHover = settings.ContainsKey("sidebarOpenOnHover") ? Convert.ToBoolean(settings["sidebarOpenOnHover"]) : true;
+                bool autoClose = settings.ContainsKey("sidebarAutoClose") ? Convert.ToBoolean(settings["sidebarAutoClose"]) : false;
+                bool autoOpen = settings.ContainsKey("sidebarAutoOpen") ? Convert.ToBoolean(settings["sidebarAutoOpen"]) : true;
+
+                ApplySidebarSettings(position, openHover, autoClose, autoOpen);
+            }
+            catch { }
+        }
+
+        private bool _openOnHover = true;
+        private bool _autoClose = false;
+
+        public void ApplySidebarSettings(string position, bool openOnHover, bool autoClose, bool autoOpen)
+        {
+            // Apply Pane Display Mode
+            if (position == "Top") 
+                RootNavigation.PaneDisplayMode = Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Top;
+            else if (position == "Bottom")
+                RootNavigation.PaneDisplayMode = Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Bottom;
+            else 
+                RootNavigation.PaneDisplayMode = Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Left;
+
+            RootNavigation.IsPaneOpen = autoOpen;
+            
+            _openOnHover = openOnHover;
+            _autoClose = autoClose;
+
+            // Clean up previous event handlers
+            RootNavigation.MouseMove -= RootNavigation_MouseMove;
+
+            if (_openOnHover || _autoClose)
+            {
+                RootNavigation.MouseMove += RootNavigation_MouseMove;
+            }
+        }
+
+        private void RootNavigation_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if (!_openOnHover && !_autoClose) return;
+
+            var pos = e.GetPosition(RootNavigation);
+            bool isHoveringSidebar = false;
+
+            double compactWidth = 50.0; // Approximate collapsed width
+            double openWidth = 250.0;   // OpenPaneLength
+
+            if (RootNavigation.PaneDisplayMode == Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Left)
+            {
+                isHoveringSidebar = pos.X <= (RootNavigation.IsPaneOpen ? openWidth : compactWidth);
+            }
+            else if (RootNavigation.PaneDisplayMode == Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Bottom)
+            {
+                // For bottom, check Y coordinate
+                isHoveringSidebar = pos.Y >= RootNavigation.ActualHeight - (RootNavigation.IsPaneOpen ? openWidth : compactWidth);
+            }
+            else if (RootNavigation.PaneDisplayMode == Wpf.Ui.Controls.NavigationViewPaneDisplayMode.Top)
+            {
+                // For top, check Y coordinate
+                isHoveringSidebar = pos.Y <= (RootNavigation.IsPaneOpen ? openWidth : compactWidth);
+            }
+
+            if (_openOnHover && isHoveringSidebar && !RootNavigation.IsPaneOpen)
+            {
+                RootNavigation.IsPaneOpen = true;
+            }
+            else if (_autoClose && !isHoveringSidebar && RootNavigation.IsPaneOpen)
+            {
+                RootNavigation.IsPaneOpen = false;
+            }
         }
 
         private void LogoutBtn_Click(object sender, RoutedEventArgs e)

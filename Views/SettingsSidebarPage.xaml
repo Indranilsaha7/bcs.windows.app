@@ -14,9 +14,8 @@
                         <TextBlock Text="Choose where the sidebar docks on the screen" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <ComboBox Width="150" SelectedIndex="0">
+                <ComboBox x:Name="SidebarPositionCombo" Width="150" SelectedIndex="0">
                     <ComboBoxItem Content="Left" />
-                    <ComboBoxItem Content="Right" />
                     <ComboBoxItem Content="Top" />
                     <ComboBoxItem Content="Bottom" />
                 </ComboBox>
@@ -29,7 +28,7 @@
                         <TextBlock Text="Automatically expand the sidebar when hovering over it" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <ui:ToggleSwitch IsChecked="True" />
+                <ui:ToggleSwitch x:Name="OpenOnHoverToggle" IsChecked="True" />
             </ui:CardControl>
 
             <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon Symbol=Settings24}">
@@ -39,7 +38,7 @@
                         <TextBlock Text="Automatically collapse the sidebar when mouse leaves" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <ui:ToggleSwitch IsChecked="False" />
+                <ui:ToggleSwitch x:Name="AutoCloseToggle" IsChecked="False" />
             </ui:CardControl>
 
             <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon Symbol=List24}">
@@ -49,7 +48,7 @@
                         <TextBlock Text="Keep the sidebar fully expanded by default" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <ui:ToggleSwitch IsChecked="True" />
+                <ui:ToggleSwitch x:Name="AutoOpenToggle" IsChecked="True" />
             </ui:CardControl>
 
             <ui:Button Content="Save Settings" Appearance="Primary" Icon="{ui:SymbolIcon Symbol=Save24}" HorizontalAlignment="Right" Margin="0,16,0,0" Click="SaveSettings_Click" />

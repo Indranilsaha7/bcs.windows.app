@@ -40,8 +40,8 @@
                            IsPaneToggleVisible="True"
                            VerticalAlignment="Stretch"
                            HorizontalAlignment="Stretch"
-                           TransitionDuration="300"
-                           Transition="SlideBottom">
+                           TransitionDuration="150"
+                           Transition="FadeIn">
 
             <ui:NavigationView.AutoSuggestBox>
                 <ui:AutoSuggestBox PlaceholderText="Search pages..." Icon="{ui:SymbolIcon Symbol=Search24}" />
@@ -71,10 +71,9 @@
                 <!-- Purchases with Sub-Links -->
                 <ui:NavigationViewItem Content="Purchases" Icon="{ui:SymbolIcon Symbol=Receipt24}">
                     <ui:NavigationViewItem.MenuItems>
-                        <ui:NavigationViewItem Content="Draft Pre-Purchase" TargetPageType="{x:Type local:PrePurchasePage}" Icon="{ui:SymbolIcon Symbol=ShoppingBag24}" />
-                        <ui:NavigationViewItem Content="Fast Purchase Scan" TargetPageType="{x:Type local:FastPurchasePage}" Icon="{ui:SymbolIcon Symbol=BarcodeScanner24}" />
+                        <ui:NavigationViewItem Content="Pre Draft Product" TargetPageType="{x:Type local:PurchasePreDraftProductPage}" Icon="{ui:SymbolIcon Symbol=ShoppingBag24}" />
+                        <ui:NavigationViewItem Content="Scan Pre Draft" TargetPageType="{x:Type local:PurchasePreDraftPurchasePage}" Icon="{ui:SymbolIcon Symbol=BarcodeScanner24}" />
                         <ui:NavigationViewItem Content="Detailed Purchase" TargetPageType="{x:Type local:PurchasePage}" Icon="{ui:SymbolIcon Symbol=Add24}" />
-                        <ui:NavigationViewItem Content="Purchase List" TargetPageType="{x:Type local:PurchaseHistoryPage}" Icon="{ui:SymbolIcon Symbol=History24}" />
                         <ui:NavigationViewItem Content="Purchase Return" TargetPageType="{x:Type local:PurchaseReturnPage}" Icon="{ui:SymbolIcon Symbol=ArrowUndo24}" />
                     </ui:NavigationViewItem.MenuItems>
                 </ui:NavigationViewItem>

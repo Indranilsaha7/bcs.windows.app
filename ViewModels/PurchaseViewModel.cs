@@ -285,6 +285,12 @@ namespace BarodaPOS.ViewModels
                 }).ToList());
 
                 Suppliers = new ObservableCollection<Supplier>(suppliers);
+                
+                // Smart option: if only 1 supplier exists, auto-select it.
+                if (Suppliers.Count == 1)
+                {
+                    SelectedSupplier = Suppliers.First();
+                }
             }
             catch (Exception ex)
             {
