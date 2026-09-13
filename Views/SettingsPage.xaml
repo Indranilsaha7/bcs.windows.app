@@ -11,9 +11,11 @@
             </ui:NavigationView.AutoSuggestBox>
             <ui:NavigationView.MenuItems>
                 <ui:NavigationViewItem Content="System Info" TargetPageType="{x:Type local:SettingsSystemPage}" Icon="{ui:SymbolIcon Symbol=Desktop24}" />
+                <ui:NavigationViewItem Content="Sidebar" TargetPageType="{x:Type local:SettingsSidebarPage}" Icon="{ui:SymbolIcon Symbol=List24}" />
                 <ui:NavigationViewItem Content="Hardware" TargetPageType="{x:Type local:SettingsHardwarePage}" Icon="{ui:SymbolIcon Symbol=Print24}" />
                 <ui:NavigationViewItem Content="Maintenance" TargetPageType="{x:Type local:SettingsMaintenancePage}" Icon="{ui:SymbolIcon Symbol=Wrench24}" />
                 <ui:NavigationViewItem Content="Login &amp; Security" TargetPageType="{x:Type local:SettingsLoginPage}" Icon="{ui:SymbolIcon Symbol=Key24}" />
+
             </ui:NavigationView.MenuItems>
         </ui:NavigationView>
     </Grid>

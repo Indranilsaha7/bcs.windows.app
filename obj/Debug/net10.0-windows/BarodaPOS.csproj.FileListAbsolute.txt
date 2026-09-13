@@ -213,3 +213,5 @@ C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sa
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\ProductionPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PosPage.baml
 C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\PosPage.g.cs
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\SettingsSidebarPage.baml
+C:\Users\Indranil saha\Desktop\coding\shop management\1. Baroda Computure And Sales\windows app\obj\Debug\net10.0-windows\Views\SettingsSidebarPage.g.cs
