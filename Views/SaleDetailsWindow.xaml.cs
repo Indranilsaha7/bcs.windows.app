@@ -50,8 +50,10 @@ namespace BarodaPOS.Views
                 {
                     estimatedHeight += (_sale.Items.Count * 15) + 50;
                 }
-                estimatedHeight += _bottomMargin;
-                
+                // Convert mm to 1/100 inch units
+                int extraFeedUnits = (int)(_bottomMargin * 3.937);
+                estimatedHeight += extraFeedUnits;
+
                 int paperWidth = pd.DefaultPageSettings.PaperSize.Width;
                 if (paperWidth < 100) paperWidth = 284; // fallback for 80mm
                 
@@ -200,8 +202,12 @@ namespace BarodaPOS.Views
             g.DrawString("Thank you for shopping!", regularFont, Brushes.Black, new RectangleF(leftMargin, yPos, rightMargin, 20), centerFormat);
             
             // Bottom Padding for auto-cutter / bottleneck
-            yPos += _bottomMargin;
-            g.DrawString(".", regularFont, Brushes.White, leftMargin, yPos);
+            int extraFeedUnits = (int)(_bottomMargin * 3.937);
+            yPos += extraFeedUnits;
+            using (var cutPen = new System.Drawing.Pen(System.Drawing.Color.LightGray, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
+            {
+                g.DrawLine(cutPen, leftMargin, yPos, rightMargin, yPos);
+            }
         }
     }
 }

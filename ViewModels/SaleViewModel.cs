@@ -714,8 +714,12 @@ namespace BarodaPOS.ViewModels
                 g.DrawString("Thank you for your business!", fontBold, System.Drawing.Brushes.Black, center, y, sfCenter);
                 
                 // Bottom Padding for auto-cutter / bottleneck
-                y += bottomMargin; 
-                g.DrawString(".", fontRegular, System.Drawing.Brushes.White, left, y);
+                int extraFeedUnits = (int)(bottomMargin * 3.937);
+                y += extraFeedUnits; 
+                using (var cutPen = new System.Drawing.Pen(System.Drawing.Color.LightGray, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash })
+                {
+                    g.DrawLine(cutPen, left, y, right, y);
+                }
             };
 
             pd.Print();

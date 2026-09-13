@@ -25,13 +25,22 @@
             <ui:CardControl Margin="0,0,0,8" Icon="{ui:SymbolIcon Symbol=Document24}">
                 <ui:CardControl.Header>
                     <StackPanel>
-                        <TextBlock Text="Receipt Margin" FontWeight="SemiBold" FontSize="14" />
-                        <TextBlock Text="Extra blank space at the bottom" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
+                        <TextBlock Text="Extra Paper Feed (mm)" FontWeight="SemiBold" FontSize="14" />
+                        <TextBlock Text="Forces printer to pull out extra paper by drawing a thin cut line" Foreground="{DynamicResource TextFillColorSecondaryBrush}" FontSize="12" Margin="0,2,0,0" />
                     </StackPanel>
                 </ui:CardControl.Header>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Slider x:Name="BottomMarginSlider" Width="150" Minimum="0" Maximum="200" Value="50" TickFrequency="10" IsSnapToTickEnabled="True" Margin="0,0,16,0" VerticalAlignment="Center" />
-                    <TextBlock Text="{Binding ElementName=BottomMarginSlider, Path=Value, StringFormat={}{0} units}" FontWeight="SemiBold" VerticalAlignment="Center" Width="60"/>
+                    <Slider x:Name="BottomMarginSlider" Width="150" Minimum="0" Maximum="100" Value="15" TickFrequency="5" IsSnapToTickEnabled="True" Margin="0,0,16,0" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding ElementName=BottomMarginSlider, Path=Value, StringFormat={}{0} mm}" FontWeight="SemiBold" VerticalAlignment="Center" Width="60"/>
+                    <Border BorderBrush="{DynamicResource TextFillColorSecondaryBrush}" BorderThickness="1" Width="50" Height="100" Margin="16,0,0,0" VerticalAlignment="Bottom">
+                        <StackPanel VerticalAlignment="Bottom">
+                            <TextBlock Text="Receipt" HorizontalAlignment="Center" FontSize="10" Foreground="{DynamicResource TextFillColorSecondaryBrush}"/>
+                            <Border Background="{DynamicResource SystemFillColorCautionBrush}" Height="{Binding ElementName=BottomMarginSlider, Path=Value}" Opacity="0.5">
+                                <TextBlock Text="Extra" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="10" Foreground="Black"/>
+                            </Border>
+                            <Rectangle Height="1" Fill="Black" StrokeDashArray="2 2" />
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </ui:CardControl>
 
