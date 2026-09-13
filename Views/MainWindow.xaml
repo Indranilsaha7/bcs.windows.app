@@ -62,6 +62,7 @@
                 <!-- Sales with Sub-Links -->
                 <ui:NavigationViewItem Content="Sales" Icon="{ui:SymbolIcon Symbol=Money24}">
                     <ui:NavigationViewItem.MenuItems>
+                        <ui:NavigationViewItem Content="POS" TargetPageType="{x:Type local:PosPage}" Icon="{ui:SymbolIcon Symbol=Store24}" />
                         <ui:NavigationViewItem Content="New Sale" TargetPageType="{x:Type local:SalePage}" Icon="{ui:SymbolIcon Symbol=Cart24}" />
                         <ui:NavigationViewItem Content="Add Sale History" TargetPageType="{x:Type local:AddSaleHistoryPage}" Icon="{ui:SymbolIcon Symbol=History24}" />
                     </ui:NavigationViewItem.MenuItems>
