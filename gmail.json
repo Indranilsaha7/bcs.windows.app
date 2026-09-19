@@ -1,0 +1,13 @@
+{
+    "web": {
+        "client_id": "461568467464-bek5uflmhsmmg9smfm1dqln7847219j1.apps.googleusercontent.com",
+        "project_id": "bcs-mail-sistem",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_secret": "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",
+        "redirect_uris": [
+            "https://developers.google.com/oauthplayground"
+        ]
+    }
+}

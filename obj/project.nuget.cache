@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "pV1852Bo5Rk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Indranil saha\\Desktop\\coding\\shop management\\1. Baroda Computure And Sales\\windows app\\BcsPosApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\konscious.security.cryptography.argon2\\1.3.1\\konscious.security.cryptography.argon2.1.3.1.nupkg.sha512",
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\konscious.security.cryptography.blake2\\1.1.1\\konscious.security.cryptography.blake2.1.1.1.nupkg.sha512",
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\wpf-ui\\4.3.0\\wpf-ui.4.3.0.nupkg.sha512",
+    "C:\\Users\\Indranil saha\\.nuget\\packages\\wpf-ui.abstractions\\4.3.0\\wpf-ui.abstractions.4.3.0.nupkg.sha512"
+  ],
+  "logs": []
+}

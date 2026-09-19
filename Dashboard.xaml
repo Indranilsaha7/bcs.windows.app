@@ -1,0 +1,144 @@
+<ui:FluentWindow x:Class="BcsPosApp.Dashboard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BcsPosApp"
+        xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+        mc:Ignorable="d"
+        Title="Baroda Computer &amp; Sales - Dashboard" Height="768" Width="1024"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Icon="al.ico"
+        ExtendsContentIntoTitleBar="True"
+        WindowBackdropType="Mica"
+        WindowCornerPreference="Round">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="Baroda Computer &amp; Sales - Dashboard" Background="#44000000" HorizontalAlignment="Stretch" Padding="10,5">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="al.png" Width="18" Height="18" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- Sidebar -->
+            <Border Grid.Column="0" Background="#33000000" BorderBrush="#22ffffff" BorderThickness="0,0,1,0">
+                <StackPanel Margin="10,20">
+                    <TextBlock Text="MAIN MENU" Foreground="#88ffffff" FontWeight="Bold" FontSize="11" Margin="10,0,0,10" />
+                    
+                    <ui:Button x:Name="BtnNavDashboard" Content="Dashboard" Icon="{ui:SymbolIcon Home24}" Appearance="Light" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5" Click="BtnNavDashboard_Click" />
+                    <ui:Button x:Name="BtnNavUsers" Content="System Users" Icon="{ui:SymbolIcon People24}" Appearance="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5" Click="BtnNavUsers_Click" />
+                    <ui:Button x:Name="BtnNavProducts" Content="Inventory / Products" Icon="{ui:SymbolIcon Box24}" Appearance="Transparent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5" Click="BtnNavProducts_Click" />
+                    
+                    <ui:Button Content="Logout" Icon="{ui:SymbolIcon SignOut24}" Appearance="Danger" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,50,0,0" Click="BtnLogout_Click" />
+                </StackPanel>
+            </Border>
+            
+            <!-- Main Content Area -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" /> <!-- Topbar -->
+                    <RowDefinition Height="*" /> <!-- Content -->
+                </Grid.RowDefinitions>
+                
+                <!-- Topbar -->
+                <Border Grid.Row="0" Background="#22000000" BorderBrush="#22ffffff" BorderThickness="0,0,0,1" Padding="20,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock x:Name="lblPageTitle" Grid.Column="0" Text="Dashboard Overview" FontSize="18" FontWeight="SemiBold" Foreground="White" VerticalAlignment="Center" />
+                        
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                            <ui:Button Content="Refresh Data" Icon="{ui:SymbolIcon ArrowClockwise24}" Appearance="Primary" Click="BtnRefresh_Click" Margin="0,0,15,0" />
+                            <ui:SymbolIcon Symbol="PersonCircle24" Foreground="White" FontSize="24" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Page Content -->
+                <Grid Grid.Row="1" Margin="20">
+                    
+                    <!-- Dashboard View -->
+                    <Grid x:Name="DashboardView" Visibility="Visible">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <!-- Dashboard Cards -->
+                        <Grid Grid.Row="0" Margin="0,0,0,20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <ui:Card Grid.Column="0" Margin="0,0,10,0" Background="#550f172a" BorderBrush="#33ffffff">
+                                <StackPanel>
+                                    <TextBlock Text="Total Users" Foreground="#94a3b8" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="lblTotalUsers" Text="-" FontSize="32" FontWeight="Bold" Foreground="White" Margin="0,5,0,0" />
+                                </StackPanel>
+                            </ui:Card>
+                            
+                            <ui:Card Grid.Column="1" Margin="10,0,10,0" Background="#550f172a" BorderBrush="#33ffffff">
+                                <StackPanel>
+                                    <TextBlock Text="Total Admins" Foreground="#94a3b8" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="lblAdmins" Text="-" FontSize="32" FontWeight="Bold" Foreground="#38bdf8" Margin="0,5,0,0" />
+                                </StackPanel>
+                            </ui:Card>
+                            
+                            <ui:Card Grid.Column="2" Margin="10,0,0,0" Background="#550f172a" BorderBrush="#33ffffff">
+                                <StackPanel>
+                                    <TextBlock Text="Total Products" Foreground="#94a3b8" FontWeight="SemiBold" />
+                                    <TextBlock x:Name="lblProducts" Text="-" FontSize="32" FontWeight="Bold" Foreground="#f472b6" Margin="0,5,0,0" />
+                                </StackPanel>
+                            </ui:Card>
+                        </Grid>
+                    </Grid>
+
+                    <!-- Users View -->
+                    <Grid x:Name="UsersView" Visibility="Collapsed">
+                        <ui:DataGrid x:Name="UsersGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" Background="#550f172a" RowBackground="Transparent" AlternatingRowBackground="#11ffffff">
+                            <ui:DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="Auto" />
+                                <DataGridTextColumn Header="Username" Binding="{Binding username}" Width="*" />
+                                <DataGridTextColumn Header="Role" Binding="{Binding role}" Width="*" />
+                            </ui:DataGrid.Columns>
+                        </ui:DataGrid>
+                    </Grid>
+                    
+                    <!-- Products View -->
+                    <Grid x:Name="ProductsView" Visibility="Collapsed">
+                        <ui:DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" Background="#550f172a" RowBackground="Transparent" AlternatingRowBackground="#11ffffff">
+                            <ui:DataGrid.Columns>
+                                <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="Auto" />
+                                <DataGridTextColumn Header="Name" Binding="{Binding name}" Width="*" />
+                                <DataGridTextColumn Header="Category" Binding="{Binding category}" Width="Auto" />
+                                <DataGridTextColumn Header="Stock" Binding="{Binding quantity}" Width="Auto" />
+                                <DataGridTextColumn Header="Buy Price" Binding="{Binding buy_price}" Width="Auto" />
+                                <DataGridTextColumn Header="Sell Price" Binding="{Binding sell_price}" Width="Auto" />
+                            </ui:DataGrid.Columns>
+                        </ui:DataGrid>
+                    </Grid>
+                    
+                    <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Collapsed" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </Grid>
+        </Grid>
+        
+        <ui:SnackbarPresenter x:Name="SnackbarPresenter" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" />
+    </Grid>
+</ui:FluentWindow>
