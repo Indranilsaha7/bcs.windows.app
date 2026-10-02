@@ -21,15 +21,19 @@ namespace BcsPosApp
         public string id { get; set; }
         public string name { get; set; }
         public string category { get; set; }
-        public double quantity { get; set; }
-        public double buy_price { get; set; }
-        public double sell_price { get; set; }
+        public double? quantity { get; set; }
+        public double? buy_price { get; set; }
+        public double? sell_price { get; set; }
     }
 
     public partial class Dashboard : FluentWindow
     {
         private static readonly HttpClient client = new HttpClient { BaseAddress = new Uri("https://backend.bcs.bcsdeveloper.com/") };
         private readonly SnackbarService _snackbarService;
+        
+        private int currentProductPage = 0;
+        private int productsPerPage = 100;
+        private int totalProductsCount = 0;
 
         static Dashboard()
         {
@@ -43,12 +47,17 @@ namespace BcsPosApp
             _snackbarService.SetSnackbarPresenter(SnackbarPresenter);
             
             // Load data when window loads
-            this.Loaded += async (s, e) => await LoadUsersData();
+            this.Loaded += async (s, e) => {
+                await LoadUsersData();
+                await LoadProductsData();
+            };
         }
 
         private async void BtnRefresh_Click(object sender, RoutedEventArgs e)
         {
+            currentProductPage = 0;
             await LoadUsersData();
+            await LoadProductsData();
         }
 
         private void BtnLogout_Click(object sender, RoutedEventArgs e)
@@ -97,18 +106,33 @@ namespace BcsPosApp
             lblPageTitle.Text = "Inventory / Products";
         }
 
+        private async void BtnPrevPage_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentProductPage > 0)
+            {
+                currentProductPage--;
+                await LoadProductsData();
+            }
+        }
+
+        private async void BtnNextPage_Click(object sender, RoutedEventArgs e)
+        {
+            // Allow next page if we haven't reached the end
+            if ((currentProductPage + 1) * productsPerPage < totalProductsCount)
+            {
+                currentProductPage++;
+                await LoadProductsData();
+            }
+        }
+
         private async Task LoadUsersData()
         {
             try
             {
-                LoadingRing.Visibility = Visibility.Visible;
-
                 var usersResponse = await client.GetAsync("api/users");
-                var productsResponse = await client.GetAsync("api/data-manager"); // This endpoint returns products
-
                 if (!usersResponse.IsSuccessStatusCode)
                 {
-                    ShowError("Failed to fetch data from server.");
+                    ShowError("Failed to fetch users from server.");
                     return;
                 }
 
@@ -135,31 +159,57 @@ namespace BcsPosApp
                         lblAdmins.Text = admins.ToString();
                     }
                 }
-                
-                // Process Products
+            }
+            catch (Exception ex)
+            {
+                ShowError("Users connection error: " + ex.Message);
+            }
+        }
+
+        private async Task LoadProductsData()
+        {
+            try
+            {
+                LoadingRing.Visibility = Visibility.Visible;
+                BtnPrevPage.IsEnabled = false;
+                BtnNextPage.IsEnabled = false;
+
+                int offset = currentProductPage * productsPerPage;
+                var productsResponse = await client.GetAsync($"api/data-manager?limit={productsPerPage}&offset={offset}");
+
                 if (productsResponse.IsSuccessStatusCode)
                 {
                     var productsJsonStr = await productsResponse.Content.ReadAsStringAsync();
                     var productsResult = JsonDocument.Parse(productsJsonStr);
                     if (productsResult.RootElement.TryGetProperty("success", out var prodSuccess) && prodSuccess.GetBoolean())
                     {
+                        // Get total count
+                        if (productsResult.RootElement.TryGetProperty("total_count", out var totalEl))
+                        {
+                            totalProductsCount = totalEl.GetInt32();
+                            lblProducts.Text = totalProductsCount.ToString();
+                        }
+
+                        // Parse products array
                         var prodArray = productsResult.RootElement.GetProperty("data");
                         var products = JsonSerializer.Deserialize<List<ProductDto>>(prodArray.GetRawText());
                         
                         ProductsGrid.ItemsSource = products;
-                        
-                        if (products != null)
-                        {
-                            lblProducts.Text = products.Count.ToString();
-                        }
+
+                        // Update pagination UI
+                        lblPageInfo.Text = $"Page {currentProductPage + 1} of {Math.Ceiling((double)totalProductsCount / productsPerPage)}";
+                        BtnPrevPage.IsEnabled = currentProductPage > 0;
+                        BtnNextPage.IsEnabled = (currentProductPage + 1) * productsPerPage < totalProductsCount;
                     }
                 }
-                
-                ShowSuccess("Data refreshed successfully!");
+                else 
+                {
+                    ShowError("Failed to fetch products from server.");
+                }
             }
             catch (Exception ex)
             {
-                ShowError("Connection error: " + ex.Message);
+                ShowError("Products connection error: " + ex.Message);
             }
             finally
             {

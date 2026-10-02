@@ -122,7 +122,12 @@
                     
                     <!-- Products View -->
                     <Grid x:Name="ProductsView" Visibility="Collapsed">
-                        <ui:DataGrid x:Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" Background="#550f172a" RowBackground="Transparent" AlternatingRowBackground="#11ffffff">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        
+                        <ui:DataGrid Grid.Row="0" x:Name="ProductsGrid" AutoGenerateColumns="False" CanUserAddRows="False" HeadersVisibility="Column" Background="#550f172a" RowBackground="Transparent" AlternatingRowBackground="#11ffffff">
                             <ui:DataGrid.Columns>
                                 <DataGridTextColumn Header="ID" Binding="{Binding id}" Width="Auto" />
                                 <DataGridTextColumn Header="Name" Binding="{Binding name}" Width="*" />
@@ -132,6 +137,12 @@
                                 <DataGridTextColumn Header="Sell Price" Binding="{Binding sell_price}" Width="Auto" />
                             </ui:DataGrid.Columns>
                         </ui:DataGrid>
+                        
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,0">
+                            <ui:Button x:Name="BtnPrevPage" Content="Previous Page" Icon="{ui:SymbolIcon ChevronLeft24}" Appearance="Secondary" Click="BtnPrevPage_Click" Margin="0,0,10,0" IsEnabled="False" />
+                            <TextBlock x:Name="lblPageInfo" Text="Page 1" VerticalAlignment="Center" Foreground="#94a3b8" FontWeight="SemiBold" Margin="10,0,10,0" />
+                            <ui:Button x:Name="BtnNextPage" Content="Next Page" Icon="{ui:SymbolIcon ChevronRight24}" Appearance="Secondary" Click="BtnNextPage_Click" Margin="10,0,0,0" />
+                        </StackPanel>
                     </Grid>
                     
                     <ui:ProgressRing x:Name="LoadingRing" IsIndeterminate="True" Visibility="Collapsed" Width="60" Height="60" HorizontalAlignment="Center" VerticalAlignment="Center" />
