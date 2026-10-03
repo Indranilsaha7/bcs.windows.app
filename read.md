@@ -66,7 +66,7 @@ for more details cheak the <a href=".\backend\before-action-read-me.md">md</a>
         40. stock report                                                           |=====================Reports
         41. stock adjust                                                           |=====================Reports
         42. Monthly report                                                         |=====================Reports
-        43. MMonthly report history                                                |=====================Reports
+        43. Monthly report history                                                |=====================Reports
         44. day report history                                                     |=====================Reports
         45. stock adjust history                     ------------------------------|=====================Reports
         46. emloyee management                                                     
