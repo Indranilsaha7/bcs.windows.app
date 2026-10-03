@@ -1,18 +1,25 @@
 /* VS Code Style Custom Titlebar */
 .titlebar {
+    height: 30px;
+    background-color: #181818;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: 30px; /* Exact VS Code titlebar height */
-    background-color: #181818; /* VS Code dark theme background */
-    color: #CCCCCC;
+    color: #cccccc;
     font-size: 13px;
-    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-    user-select: none;
-    -webkit-app-region: drag; /* Makes the entire bar draggable natively in Electron */
+    font-family: "Segoe UI", -apple-system, sans-serif;
     position: fixed;
-    top: 0; left: 0; right: 140px;
+    top: 0; left: 0; right: 0;
     z-index: 9999;
+    user-select: none;
+}
+
+/* Dedicated drag region that avoids the native window controls on the right */
+.titlebar-drag-region {
+    position: absolute;
+    top: 0; left: 0; right: 140px; 
+    height: 100%;
+    -webkit-app-region: drag;
+    z-index: 0;
 }
 
 .titlebar-left {
@@ -20,6 +27,8 @@
     align-items: center;
     height: 100%;
     padding-left: 10px;
+    z-index: 1;
+    -webkit-app-region: no-drag;
 }
 
 .titlebar-icon {
@@ -31,7 +40,6 @@
 .titlebar-menu {
     display: flex;
     height: 100%;
-    -webkit-app-region: no-drag; /* Makes the menu clickable, not draggable */
 }
 
 .menu-item {
@@ -50,10 +58,14 @@
 }
 
 .titlebar-center {
-    flex: 1;
+    position: absolute;
+    left: 0; right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    pointer-events: none; /* Allows dragging through the text */
+    z-index: 1;
     font-size: 12px;
     color: #999999;
 }
