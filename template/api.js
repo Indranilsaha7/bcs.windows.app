@@ -2,7 +2,7 @@
 
 const API_CONFIG = {
     // Change this to your deployed Cloudflare Worker URL in production
-    BASE_URL: 'http://127.0.0.1:8788', 
+    BASE_URL: 'https://backend.bcs.bcsdeveloper.com', 
     API_KEY: 'backend-bcs-pos'
 };
 
