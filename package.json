@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "argon2": "^0.45.1",
-    "better-sqlite3": "^13.0.3"
+    "hash-wasm": "^4.12.0"
   },
   "allowScripts": {
     "argon2@0.45.1": true

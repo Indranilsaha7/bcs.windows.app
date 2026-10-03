@@ -251,7 +251,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="template/alert/alert.js"></script>
-    <script src="template/topbar/topbar.js"></script>
+    <script src="template/topbar/topbar.js"></script><script src="template/api.js"></script>
     <script>
         const sessionJson = localStorage.getItem('userSession');
         if (!sessionJson) window.location.href = 'index.html';
@@ -268,25 +268,32 @@
         if (topbarUserEl) topbarUserEl.textContent = user.username;
 
         // Fetch Local Database Data
-        const dbLocal = require('./db.js');
         
-        function loadDashboardStats() {
+        
+        async function loadDashboardStats() {
             try {
-                const d = dbLocal.getDashboardStats();
-                // Update DOM with live local data
-                document.getElementById('val-total-sale').textContent = `₹ ${d.totalSale.toFixed(2)}`;
-                document.getElementById('val-total-purchase').textContent = `₹ ${d.totalPurchase.toFixed(2)}`;
-                document.getElementById('val-net-profit').textContent = `₹ ${d.netProfit.toFixed(2)}`;
-                document.getElementById('val-total-orders').textContent = d.totalOrders;
+                const res = await fetchAPI('/api/dashboard'); if (!res || !res.success) return; const d = res.data;
+                // Safely update DOM with live local data
+                const update = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+        async function loadDashboardStats() {
+            try {
+                const res = await fetchAPI('/api/dashboard');
+                if (!res || !res.success) return;
+                const d = res.data;
+                const update = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
                 
-                document.getElementById('val-total-products').textContent = d.totalProducts;
-                document.getElementById('val-items-in-stock').textContent = d.inStock;
-                document.getElementById('val-out-of-stock').textContent = d.outOfStock;
-                document.getElementById('val-categories').textContent = d.categories;
-                document.getElementById('val-total-customers').textContent = d.totalCustomers;
+                update('val-total-sale', '₹ ' + d.totalSale.toFixed(2));
+                update('val-total-purchase', '₹ ' + d.totalPurchase.toFixed(2));
+                update('val-net-profit', '₹ ' + d.netProfit.toFixed(2));
+                update('val-total-orders', d.totalOrders);
+                
+                update('val-total-products', d.totalProducts);
+                update('val-items-in-stock', d.inStock);
+                update('val-out-of-stock', d.outOfStock);
+                update('val-categories', d.categories);
+                update('val-total-customers', d.totalCustomers);
             } catch (err) {
-                console.error("Local DB Error:", err);
-                showAlert('error', 'Database Error', 'Failed to load local stats.');
+                console.error('Fetch Error:', err);
             }
         }
         

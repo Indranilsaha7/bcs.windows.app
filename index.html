@@ -274,7 +274,7 @@
     
     <!-- Page Specific Scripts -->
     <script>
-        const argon2 = require('argon2');
+        const { argon2Verify } = require('hash-wasm');
 
         // --- Session Persistence & Expiry Check ---
         (() => {
@@ -343,7 +343,8 @@
                 const serverCodeHash = saltData.code_hash;
 
                 // Step 2: Offload Argon2 computation to the client to save Cloudflare CPU limits
-                const isPasswordValid = await argon2.verify(serverPasswordHash, password);
+                // Using WebAssembly to prevent native module crashes in Electron
+                const isPasswordValid = await argon2Verify({ password, hash: serverPasswordHash });
                 if (!isPasswordValid) {
                     showAlert('error', 'Access Denied', 'Invalid password.');
                     btn.classList.remove('is-loading');
@@ -353,7 +354,7 @@
 
                 let isCodeValid = true;
                 if (serverCodeHash) {
-                    isCodeValid = await argon2.verify(serverCodeHash, code);
+                    isCodeValid = await argon2Verify({ password: code, hash: serverCodeHash });
                     if (!isCodeValid) {
                         showAlert('error', 'Access Denied', 'Invalid security code.');
                         btn.classList.remove('is-loading');
@@ -396,7 +397,8 @@
 
             } catch (error) {
                 console.error("Auth Error:", error);
-                showAlert('error', 'Network Error', 'Could not connect to authentication server.');
+                // Reveal the exact error to the user for debugging
+                showAlert('error', 'App Error', error.message || error.toString());
                 btn.classList.remove('is-loading');
                 btn.disabled = false;
             }
