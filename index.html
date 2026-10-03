@@ -218,20 +218,14 @@
 </head>
 <body>
     
-    <!-- VS Code Style Topbar HTML -->
+    <!-- Refractive Black Hole Topbar -->
     <div class="titlebar">
         <div class="titlebar-drag-region"></div>
-        <div class="titlebar-left">
-            <img src="al.png" alt="Logo" class="titlebar-icon">
-            <div class="titlebar-menu">
-                <div class="menu-item">File</div>
-                <div class="menu-item">Edit</div>
-                <div class="menu-item">View</div>
-                <div class="menu-item">Help</div>
+        <div class="titlebar-content">
+            <div class="titlebar-brand">
+                <img src="al.png" alt="Logo">
+                Baroda Computer And Sales - Secure Login
             </div>
-        </div>
-        <div class="titlebar-center" style="position: absolute; left: 50%; transform: translateX(-50%);">
-            <span>BCS Enterprise POS</span>
         </div>
     </div>
 
@@ -281,6 +275,33 @@
     <!-- Page Specific Scripts -->
     <script>
         const argon2 = require('argon2');
+
+        // --- Session Persistence & Expiry Check ---
+        (() => {
+            const MAX_IDLE = 2 * 60 * 60 * 1000; // 2 hours
+            const existingSession = localStorage.getItem('userSession');
+            
+            if (existingSession) {
+                const lastActivity = parseInt(localStorage.getItem('lastActivity') || '0');
+                if (Date.now() - lastActivity >= MAX_IDLE) {
+                    // Session expired while app was closed
+                    localStorage.removeItem('userSession');
+                    localStorage.removeItem('lastActivity');
+                    sessionStorage.setItem('logoutMessage', 'Your session expired while you were away.');
+                } else {
+                    // Session is still valid! Reset timer and auto-login
+                    localStorage.setItem('lastActivity', Date.now().toString());
+                    window.location.href = 'dashboard.html';
+                }
+            }
+        })();
+
+        // Show Session Expiry message if redirected here
+        const logoutMsg = sessionStorage.getItem('logoutMessage');
+        if (logoutMsg) {
+            setTimeout(() => showAlert('warning', 'Session Timeout', logoutMsg), 500);
+            sessionStorage.removeItem('logoutMessage');
+        }
 
         // Smart Enter Key System
         document.addEventListener('keypress', function(e) {

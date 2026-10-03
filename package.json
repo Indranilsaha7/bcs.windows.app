@@ -14,7 +14,8 @@
     "electron": "^44.5.1"
   },
   "dependencies": {
-    "argon2": "^0.45.1"
+    "argon2": "^0.45.1",
+    "better-sqlite3": "^13.0.3"
   },
   "allowScripts": {
     "argon2@0.45.1": true

@@ -1,71 +1,109 @@
-/* VS Code Style Custom Titlebar */
+/* Ultra-Modern Black Hole Light Bending Topbar */
 .titlebar {
-    height: 30px;
-    background-color: #181818;
-    display: flex;
-    align-items: center;
-    color: #cccccc;
-    font-size: 13px;
-    font-family: "Segoe UI", -apple-system, sans-serif;
+    height: 48px; /* Expanded for better proportions */
     position: fixed;
     top: 0; left: 0; right: 0;
     z-index: 9999;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    font-family: 'Inter', sans-serif;
     user-select: none;
+    background: transparent; /* CRITICAL: Transparent for the XOR mask to work */
 }
 
-/* Dedicated drag region that avoids the native window controls on the right */
+/* Base background & standard blur */
+.titlebar::before {
+    content: ''; 
+    position: absolute; 
+    inset: 0; 
+    z-index: -1;
+    background: rgba(30, 30, 36, 0.4); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* The Refractive Ring Lens (XOR Mask) */
+.titlebar::after {
+    content: ''; 
+    position: absolute; 
+    inset: 0; 
+    z-index: -2;
+    padding: 3px; /* Thickness of the refracting edge */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    backdrop-filter: blur(20px) saturate(400%) contrast(150%) brightness(1.2);
+    -webkit-backdrop-filter: blur(20px) saturate(400%) contrast(150%) brightness(1.2);
+}
+
+/* Dedicated drag region avoids right window controls (140px) */
 .titlebar-drag-region {
-    position: absolute;
+    position: absolute; 
     top: 0; left: 0; right: 140px; 
     height: 100%;
-    -webkit-app-region: drag;
+    -webkit-app-region: drag; 
     z-index: 0;
 }
 
-.titlebar-left {
-    display: flex;
+/* Container for Topbar content */
+.titlebar-content {
+    display: flex; 
+    justify-content: space-between; 
     align-items: center;
-    height: 100%;
-    padding-left: 10px;
+    width: 100%; 
+    padding-right: 140px; /* Leave space for native OS controls */
+    -webkit-app-region: no-drag; /* Buttons must be clickable */
     z-index: 1;
-    -webkit-app-region: no-drag;
 }
 
-.titlebar-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 12px;
-}
-
-.titlebar-menu {
-    display: flex;
-    height: 100%;
-}
-
-.menu-item {
-    padding: 0 8px;
-    margin: 3px 2px;
-    height: calc(100% - 6px);
+.titlebar-brand {
     display: flex;
     align-items: center;
-    cursor: default;
-    border-radius: 4px;
-    transition: background-color 0.1s;
+    gap: 10px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
-.menu-item:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.titlebar-brand img {
+    width: 18px;
+    height: 18px;
 }
 
-.titlebar-center {
-    position: absolute;
-    left: 0; right: 0;
-    display: flex;
-    justify-content: center;
+/* Topbar Action Buttons */
+.topbar-actions {
+    display: flex; 
+    gap: 6px; 
     align-items: center;
-    height: 100%;
-    pointer-events: none; /* Allows dragging through the text */
-    z-index: 1;
-    font-size: 12px;
-    color: #999999;
 }
+
+.tb-btn {
+    padding: 5px 12px; 
+    border-radius: 4px; 
+    font-size: 11px; 
+    font-weight: 600; 
+    cursor: pointer; 
+    border: none; 
+    color: white;
+    transition: opacity 0.2s;
+}
+
+.tb-btn:hover { opacity: 0.8; }
+
+.tb-btn-purple { background: linear-gradient(135deg, #6C63FF, #9D4EDD); }
+.tb-btn-info { background: #0b3d4a; }
+.tb-btn-grey { background: #33333b; }
+.tb-btn-success { background: #0c3620; }
+.tb-btn-yellow { background: #5a4200; color: #ffeb3b; }
+.tb-btn-danger { background: #4a1515; color: #ff8a8a; }
+
+.tb-text { 
+    font-size: 11px; 
+    color: #888899; 
+    margin-left: 8px;
+    font-weight: 500;
+}
+.tb-text-white { color: #fff; }

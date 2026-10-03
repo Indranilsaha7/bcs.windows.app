@@ -7,9 +7,9 @@ function createWindow () {
     height: 768,
     titleBarStyle: 'hidden',
     titleBarOverlay: {
-      color: '#181818',
-      symbolColor: '#cccccc',
-      height: 30
+      color: '#00000000', /* Transparent so the CSS glassmorphism shows through */
+      symbolColor: '#ffffff',
+      height: 48
     },
     icon: path.join(__dirname, 'al.ico'),
     webPreferences: {
