@@ -42,18 +42,15 @@
     justify-content: center;
     background: rgba(255,255,255,0.05);
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
 }
 
 .toast-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 100%;
+    height: 100%;
 }
-
-.toast.success .toast-icon svg { fill: #00E676; }
-.toast.error .toast-icon svg { fill: #FF5E5E; }
-.toast.warning .toast-icon svg { fill: #FFB74D; }
 
 .toast-content {
     display: flex;

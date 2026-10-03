@@ -11,17 +11,14 @@ function showAlert(type, title, message) {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     
-    let svgIcon = '';
-    if (type === 'success') {
-        svgIcon = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
-    } else if (type === 'error') {
-        svgIcon = `<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>`;
-    } else if (type === 'warning') {
-        svgIcon = `<svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>`;
-    }
+    // Determine the Lottie file path based on alert type
+    let animationFile = '';
+    if (type === 'success') animationFile = 'template/success.json';
+    else if (type === 'error') animationFile = 'template/error.json';
+    else if (type === 'warning') animationFile = 'template/Alert.json';
 
     toast.innerHTML = `
-        <div class="toast-icon">${svgIcon}</div>
+        <div class="toast-icon" id="lottie-${Date.now()}"></div>
         <div class="toast-content">
             <h4>${title}</h4>
             <p>${message}</p>
@@ -30,7 +27,19 @@ function showAlert(type, title, message) {
 
     container.appendChild(toast);
 
-    // Auto dismiss after 3 seconds
+    // Initialize the Lottie animation for this specific toast
+    const iconContainer = toast.querySelector('.toast-icon');
+    if (animationFile && typeof lottie !== 'undefined') {
+        lottie.loadAnimation({
+            container: iconContainer,
+            renderer: 'svg',
+            loop: false, // Plays the tick/cross animation once
+            autoplay: true,
+            path: animationFile
+        });
+    }
+
+    // Auto dismiss after 3.5 seconds
     setTimeout(() => {
         toast.classList.add('hide');
         setTimeout(() => toast.remove(), 400); // Wait for CSS animation
