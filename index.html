@@ -280,7 +280,14 @@
     
     <!-- Page Specific Scripts -->
     <script>
-        document.getElementById('btn-login').addEventListener('click', function() {
+        const argon2 = require('argon2');
+
+        // Smart Enter Key System
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') document.getElementById('btn-login').click();
+        });
+
+        document.getElementById('btn-login').addEventListener('click', async function() {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const code = document.getElementById('code').value;
@@ -295,15 +302,83 @@
             btn.classList.add('is-loading');
             btn.disabled = true;
 
-            // Simulate authentication process
-            setTimeout(() => {
-                btn.classList.remove('is-loading');
-                showAlert('success', 'Access Granted', `Authentication successful. Welcome, ${username}!`);
-                
-                setTimeout(() => {
+            try {
+                // Step 1: Securely fetch the user's password salt/hash
+                const saltRes = await fetch('https://backend.bcs.bcsdeveloper.com/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': 'backend-bcs-pos' },
+                    body: JSON.stringify({ username, action: 'get_salt' })
+                });
+
+                if (!saltRes.ok) {
+                    showAlert('error', 'Login Failed', saltRes.status === 404 ? 'User not found in system.' : 'Failed to retrieve credentials.');
+                    btn.classList.remove('is-loading');
                     btn.disabled = false;
-                }, 2000);
-            }, 1800);
+                    return;
+                }
+
+                const saltData = await saltRes.json();
+                const serverPasswordHash = saltData.password_hash;
+                const serverCodeHash = saltData.code_hash;
+
+                // Step 2: Offload Argon2 computation to the client to save Cloudflare CPU limits
+                const isPasswordValid = await argon2.verify(serverPasswordHash, password);
+                if (!isPasswordValid) {
+                    showAlert('error', 'Access Denied', 'Invalid password.');
+                    btn.classList.remove('is-loading');
+                    btn.disabled = false;
+                    return;
+                }
+
+                let isCodeValid = true;
+                if (serverCodeHash) {
+                    isCodeValid = await argon2.verify(serverCodeHash, code);
+                    if (!isCodeValid) {
+                        showAlert('error', 'Access Denied', 'Invalid security code.');
+                        btn.classList.remove('is-loading');
+                        btn.disabled = false;
+                        return;
+                    }
+                }
+
+                // Step 3: Complete login process
+                const loginRes = await fetch('https://backend.bcs.bcsdeveloper.com/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'x-api-key': 'backend-bcs-pos' },
+                    body: JSON.stringify({ 
+                        username, 
+                        password: serverPasswordHash, // The backend expects the exact hash
+                        code: serverCodeHash, 
+                        action: 'login' 
+                    })
+                });
+
+                const loginData = await loginRes.json();
+                if (loginData.success) {
+                    showAlert('success', 'Access Granted', `Welcome back, ${username}! Redirecting...`);
+                    
+                    // Store Session
+                    localStorage.setItem('userSession', JSON.stringify({
+                        username,
+                        role: loginData.role,
+                        permissions: loginData.permissions
+                    }));
+
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                } else {
+                    showAlert('error', 'Login Failed', loginData.error || 'Invalid credentials');
+                    btn.classList.remove('is-loading');
+                    btn.disabled = false;
+                }
+
+            } catch (error) {
+                console.error("Auth Error:", error);
+                showAlert('error', 'Network Error', 'Could not connect to authentication server.');
+                btn.classList.remove('is-loading');
+                btn.disabled = false;
+            }
         });
     </script>
 </body>

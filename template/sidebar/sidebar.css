@@ -1,7 +1,162 @@
-/* Global Sidebar Styles */
+/* Global Application Layout (Sidebar + Main Content) */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    padding-top: 30px; /* Offset for native topbar */
+    box-sizing: border-box;
+    background-color: #121216; /* Base dark */
+    background-image: radial-gradient(circle at 100% 0%, rgba(108, 99, 255, 0.05) 0%, rgba(18, 18, 22, 1) 50%);
+    overflow: hidden;
+}
+
+/* Sidebar Styling */
 .sidebar {
     width: 260px;
-    background-color: #16161E;
-    border-right: 1px solid #22222A;
-    height: 100%;
+    background: rgba(22, 22, 28, 0.65);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 25px 0;
+    z-index: 10;
+    box-shadow: 5px 0 20px rgba(0,0,0,0.2);
 }
+
+.sidebar-header {
+    padding: 0 25px 25px 25px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-brand {
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-brand img {
+    width: 30px;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 15px;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Custom Scrollbar for Sidebar */
+.sidebar-menu::-webkit-scrollbar { width: 5px; }
+.sidebar-menu::-webkit-scrollbar-track { background: transparent; }
+.sidebar-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+.menu-label {
+    font-size: 11px;
+    color: #666677;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 15px 10px 5px 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    color: #a0a0b0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    transform: translateX(4px);
+}
+
+.menu-item.active {
+    background: linear-gradient(135deg, rgba(108, 99, 255, 0.15), rgba(157, 78, 221, 0.15));
+    color: #fff;
+    border-left: 4px solid #6C63FF;
+    box-shadow: inset 0 0 20px rgba(108, 99, 255, 0.05);
+}
+
+.menu-item svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+    transition: all 0.2s ease;
+}
+
+.menu-item.active svg {
+    filter: drop-shadow(0 0 5px rgba(108, 99, 255, 0.5));
+}
+
+.sidebar-footer {
+    padding: 20px 25px 0 25px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #6C63FF, #9D4EDD);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.user-role {
+    color: #888899;
+    font-size: 11px;
+    text-transform: capitalize;
+}
+
+/* Main Content Area */
+.main-content {
+    flex-grow: 1;
+    padding: 35px 45px;
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Custom Scrollbar for Main Content */
+.main-content::-webkit-scrollbar { width: 8px; }
+.main-content::-webkit-scrollbar-track { background: transparent; }
+.main-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+.main-content::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }

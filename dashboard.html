@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCS Enterprise - Dashboard</title>
+    
+    <!-- Global Components -->
+    <link rel="stylesheet" href="template/topbar/topbar.css">
+    <link rel="stylesheet" href="template/sidebar/sidebar.css">
+    <link rel="stylesheet" href="template/alert/alert.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .page-title h1 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #888899;
+            font-size: 14px;
+        }
+
+        /* Dashboard Overview Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(30, 30, 36, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(40, 40, 48, 0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border-top: 1px solid rgba(108, 99, 255, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-title {
+            color: #a0a0b0;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(108, 99, 255, 0.1);
+        }
+
+        .stat-icon svg { width: 18px; height: 18px; fill: #6C63FF; }
+
+        .stat-value {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* Action Buttons */
+        .header-actions { display: flex; gap: 15px; }
+        
+        .btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6C63FF, #9D4EDD);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(108, 99, 255, 0.5);
+        }
+
+    </style>
+</head>
+<body>
+    
+    <!-- VS Code Style Topbar -->
+    <div class="titlebar">
+        <div class="titlebar-drag-region"></div>
+        <div class="titlebar-left">
+            <img src="al.png" alt="Logo" class="titlebar-icon">
+            <div class="titlebar-menu">
+                <div class="menu-item">File</div>
+                <div class="menu-item">View</div>
+                <div class="menu-item">Help</div>
+            </div>
+        </div>
+        <div class="titlebar-center" style="position: absolute; left: 50%; transform: translateX(-50%);">
+            <span>Dashboard - BCS Enterprise</span>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="app-container">
+        
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-brand">
+                    <img src="al.png" alt="Logo">
+                    BCS Enterprise
+                </div>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-label">Main</div>
+                
+                <a href="dashboard.html" class="menu-item active">
+                    <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+                    Dashboard
+                </a>
+                
+                <a href="#" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 4.05.4 5.5 1.5 1.35-.85 3.8-1.5 5.5-1.5 1.65 0 3.35.3 4.75 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zM21 18.5c-1.1-.35-2.3-.5-3.5-.5-1.7 0-4.15.65-5.5 1.5V8c1.35-.85 3.8-1.5 5.5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
+                    Sales / POS
+                </a>
+                
+                <div class="menu-label">Inventory</div>
+                
+                <a href="#" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                    Products
+                </a>
+                
+                <a href="#" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/><path d="M7 12h2v5H7zm4-3h2v8h-2zm4-3h2v11h-2z"/></svg>
+                    Purchase
+                </a>
+
+                <div class="menu-label">Network</div>
+
+                <a href="#" class="menu-item">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    Customers
+                </a>
+            </div>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="user-avatar" id="nav-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name" id="nav-username">Admin User</span>
+                        <span class="user-role" id="nav-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content View -->
+        <main class="main-content">
+            
+            <div class="page-header">
+                <div class="page-title">
+                    <h1 id="welcome-text">Overview</h1>
+                    <p>Here's what's happening with your store today.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showAlert('success', 'Launch POS', 'Opening Point of Sale terminal...')">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z"/></svg>
+                        Open POS
+                    </button>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Sales Today</span>
+                        <div class="stat-icon">
+                            <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">₹ 0.00</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Products in Stock</span>
+                        <div class="stat-icon" style="background: rgba(0, 230, 118, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="#00E676"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Pending Orders</span>
+                        <div class="stat-icon" style="background: rgba(255, 183, 77, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="#FFB74D"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z"/></svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">0</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-title">Total Customers</span>
+                        <div class="stat-icon" style="background: rgba(255, 94, 94, 0.1);">
+                            <svg viewBox="0 0 24 24" fill="#FF5E5E"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        </div>
+                    </div>
+                    <div class="stat-value">0</div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Global Component Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+    <script src="template/alert/alert.js"></script>
+    <script src="template/topbar/topbar.js"></script>
+
+    <!-- Page Specific Auth & Load Logic -->
+    <script>
+        // 1. Enforce Authentication Guard
+        const sessionJson = localStorage.getItem('userSession');
+        if (!sessionJson) {
+            window.location.href = 'index.html'; // Kick out unauthenticated users
+        } else {
+            const user = JSON.parse(sessionJson);
+            
+            // 2. Populate UI with User Info
+            document.getElementById('nav-username').textContent = user.username;
+            document.getElementById('nav-role').textContent = user.role;
+            document.getElementById('nav-avatar').textContent = user.username.charAt(0).toUpperCase();
+            document.getElementById('welcome-text').textContent = `Welcome, ${user.username}`;
+        }
+    </script>
+</body>
+</html>
