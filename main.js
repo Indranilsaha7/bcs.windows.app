@@ -5,8 +5,12 @@ function createWindow () {
   const win = new BrowserWindow({
     width: 1200,
     height: 768,
-    frame: false, // We will build a custom HTML title bar like VS Code
-    transparent: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: {
+      color: '#181818',
+      symbolColor: '#cccccc',
+      height: 30
+    },
     icon: path.join(__dirname, 'al.ico'),
     webPreferences: {
       nodeIntegration: true,
@@ -14,16 +18,7 @@ function createWindow () {
     }
   });
 
-  win.loadFile('src/index.html');
-  ipcMain.on('window-minimize', () => win.minimize());
-  ipcMain.on('window-maximize', () => {
-    if (win.isMaximized()) {
-      win.unmaximize();
-    } else {
-      win.maximize();
-    }
-  });
-  ipcMain.on('window-close', () => win.close());
+  win.loadFile('index.html');
 }
 
 app.whenReady().then(createWindow);

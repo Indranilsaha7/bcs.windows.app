@@ -1,0 +1,59 @@
+/* VS Code Style Custom Titlebar */
+.titlebar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px; /* Exact VS Code titlebar height */
+    background-color: #181818; /* VS Code dark theme background */
+    color: #CCCCCC;
+    font-size: 13px;
+    font-family: "Segoe UI", "Segoe UI Web (West European)", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    user-select: none;
+    -webkit-app-region: drag; /* Makes the entire bar draggable natively in Electron */
+    position: fixed;
+    top: 0; left: 0; right: 140px;
+    z-index: 9999;
+}
+
+.titlebar-left {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-left: 10px;
+}
+
+.titlebar-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 12px;
+}
+
+.titlebar-menu {
+    display: flex;
+    height: 100%;
+    -webkit-app-region: no-drag; /* Makes the menu clickable, not draggable */
+}
+
+.menu-item {
+    padding: 0 8px;
+    margin: 3px 2px;
+    height: calc(100% - 6px);
+    display: flex;
+    align-items: center;
+    cursor: default;
+    border-radius: 4px;
+    transition: background-color 0.1s;
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.titlebar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: #999999;
+}

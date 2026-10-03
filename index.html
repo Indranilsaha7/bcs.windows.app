@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCS Enterprise - Login</title>
+    
+    <!-- Global Components -->
+    <link rel="stylesheet" href="template/topbar/topbar.css">
+    
+    <!-- Page Specific Styles -->
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-hover: #5a52d9;
+            --bg-dark: #121216;
+            --text-muted: #aaaaaa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: transparent;
+        }
+
+        /* Main Background */
+        .background-container {
+            margin-top: 35px; /* offset for topbar */
+            height: calc(100vh - 35px);
+            background-image: url('bg-walpaper.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .background-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(5, 5, 10, 0.6); /* Dark overlay */
+            z-index: 1;
+        }
+
+        /* Glassmorphism Card */
+        .glass-card {
+            position: relative;
+            z-index: 2;
+            width: 440px;
+            background: rgba(30, 30, 36, 0.65);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 25px;
+            padding: 45px 50px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: slideUpFade 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUpFade {
+            0% { transform: translateY(50px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        .logo {
+            width: 85px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+        }
+
+        h2 {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-top: 5px;
+            margin-bottom: 40px;
+        }
+
+        .input-group {
+            width: 100%;
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-left: 5px;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(108, 99, 255, 0.2);
+        }
+
+        .primary-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.4);
+        }
+
+        .status-message {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .text-error { color: #FF5E5E; }
+        .text-success { color: #00E676; }
+    </style>
+</head>
+<body>
+    
+    <!-- VS Code Style Topbar HTML -->
+    <div class="titlebar">
+        <!-- Left: Logo & Menus -->
+        <div class="titlebar-left">
+            <img src="al.png" alt="Logo" class="titlebar-icon">
+            <div class="titlebar-menu">
+                <div class="menu-item">File</div>
+                <div class="menu-item">Edit</div>
+                <div class="menu-item">View</div>
+                <div class="menu-item">Help</div>
+            </div>
+        </div>
+
+        <!-- Center: Window Title -->
+        <div class="titlebar-center" style="position: absolute; left: 50%; transform: translateX(-50%);">
+            <span>BCS Enterprise POS</span>
+        </div>
+    </div>
+
+    <!-- Main Page Content -->
+    <div class="background-container">
+        <!-- Floating Glass Login Card -->
+        <div class="glass-card">
+            <img src="al.png" alt="BCS Logo" class="logo">
+            <h2>BCS ENTERPRISE</h2>
+            <p class="subtitle">Secure POS Access</p>
+            
+            <div class="input-group">
+                <label>USERNAME</label>
+                <input type="text" id="username" autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <label>PASSWORD</label>
+                <input type="password" id="password">
+            </div>
+
+            <div class="input-group">
+                <label>SECURITY CODE</label>
+                <input type="password" id="code">
+            </div>
+            
+            <button id="btn-login" class="primary-btn">SIGN IN</button>
+            
+            <div id="status-message" class="status-message"></div>
+        </div>
+    </div>
+
+    <!-- Global Component Scripts -->
+    <script src="template/topbar/topbar.js"></script>
+    
+    <!-- Page Specific Scripts -->
+    <script>
+        document.getElementById('btn-login').addEventListener('click', () => {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const code = document.getElementById('code').value;
+            const statusEl = document.getElementById('status-message');
+
+            if (!username || !password || !code) {
+                statusEl.textContent = 'Username, password, and security code are required.';
+                statusEl.className = 'status-message text-error';
+                return;
+            }
+
+            statusEl.textContent = 'Authenticating...';
+            statusEl.className = 'status-message text-success';
+            document.getElementById('btn-login').disabled = true;
+
+            setTimeout(() => {
+                statusEl.textContent = `Welcome back, ${username}!`;
+                setTimeout(() => {
+                    document.getElementById('btn-login').disabled = false;
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
