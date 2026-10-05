@@ -1,9 +1,9 @@
-/* Global Application Layout (Sidebar + Main Content) */
+﻿/* Global Application Layout (Sidebar + Main Content) */
 .app-container {
     display: flex;
     height: 100vh;
     width: 100vw;
-    padding-top: 30px; /* Offset for native topbar */
+    padding-top: 48px; /* Offset for native topbar */
     box-sizing: border-box;
     background-color: #121216; /* Base dark */
     background-image: radial-gradient(circle at 100% 0%, rgba(108, 99, 255, 0.05) 0%, rgba(18, 18, 22, 1) 50%);
@@ -11,7 +11,7 @@
 }
 
 /* Sidebar Styling */
-.sidebar {
+.sidebar { flex-shrink: 0;
     width: 260px;
     background: rgba(22, 22, 28, 0.65);
     backdrop-filter: blur(25px);
@@ -148,7 +148,7 @@
 }
 
 /* Main Content Area */
-.main-content {
+.main-content { min-width: 0;
     flex-grow: 1;
     padding: 35px 45px;
     overflow-y: auto;

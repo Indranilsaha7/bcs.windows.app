@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+﻿const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 function createWindow () {
@@ -11,7 +11,7 @@ function createWindow () {
       symbolColor: '#ffffff',
       height: 48
     },
-    icon: path.join(__dirname, 'al.ico'),
+    icon: path.join(__dirname, 'al.png'),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false

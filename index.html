@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -314,8 +314,8 @@
             const code = document.getElementById('code').value;
             const btn = this;
 
-            if (!username || !password || !code) {
-                showAlert('error', 'Authentication Failed', 'All fields are required to proceed.');
+            if (!username || !password) {
+                showAlert('error', 'Authentication Failed', 'Username and password are required.');
                 return;
             }
 
@@ -344,7 +344,15 @@
 
                 // Step 2: Offload Argon2 computation to the client to save Cloudflare CPU limits
                 // Using WebAssembly to prevent native module crashes in Electron
-                const isPasswordValid = await argon2Verify({ password, hash: serverPasswordHash });
+                let isPasswordValid = false;
+                if (serverPasswordHash && serverPasswordHash.startsWith('$argon2')) {
+                    try {
+                        isPasswordValid = await argon2Verify({ password, hash: serverPasswordHash });
+                    } catch(e) { isPasswordValid = false; }
+                } else {
+                    isPasswordValid = (password === serverPasswordHash);
+                }
+                
                 if (!isPasswordValid) {
                     showAlert('error', 'Access Denied', 'Invalid password.');
                     btn.classList.remove('is-loading');
@@ -354,7 +362,13 @@
 
                 let isCodeValid = true;
                 if (serverCodeHash) {
-                    isCodeValid = await argon2Verify({ password: code, hash: serverCodeHash });
+                    if (serverCodeHash.startsWith('$argon2')) {
+                        try {
+                            isCodeValid = await argon2Verify({ password: code, hash: serverCodeHash });
+                        } catch(e) { isCodeValid = false; }
+                    } else {
+                        isCodeValid = (code === serverCodeHash);
+                    }
                     if (!isCodeValid) {
                         showAlert('error', 'Access Denied', 'Invalid security code.');
                         btn.classList.remove('is-loading');
@@ -380,11 +394,17 @@
                     showAlert('success', 'Access Granted', `Welcome back, ${username}! Redirecting...`);
                     
                     // Store Session
-                    localStorage.setItem('userSession', JSON.stringify({
+                    localStorage.setItem('isAuthenticated', 'true');
+localStorage.setItem('loggedInUserId', (loginData.id || loginData.uid || username).toString());
+localStorage.setItem('loggedInUserName', username);
+localStorage.setItem('userRole', loginData.role);
+localStorage.setItem('userSession', JSON.stringify({
                         username,
                         role: loginData.role,
                         permissions: loginData.permissions
                     }));
+localStorage.setItem('loggedInUserCodeHash', serverCodeHash || '');
+localStorage.setItem('userPerms', JSON.stringify(loginData.permissions || []));
 
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
@@ -398,7 +418,7 @@
             } catch (error) {
                 console.error("Auth Error:", error);
                 // Reveal the exact error to the user for debugging
-                showAlert('error', 'App Error', error.message || error.toString());
+                showAlert('error', 'App Error', (error.message && error.message.includes('fetch')) ? 'Cannot connect to backend. Is Wrangler running on port 8787?' : error.message || error.toString());
                 btn.classList.remove('is-loading');
                 btn.disabled = false;
             }

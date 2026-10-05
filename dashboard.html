@@ -1,282 +1,1386 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BCS Enterprise - Dashboard</title>
-    
-    <!-- Global Components -->
-    <link rel="stylesheet" href="template/topbar/topbar.css">
-    <link rel="stylesheet" href="template/sidebar/sidebar.css">
-    <link rel="stylesheet" href="template/alert/alert.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Page Specific Styles -->
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-        
-        .page-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 25px; }
-        .page-title h1 { color: #fff; font-size: 24px; font-weight: 700; margin-bottom: 2px; }
-        .page-title p { color: #888899; font-size: 13px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link rel="icon" href="images/logo/logo.png" type="image/x-icon">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-        /* Dense, Colorful Stats Grid (Matching Image 2) */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px; /* Tighter gap */
-            margin-bottom: 15px;
-        }
-
-        .stat-card {
-            border-radius: 10px;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.2s ease;
-            border: none;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            color: white;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
-        }
-
-        .stat-info { display: flex; flex-direction: column; gap: 5px; }
-        
-        .stat-title {
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            opacity: 0.9;
-        }
-
-        .stat-value {
-            font-size: 22px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.2);
-        }
-        .stat-icon svg { width: 20px; height: 20px; fill: #fff; }
-
-        /* Background Color Classes matching Old Dashboard */
-        .bg-green { background: #0c3620; } /* Total Sale, In Stock */
-        .bg-red { background: #4a1515; } /* Total Purchase, Out of Stock */
-        .bg-teal { background: #0b3d4a; } /* Total Sales Count, Categories */
-        .bg-blue { background: #12284a; } /* Net Profit, Total Orders, Total Products */
-        .bg-yellow { background: #5a4200; } /* Sale Due, Stock Alert */
-        .bg-grey { background: #2a2a2a; } /* Purchase Due, Suppliers, Customers */
-
-        /* Header Actions */
-        .header-actions { display: flex; gap: 15px; }
-        .btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 8px; }
-        .btn-primary { background: #6C63FF; color: white; }
-    </style>
+<link rel="stylesheet" href="template/sidebar/sidebar.css">
+<link rel="stylesheet" href="template/topbar/topbar.css">
+<link rel="stylesheet" href="template/footer/footer.css">
+<style>
+:root {
+--bs-primary-rgb: 99, 102, 241;
+--bs-primary: #6366f1;
+--bs-body-font-family: 'Inter', sans-serif;
+}
+body {
+font-family: var(--bs-body-font-family);
+background-color: var(--bs-tertiary-bg);
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+.main-content {
+margin-left: 0;
+padding-top: 72px;
+flex-grow: 1;
+padding-bottom: 40px;
+}
+.stat-card {
+border: none;
+border-radius: .75rem;
+box-shadow: 0 4px 6px -1px rgba(0, 0, 0, .1), 0 2px 4px -2px rgba(0, 0, 0, .1);
+transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.stat-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -4px rgba(0, 0, 0, .1);
+}
+.stat-card .card-body {
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.stat-card .icon-circle {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.stat-card .icon-circle svg {
+width: 24px;
+height: 24px;
+color: #fff;
+}
+.chart-container {
+height: 350px;
+}
+.theme-switch-wrapper {
+position: fixed;
+bottom: 1.5rem;
+right: 1.5rem;
+z-index: 1001;
+}
+#theme-switcher {
+background: none;
+border: 1px solid var(--bs-border-color-translucent);
+padding: 0;
+cursor: pointer;
+position: relative;
+width: 60px;
+height: 30px;
+background-color: var(--bs-tertiary-bg);
+border-radius: 15px;
+transition: background-color 0.3s ease;
+}
+.slider-thumb {
+position: absolute;
+top: 2px;
+left: 2px;
+width: 24px;
+height: 24px;
+border-radius: 50%;
+transition: transform 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+@media (max-width: 991.98px) {
+.main-content {
+margin-left: 0;
+}
+}
+/* Custom Alert Cards */
+#custom-alert-container {
+position: fixed;
+top: 20px;
+right: 20px;
+z-index: 9999;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.custom-alert {
+min-width: 300px;
+padding: 15px;
+border-radius: 8px;
+background-color: var(--bs-body-bg);
+box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+display: flex;
+align-items: center;
+gap: 12px;
+animation: slideIn 0.3s ease-out forwards;
+border-left: 5px solid;
+overflow: hidden;
+}
+.custom-alert.success { border-left-color: #198754; }
+.custom-alert.error { border-left-color: #dc3545; }
+.custom-alert .icon { width: 24px; height: 24px; flex-shrink: 0; }
+.custom-alert.success .icon { color: #198754; }
+.custom-alert.error .icon { color: #dc3545; }
+.custom-alert .content { flex-grow: 1; }
+.custom-alert .title {
+font-weight: 600;
+font-size: 0.95rem;
+margin-bottom: 2px;
+color: var(--bs-body-color);
+}
+.custom-alert .message {
+font-size: 0.85rem;
+color: var(--bs-secondary-color);
+}
+.custom-alert .close-btn { background: none; border: none; color: var(--bs-secondary-color); cursor: pointer; padding: 0; opacity: 0.6; }
+.custom-alert .close-btn:hover { opacity: 1; }
+@keyframes slideIn {
+from { transform: translateX(100%); opacity: 0; }
+to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+to { transform: translateX(100%); opacity: 0; }
+}
+</style>
+<script src="template/layout.js"></script>
 </head>
 <body>
-    
-    <!-- Main Layout -->
-    <div class="app-container" style="padding-top: 48px;"> <!-- Updated padding for new 48px Topbar -->
-        
-        <!-- Sidebar Navigation -->
-        
+<script>
+if (!sessionStorage.getItem('isAuthenticated') && localStorage.getItem('isAuthenticated') === 'true') {
+sessionStorage.setItem('isAuthenticated', 'true');
+sessionStorage.setItem('loggedInUserId', localStorage.getItem('loggedInUserId'));
+sessionStorage.setItem('userType', localStorage.getItem('userType'));
+sessionStorage.setItem('userRole', localStorage.getItem('userRole'));
+sessionStorage.setItem('loggedInUserName', localStorage.getItem('loggedInUserName'));
+sessionStorage.setItem('userPerms', localStorage.getItem('userPerms'));
+}
+if (sessionStorage.getItem('isAuthenticated') !== 'true') {
+let redirectCount = parseInt(sessionStorage.getItem('redirectCount') || '0');
+if (redirectCount >= 2) {
+sessionStorage.clear();
+localStorage.clear();
+} else {
+sessionStorage.setItem('redirectCount', (redirectCount + 1).toString());
+}
+window.location.href = 'index.html';
+} else {
+sessionStorage.removeItem('redirectCount');
+}
+</script>
+<div class="app-container" style="background: transparent;">
+<main class="main-content">
+<div class="container-fluid px-4">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+<h1 class="h2">Dashboard</h1>
+</div>
+<div class="row mb-4">
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_sale_bdt">
+<a href="all-sale-history.html" class="text-decoration-none">
+<div class="card stat-card bg-success-subtle text-success-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small"> Total sale (BDT) </h6>
+<h3 class="fw-bold" id="totalRevenue">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-success">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm12 2a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h12zM1 9a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V9zm12 4a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_purchase">
+<a href="purchase-history.html" class="text-decoration-none">
+<div class="card stat-card bg-danger-subtle text-danger-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Purchase</h6>
+<h3 class="fw-bold" id="totalPurchase">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-danger">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM6 9.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H6z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_sales_count">
+<a href="all-sale-history.html" class="text-decoration-none">
+<div class="card stat-card bg-info-subtle text-info-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Sales</h6>
+<h3 class="fw-bold" id="totalSalesCount">0</h3>
+</div>
+<div class="icon-circle bg-info">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path d="M1.92.506a.5.5 0 0 1 .434.14L3 1.293l.646-.647a.5.5 0 0 1 .708 0L5 1.293l.646-.647a.5.5 0 0 1 .708 0L7 1.293l.646-.647a.5.5 0 0 1 .708 0L9 1.293l.646-.647a.5.5 0 0 1 .708 0L11 1.293l.646-.647a.5.5 0 0 1 .708 0L13 1.293l.646-.647a.5.5 0 0 1 .638.057l.055.059a.5.5 0 0 1 .059.638l-.647.646.647.646a.5.5 0 0 1 0 .708l-.647.646.647.646a.5.5 0 0 1 0 .708l-.647.646.647.646a.5.5 0 0 1 0 .708l-.647.646.647.646a.5.5 0 0 1 0 .708l-1.293 1.293a.5.5 0 0 1-.708 0l-.646-.647-.646.647a.5.5 0 0 1-.708 0l-.646-.647-.646.647a.5.5 0 0 1-.708 0l-.646-.647-.646.647a.5.5 0 0 1-.708 0l-.646-.647-.646.647a.5.5 0 0 1-.708 0L3 8.707l-.646.647a.5.5 0 0 1-.708 0l-1.293-1.293a.5.5 0 0 1 0-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708l.647-.646-.647-.646a.5.5 0 0 1 0-.708l.647-.646-.647-.646a.5.5 0 0 1 .14-.434zM4 3.5a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm2-8a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm2-8a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm2-8a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5zm0 2a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-1 0v-1a.5.5 0 0 1 .5-.5z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_net_profit">
+<a href="profit-and-loss.html" class="text-decoration-none">
+<div class="card stat-card bg-primary-subtle text-primary-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Net Profit</h6>
+<h3 class="fw-bold" id="netProfit">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-primary">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_purchase_due">
+<a href="purchase-history.html" class="text-decoration-none">
+<div class="card stat-card bg-secondary-subtle text-secondary-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Purchase Due</h6>
+<h3 class="fw-bold" id="totalPurchaseDue">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-secondary">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+<path d="M2.5 15a.5.5 0 1 1 0-1h11a.5.5 0 0 1 0 1h-11zm.21-11.542a.5.5 0 0 1 .78 0l2.99 4.225a.5.5 0 0 1 0 .564l-2.99 4.225a.5.5 0 0 1-.78-.564L4.89 8 2.71 3.958a.5.5 0 0 1 0-.564zm8.58 0a.5.5 0 0 1 .78 0l2.99 4.225a.5.5 0 0 1 0 .564l-2.99 4.225a.5.5 0 0 1-.78-.564L11.11 8l-2.18-3.042a.5.5 0 0 1 0-.564zM13.5 1a.5.5 0 0 0 0 1h-11a.5.5 0 0 0 0-1h11z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_sale_due">
+<a href="pos-sales-history.html" class="text-decoration-none">
+<div class="card stat-card bg-warning-subtle text-warning-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Sale Due Amount</h6>
+<h3 class="fw-bold" id="totalDue">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-warning">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+<path d="M2.5 15a.5.5 0 1 1 0-1h11a.5.5 0 0 1 0 1h-11zm.21-11.542a.5.5 0 0 1 .78 0l2.99 4.225a.5.5 0 0 1 0 .564l-2.99 4.225a.5.5 0 0 1-.78-.564L4.89 8 2.71 3.958a.5.5 0 0 1 0-.564zm8.58 0a.5.5 0 0 1 .78 0l2.99 4.225a.5.5 0 0 1 0 .564l-2.99 4.225a.5.5 0 0 1-.78-.564L11.11 8l-2.18-3.042a.5.5 0 0 1 0-.564zM13.5 1a.5.5 0 0 0 0 1h-11a.5.5 0 0 0 0-1h11z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-3 col-md-6 mb-4" id="perm-dashboard_total_orders">
+<a href="order-sale-history.html" class="text-decoration-none">
+<div class="card stat-card bg-primary-subtle text-primary-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Orders</h6>
+<h3 class="fw-bold" id="totalOrders">0</h3>
+</div>
+<div class="icon-circle bg-primary">
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
+<path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 4 0h3.5a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z"/>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+<div class="row mb-4">
+<div class="col-lg-6 col-md-6 mb-4" id="perm-dashboard_total_sale_return">
+<a href="sell-return-history.html" class="text-decoration-none">
+<div class="card stat-card bg-warning-subtle text-warning-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Sale Return (TSR)</h6>
+<h3 class="fw-bold" id="totalReturn">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-warning">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" />
+<path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-lg-6 col-md-6 mb-4" id="perm-dashboard_total_purchase_return">
+<a href="purchase-return-history.html" class="text-decoration-none">
+<div class="card stat-card bg-secondary-subtle text-secondary-emphasis h-100">
+<div class="card-body">
+<div>
+<h6 class="card-title text-uppercase small">Total Purchase Return (TPR)</h6>
+<h3 class="fw-bold" id="totalPurchaseReturn">0.00 BDT</h3>
+</div>
+<div class="icon-circle bg-secondary">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
+<path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_total_products">
+<a href="all-product.html" class="text-decoration-none">
+<div class="card stat-card bg-primary-subtle text-primary-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Total Products</h5>
+<h2 class="fw-bold" id="totalProducts">0</h2>
+</div>
+<div class="icon-circle bg-primary">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M21 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 4h14v16H7V4zm-4 4H1v12a2 2 0 0 0 2 2h12v-2H3V8z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_items_in_stock">
+<a href="all-product.html" class="text-decoration-none">
+<div class="card stat-card bg-success-subtle text-success-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Items In Stock</h5>
+<h2 class="fw-bold" id="inStockCount">0</h2>
+</div>
+<div class="icon-circle bg-success">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_out_of_stock">
+<a href="all-product.html" class="text-decoration-none">
+<div class="card stat-card bg-danger-subtle text-danger-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Out of Stock</h5>
+<h2 class="fw-bold" id="outOfStockCount">0</h2>
+</div>
+<div class="icon-circle bg-danger">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_categories">
+<a href="all-product.html" class="text-decoration-none">
+<div class="card stat-card bg-info-subtle text-info-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Categories</h5>
+<h2 class="fw-bold" id="categoryCount">0</h2>
+</div>
+<div class="icon-circle bg-info">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.86L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM6.5 13C4.01 13 2 15.01 2 17.5S4.01 22 6.5 22s4.5-2.01 4.5-4.5S8.99 13 6.5 13zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_stock_alert">
+<a href="all-product.html" class="text-decoration-none">
+<div class="card stat-card bg-warning-subtle text-warning-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Stock Alert</h5>
+<h2 class="fw-bold" id="stockAlertCount">0</h2>
+</div>
+<div class="icon-circle bg-warning">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_total_customers">
+<a href="customer.html" class="text-decoration-none">
+<div class="card stat-card bg-secondary-subtle text-secondary-emphasis">
+<div class="card-body">
+<div class="text-success">
+<h5 class="card-title text-uppercase">Total Customers</h5>
+<h2 class="fw-bold" id="totalCustomers">0</h2>
+</div>
+<div class="icon-circle bg-secondary">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_total_suppliers">
+<a href="supplier.html" class="text-decoration-none">
+<div class="card stat-card bg-dark-subtle text-emphasis-dark">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Total Suppliers</h5>
+<h2 class="fw-bold" id="totalSuppliers">0</h2>
+</div>
+<div class="icon-circle bg-dark">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h3.5zM18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="col-md-6 col-xl-3 mb-4" id="perm-dashboard_total_employees">
+<a href="employee.html" class="text-decoration-none">
+<div class="card stat-card bg-success-subtle text-success-emphasis">
+<div class="card-body">
+<div>
+<h5 class="card-title text-uppercase">Total Employees</h5>
+<h2 class="fw-bold" id="totalEmployees">0</h2>
+</div>
+<div class="icon-circle bg-success">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+<path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path>
+</svg>
+</div>
+</div>
+</div>
+</a>
+</div>
+</div>
+<div class="row">
+<div class="col-lg-8 mb-4">
+<div class="card mb-4" id="perm-dashboard_products_by_category">
+<div class="card-header">
+<h6 class="mb-0">Products by Category</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="categoryChart"></canvas>
+</div>
+</div>
+</div>
+<div class="card" id="perm-dashboard_top_selling_products">
+<div class="card-header">
+<h6 class="mb-0">Top Selling Products</h6>
+</div>
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-hover table-striped mb-0">
+<thead>
+<tr>
+<th>Product</th>
+<th>Category</th>
+<th class="text-end">Units Sold</th>
+</tr>
+</thead>
+<tbody id="recentProductsTableBody">
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-4">
+<div class="card h-100" id="perm-dashboard_stock_distribution">
+<div class="card-header">
+<h6 class="mb-0">Product Stock Distribution</h6>
+</div>
+<div class="card-body d-flex align-items-center justify-content-center">
+<div class="chart-container">
+<canvas id="stockChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row mt-4">
+<div class="col-12 mb-4" id="perm-dashboard_30_day_sales">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Sales Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDaySalesChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_30_day_sale_due">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Sale Due Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDaySaleDueChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_30_day_sale_return">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Sale Return Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDaySaleReturnChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_30_day_purchase">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Purchase Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDayPurchaseChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_30_day_purchase_due">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Purchase Due Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDayPurchaseDueChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_30_day_purchase_return">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">30-Day Purchase Return Overview (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="thirtyDayPurchaseReturnChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_sales">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Sales (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearSalesChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_sale_due">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Sale Due (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearSaleDueChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_purchase_due">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Purchase Due (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearPurchaseDueChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_purchase">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Purchase (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearPurchaseChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_sell_return">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Sell Return (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearSellReturnChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="col-12 mb-4" id="perm-dashboard_fy_purchase_return">
+<div class="card">
+<div class="card-header">
+<h6 class="mb-0">Current Financial Year Purchase Return (BDT)</h6>
+</div>
+<div class="card-body">
+<div class="chart-container">
+<canvas id="financialYearPurchaseReturnChart"></canvas>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="row mt-4">
+<div class="col-12">
+<div class="card text-bg-warning" id="lowStockAlert" style="display: none;">
+<div class="card-header d-flex justify-content-between align-items-center">
+<h5 class="card-title mb-0">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16"
+role="img" aria-label="Warning:">
+<path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+</svg>
+Low Stock Alerts!
+</h5>
+<button type="button" class="btn-close" onclick="document.getElementById('lowStockAlert').style.display='none'" aria-label="Close"></button>
+</div>
+<div class="card-body">
+<p>The following products need to be restocked soon:</p>
+<ul id="lowStockList" class="mb-0"></ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<div id="custom-alert-container"></div>
+<div class="theme-switch-wrapper">
+<button id="theme-switcher" aria-label="Toggle theme">
+<span class="slider-thumb bg-secondary">
+<svg class="sun" style="display: none;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+<path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+</svg>
+<svg class="moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+<path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+</svg>
+</span>
+</button>
+</div>
 
-        <!-- Dense Dashboard Content -->
-        <main class="main-content">
-            <div class="page-header">
-                <div class="page-title"><h1 id="welcome-text">Dashboard</h1></div>
-                <div class="header-actions">
-                    <button class="btn btn-primary" onclick="showAlert('success', 'Launch POS', 'Opening POS...')"><svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 9h-2V7h-2v5H6v2h2v5h2v-5h2v-2z"/></svg> Open POS</button>
-                </div>
-            </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="module">
+import { getCollection as getDocs, getDocument as getDoc, updateDocument as updateDoc } from './script/api.js';
 
-            <!-- Row 1: Primary Financials -->
-            <div class="stats-grid">
-                <div class="stat-card bg-green">
-                    <div class="stat-info"><span class="stat-title">Total Sale (BDT)</span><span class="stat-value">890177.29</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path d="M1 3h12v1H1zM1 6h12v1H1zM1 9h12v1H1zM1 12h12v1H1z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-red">
-                    <div class="stat-info"><span class="stat-title">Total Purchase</span><span class="stat-value">1296930.64</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM6 9.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1H6z" /></svg></div>
-                </div>
-                <div class="stat-card bg-teal">
-                    <div class="stat-info"><span class="stat-title">Total Sales</span><span class="stat-value">9889</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg></div>
-                </div>
-                <div class="stat-card bg-blue">
-                    <div class="stat-info"><span class="stat-title">Net Profit</span><span class="stat-value">149541.42</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z" /></svg></div>
-                </div>
-            </div>
 
-            <!-- Row 2: Dues & Orders -->
-            <div class="stats-grid">
-                <div class="stat-card bg-grey">
-                    <div class="stat-info"><span class="stat-title">Total Purchase Due</span><span class="stat-value">0.00 BDT</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path d="M2.5 15h11v-1h-11z"/></svg></div>
-                </div>
-                <div class="stat-card bg-yellow">
-                    <div class="stat-info"><span class="stat-title">Total Sale Due Amount</span><span class="stat-value">3579.00 BDT</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path d="M2.5 15h11v-1h-11z"/></svg></div>
-                </div>
-                <div class="stat-card bg-blue" style="grid-column: span 2;">
-                    <div class="stat-info"><span class="stat-title">Total Orders</span><span class="stat-value">0</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 4 0h3.5a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5z"/></svg></div>
-                </div>
-            </div>
 
-            <!-- Row 3: Returns -->
-            <div class="stats-grid" style="grid-template-columns: repeat(2, 1fr);">
-                <div class="stat-card bg-yellow">
-                    <div class="stat-info"><span class="stat-title">Total Sale Return (TSR)</span><span class="stat-value">13950.70 BDT</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z" /></svg></div>
-                </div>
-                <div class="stat-card bg-grey">
-                    <div class="stat-info"><span class="stat-title">Total Purchase Return (TPR)</span><span class="stat-value">0.00 BDT</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" /></svg></div>
-                </div>
-            </div>
 
-            <!-- Row 4: Inventory -->
-            <div class="stats-grid">
-                <div class="stat-card bg-blue">
-                    <div class="stat-info"><span class="stat-title">Total Products</span><span class="stat-value" id="val-total-products">0</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M21 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM7 4h14v16H7V4zm-4 4H1v12a2 2 0 0 0 2 2h12v-2H3V8z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-green">
-                    <div class="stat-info"><span class="stat-title">Items In Stock</span><span class="stat-value" id="val-items-in-stock">0</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-red">
-                    <div class="stat-info"><span class="stat-title">Out of Stock</span><span class="stat-value" id="val-out-of-stock">0</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-teal">
-                    <div class="stat-info"><span class="stat-title">Categories</span><span class="stat-value" id="val-categories">0</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.86L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg></div>
-                </div>
-            </div>
 
-            <!-- Row 5: Misc -->
-            <div class="stats-grid">
-                <div class="stat-card bg-yellow">
-                    <div class="stat-info"><span class="stat-title">Stock Alert</span><span class="stat-value">132</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 16 16"><path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" /></svg></div>
-                </div>
-                <div class="stat-card bg-grey">
-                    <div class="stat-info"><span class="stat-title">Total Customers</span><span class="stat-value">375</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-grey">
-                    <div class="stat-info"><span class="stat-title">Total Suppliers</span><span class="stat-value">22</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h3.5zM18 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"></path></svg></div>
-                </div>
-                <div class="stat-card bg-green">
-                    <div class="stat-info"><span class="stat-title">Total Employees</span><span class="stat-value">2</span></div>
-                    <div class="stat-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg></div>
-                </div>
-            </div>
-            
-            <!-- Charts Section -->
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; margin-top: 10px;">
-                <div style="background: rgba(30,30,36,0.6); padding: 15px; border-radius: 10px; height: 350px;">
-                    <h4 style="color: #fff; font-size: 14px; margin-bottom: 15px;">30-Day Sales Overview</h4>
-                    <canvas id="thirtyDaySalesChart"></canvas>
-                </div>
-                <div style="background: rgba(30,30,36,0.6); padding: 15px; border-radius: 10px; height: 350px;">
-                    <h4 style="color: #fff; font-size: 14px; margin-bottom: 15px;">Products by Category</h4>
-                    <canvas id="categoryChart"></canvas>
-                </div>
-            </div>
-            
-        </main>
-    </div>
+renderTopbar();
+renderSidebar('dashboard', '');
+renderFooter();
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="template/alert/alert.js"></script>
-        <script src="template/layout.js"></script>
-    <script src="template/topbar/topbar.js"></script>
-    <script src="template/api.js"></script>
-    <script>
-        // Render Template UI
-        renderTopbar();
-        renderSidebar('dashboard');
-        renderFooter();
-        const sessionJson = localStorage.getItem('userSession');
-        if (!sessionJson) window.location.href = 'index.html';
-        
-        const user = JSON.parse(sessionJson);
-        const nameEl = document.getElementById('nav-username');
-        if (nameEl) nameEl.textContent = user.username;
-        const roleEl = document.getElementById('nav-role');
-        if (roleEl) roleEl.textContent = user.role;
-        const avatarEl = document.getElementById('nav-avatar');
-        if (avatarEl) avatarEl.textContent = user.username.charAt(0).toUpperCase();
-        
-        const topbarUserEl = document.getElementById('nav-username-tb');
-        if (topbarUserEl) topbarUserEl.textContent = user.username;
+const collection = (db, name) => name;
+const db = null;
+const doc = (db, coll, id) => id ? { coll, id } : coll;
 
-        // Fetch Local Database Data
-        
-        
-        async function loadDashboardStats() {
-            try {
-                const res = await fetchAPI('/api/dashboard'); if (!res || !res.success) return; const d = res.data;
-                // Safely update DOM with live local data
-                const update = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-        async function loadDashboardStats() {
-            try {
-                const res = await fetchAPI('/api/dashboard');
-                if (!res || !res.success) return;
-                const d = res.data;
-                const update = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-                
-                update('val-total-sale', 'â‚¹ ' + d.totalSale.toFixed(2));
-                update('val-total-purchase', 'â‚¹ ' + d.totalPurchase.toFixed(2));
-                update('val-net-profit', 'â‚¹ ' + d.netProfit.toFixed(2));
-                update('val-total-orders', d.totalOrders);
-                
-                update('val-total-products', d.totalProducts);
-                update('val-items-in-stock', d.inStock);
-                update('val-out-of-stock', d.outOfStock);
-                update('val-categories', d.categories);
-                update('val-total-customers', d.totalCustomers);
-            } catch (err) {
-                console.error('Fetch Error:', err);
-            }
-        }
-        
-        loadDashboardStats();
+document.addEventListener('DOMContentLoaded', async function () {
+let currentUser = null;
+let currency = 'BDT';
+let currencyPosition = 'right';
+const formatCurrency = (amt) => currencyPosition === 'left' ? `${currency} ${amt.toFixed(2)}` : `${amt.toFixed(2)} ${currency}`;
 
-        // Chart.js Setup
-        Chart.defaults.color = '#a0a0b0';
-        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.05)';
-
-        new Chart(document.getElementById('thirtyDaySalesChart'), {
-            type: 'bar',
-            data: { labels: ['1', '5', '10', '15', '20', '25', '30'], datasets: [{ label: 'Sales', data: [1200, 1900, 3000, 5000, 2400, 3200, 4800], backgroundColor: '#6C63FF' }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        new Chart(document.getElementById('categoryChart'), {
-            type: 'doughnut',
-            data: { labels: ['Electronics', 'Accessories', 'Components'], datasets: [{ data: [55, 30, 15], backgroundColor: ['#6C63FF', '#3b82f6', '#00E676'], borderWidth: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    </script>
+window.showCustomAlert = function(title, message, type = 'success') {
+const container = document.getElementById('custom-alert-container');
+const alert = document.createElement('div');
+alert.className = `custom-alert ${type === 'failed' ? 'error' : type}`;
+let iconSvg = type === 'success'
+? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`
+: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`;
+alert.innerHTML = `
+<div class="icon">${iconSvg}</div>
+<div class="content">
+<div class="title">${title}</div>
+<div class="message">${message}</div>
+</div>
+<button class="close-btn" onclick="this.parentElement.remove()">
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646-2.647a.5.5 0 0 1-.708-.708L8 7.293 5.354 4.646z"/></svg>
+</button>
+`;
+container.appendChild(alert);
+setTimeout(() => {
+alert.style.animation = 'slideOut 0.3s ease-in forwards';
+alert.addEventListener('animationend', () => alert.remove());
+}, 3000);
+};
+let categoryChart, stockChart, thirtyDaySalesChart, thirtyDayPurchaseChart, financialYearSalesChart, financialYearPurchaseChart, thirtyDaySaleReturnChart, thirtyDayPurchaseReturnChart, thirtyDaySaleDueChart, thirtyDayPurchaseDueChart, financialYearSaleDueChart, financialYearSellReturnChart, financialYearPurchaseReturnChart, financialYearPurchaseDueChart;
+const chartColors = ['#6366f1', '#8b5cf6', '#14b8a6', '#f59e0b', '#10b981', '#3b82f6', '#ef4444'];
+let chartBorderColor = 'rgba(0, 0, 0, 0.1)';
+let globalDataCache = null;
+const DB_NAME = 'BCS_Dashboard_Cache';
+const STORE_NAME = 'collections';
+function openDB() {
+return new Promise((resolve, reject) => {
+const request = indexedDB.open(DB_NAME, 1);
+request.onupgradeneeded = (e) => {
+if (!e.target.result.objectStoreNames.contains(STORE_NAME)) {
+e.target.result.createObjectStore(STORE_NAME);
+}
+};
+request.onsuccess = () => resolve(request.result);
+request.onerror = () => reject(request.error);
+});
+}
+async function getFromCache(key) {
+try {
+const db = await openDB();
+return new Promise((resolve, reject) => {
+const tx = db.transaction(STORE_NAME, 'readonly');
+const store = tx.objectStore(STORE_NAME);
+const request = store.get(key);
+request.onsuccess = () => {
+resolve(request.result);
+db.close();
+};
+request.onerror = () => {
+reject(request.error);
+db.close();
+};
+});
+} catch(e) { return null; }
+}
+async function saveToCache(key, data) {
+try {
+const db = await openDB();
+return new Promise((resolve, reject) => {
+const tx = db.transaction(STORE_NAME, 'readwrite');
+const store = tx.objectStore(STORE_NAME);
+const request = store.put(data, key);
+request.onsuccess = () => {
+resolve();
+db.close();
+};
+request.onerror = () => {
+reject(request.error);
+db.close();
+};
+});
+} catch(e) {}
+}
+function hasPermission(user, permission) {
+if (!user) return false;
+if (user.role === 'admin') return true;
+return user.permissions && user.permissions.includes(permission);
+}
+function setupUI(user) {
+const dashboardPermissions = [
+'dashboard_total_sale_bdt', 'dashboard_total_purchase', 'dashboard_total_sales_count', 'dashboard_net_profit',
+'dashboard_total_purchase_due', 'dashboard_total_sale_due', 'dashboard_total_sale_return', 'dashboard_total_purchase_return',
+'dashboard_total_products', 'dashboard_items_in_stock', 'dashboard_out_of_stock', 'dashboard_categories', 'leaderboard',
+'dashboard_stock_alert', 'dashboard_total_customers', 'dashboard_total_suppliers', 'dashboard_total_employees',
+'dashboard_total_orders', 'dashboard_top_selling_products', 'dashboard_products_by_category', 'dashboard_stock_distribution',
+'dashboard_30_day_sales', 'dashboard_30_day_sale_due', 'dashboard_30_day_sale_return',
+'dashboard_30_day_purchase', 'dashboard_30_day_purchase_due', 'dashboard_30_day_purchase_return',
+'dashboard_fy_sales', 'dashboard_fy_sale_due', 'dashboard_fy_purchase_due', 'dashboard_fy_purchase',
+'dashboard_fy_sell_return', 'dashboard_fy_purchase_return'
+];
+dashboardPermissions.forEach(perm => {
+const el = document.getElementById(`perm-${perm}`);
+if (el && !hasPermission(user, perm)) {
+el.style.display = 'none';
+}
+});
+adjustDashboardLayout();
+}
+function adjustDashboardLayout() {
+const rows = document.querySelectorAll('.row');
+rows.forEach(row => {
+const cols = Array.from(row.children).filter(child => child.id && child.id.startsWith('perm-'));
+if (cols.length > 0) {
+cols.forEach(col => {
+if (col.style.display !== 'none') {
+col.style.flexGrow = '1';
+}
+});
+}
+});
+const catCard = document.getElementById('perm-dashboard_products_by_category');
+const topProdCard = document.getElementById('perm-dashboard_top_selling_products');
+const stockDistCard = document.getElementById('perm-dashboard_stock_distribution');
+if (catCard && topProdCard && stockDistCard) {
+const leftCol = catCard.closest('.col-lg-8');
+const rightCol = stockDistCard.closest('.col-lg-4');
+if (leftCol && rightCol) {
+const isCatHidden = catCard.style.display === 'none';
+const isTopProdHidden = topProdCard.style.display === 'none';
+const isStockDistHidden = stockDistCard.style.display === 'none';
+if (isCatHidden && isTopProdHidden) {
+leftCol.style.display = 'none';
+rightCol.classList.remove('col-lg-4');
+rightCol.classList.add('col-12');
+} else if (isStockDistHidden) {
+rightCol.style.display = 'none';
+leftCol.classList.remove('col-lg-8');
+leftCol.classList.add('col-12');
+}
+}
+}
+}
+async function loadDashboard() {
+const chartFontColor = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#adb5bd' : '#495057';
+chartBorderColor = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+Chart.defaults.color = chartFontColor;
+try {
+// Using old mock for getDoc here for settings
+// It'll probably fail since general settings doesn't exist yet but we catch it
+const genSnap = await getDoc("settings", "general");
+if (genSnap && genSnap.exists()) {
+const genData = genSnap.data();
+if (genData.currency) currency = genData.currency;
+if (genData.currencyPosition) currencyPosition = genData.currencyPosition;
+}
+} catch (e) { console.error("Error loading general settings:", e); }
+document.querySelectorAll('.card-header h6, .card-title').forEach(header => {
+if (header.textContent.includes('(BDT)')) {
+header.textContent = header.textContent.replace('(BDT)', `(${currency})`);
+}
+});
+await fetchDashboardData();
+}
+async function fetchDashboardData() {
+try {
+const cachedData = await getFromCache('dashboardData');
+if (cachedData) {
+globalDataCache = cachedData;
+renderDashboardData();
+}
+} catch(e) { console.warn('IndexedDB cache read failed:', e); }
+try {
+const results = await Promise.allSettled([
+getDocs(collection(db, "products")), getDocs(collection(db, "customers")),
+getDocs(collection(db, "suppliers")), getDocs(collection(db, "users")),
+getDocs(collection(db, "sales")), getDocs(collection(db, "purchases")),
+getDocs(collection(db, "purchaseReturns")), getDocs(collection(db, "sellReturns"))
+]);
+const getResult = (index) => results[index].status === 'fulfilled' ? results[index].value.docs : [];
+const getSize = (index) => results[index].status === 'fulfilled' ? results[index].value.docs.length : 0;
+results.forEach((r, i) => {
+if (r.status === 'rejected') {
+const collections = ["products", "customers", "suppliers", "users", "sales", "purchases", "purchaseReturns", "sellReturns"];
+console.error(`Error fetching collection: ${collections[i]}`, r.reason);
+}
+});
+globalDataCache = {
+allProducts: getResult(0).map(doc => ({ firestoreId: doc.id, ...doc.data() })),
+allSalesRaw: getResult(4).map(doc => ({ firestoreId: doc.id, ...doc.data() })),
+allPurchases: getResult(5).map(doc => ({ firestoreId: doc.id, ...doc.data() })),
+allPurchaseReturns: getResult(6).map(doc => doc.data()),
+allSellReturns: getResult(7).map(doc => doc.data()),
+allUsers: getResult(3).map(doc => doc.data()),
+totalCustomers: getSize(1),
+totalSuppliers: getSize(2),
+totalProducts: getSize(0)
+};
+renderDashboardData();
+await saveToCache('dashboardData', globalDataCache);
+} catch (error) {
+console.error('Error fetching dashboard data:', error);
+}
+}
+function renderDashboardData() {
+loadStatCards();
+loadTopSellingProducts();
+loadStockAlerts();
+loadCategoryChart(chartBorderColor);
+loadStockChart(chartBorderColor);
+load30DayCharts();
+loadFinancialYearCharts();
+}
+function loadStatCards() {
+if (!globalDataCache) return;
+const { allProducts, allSalesRaw, allPurchases, allPurchaseReturns, allSellReturns, allUsers, totalCustomers, totalSuppliers, totalProducts } = globalDataCache;
+const allSales = allSalesRaw.filter(s => !(s.source === 'order' && ['Pending', 'Processing', 'Shipped', 'Cancelled'].includes(s.paymentStatus || 'Pending')));
+const returnsMap = {};
+allSellReturns.forEach(ret => {
+if (!returnsMap[ret.originalSaleId]) returnsMap[ret.originalSaleId] = { refunded: 0, items: {}, hasItems: false };
+returnsMap[ret.originalSaleId].refunded += (parseFloat(ret.amountRefunded) || 0);
+if (Array.isArray(ret.items) && ret.items.length > 0) {
+returnsMap[ret.originalSaleId].hasItems = true;
+ret.items.forEach(item => {
+const pid = item.productId || item.firestoreId || item.id;
+returnsMap[ret.originalSaleId].items[pid] = (returnsMap[ret.originalSaleId].items[pid] || 0) + parseFloat(item.quantity || 0);
+});
+}
+});
+const returnedSaleIds = new Set(allSellReturns.map(r => r.originalSaleId));
+const returnedPurchaseIds = new Set(allPurchaseReturns.map(r => r.originalPurchaseId));
+if(document.getElementById('totalProducts')) document.getElementById('totalProducts').textContent = totalProducts;
+if(document.getElementById('inStockCount')) document.getElementById('inStockCount').textContent = allProducts.filter(p => p.quantity > 0).length;
+if(document.getElementById('outOfStockCount')) document.getElementById('outOfStockCount').textContent = allProducts.filter(p => p.quantity <= 0).length;
+if(document.getElementById('categoryCount')) document.getElementById('categoryCount').textContent = new Set(allProducts.map(p => p.category)).size;
+const lowStockProducts = allProducts.filter(p => p.quantity > 0 && p.alertQuantity && p.quantity <= p.alertQuantity);
+if(document.getElementById('stockAlertCount')) document.getElementById('stockAlertCount').textContent = lowStockProducts.length;
+if(document.getElementById('totalCustomers')) document.getElementById('totalCustomers').textContent = totalCustomers;
+if(document.getElementById('totalSuppliers')) document.getElementById('totalSuppliers').textContent = totalSuppliers;
+if(document.getElementById('totalEmployees')) document.getElementById('totalEmployees').textContent = allUsers.filter(u => u.role === 'employee').length;
+if(document.getElementById('totalSalesCount')) document.getElementById('totalSalesCount').textContent = allSales.filter(s => !returnedSaleIds.has(s.firestoreId)).length;
+const totalRevenue = allSales.reduce((sum, sale) => {
+const returnData = returnsMap[sale.firestoreId];
+const adjustedRevenue = (sale.totalAmount || 0) - (returnData ? returnData.refunded : 0);
+return sum + adjustedRevenue;
+}, 0);
+const totalDue = allSales.reduce((sum, sale) => {
+if (returnedSaleIds.has(sale.firestoreId)) return sum;
+const due = (sale.totalAmount || 0) - (sale.paidAmount || 0);
+return sum + (due > 0 ? due : 0);
+}, 0);
+const totalPurchaseCost = allPurchases.reduce((sum, purchase) => {
+if (returnedPurchaseIds.has(purchase.firestoreId)) return sum;
+return sum + (purchase.totalAmount || 0);
+}, 0);
+const totalPurchaseReturnValue = allPurchaseReturns.reduce((sum, pr) => sum + (pr.amount || 0), 0);
+const totalPurchaseDue = allPurchases.reduce((sum, purchase) => {
+if (returnedPurchaseIds.has(purchase.firestoreId)) return sum;
+const due = (purchase.totalAmount || 0) - (purchase.paidAmount || 0);
+return sum + (due > 0 ? due : 0);
+}, 0);
+const totalSellReturnValue = allSellReturns.reduce((sum, sr) => sum + (sr.amountRefunded || 0), 0);
+const totalOrdersCount = allSalesRaw.filter(sale => sale.source === 'order').length;
+if(document.getElementById('totalOrders')) document.getElementById('totalOrders').textContent = totalOrdersCount;
+const netProfit = allSales.reduce((profitSum, sale) => {
+const returnData = returnsMap[sale.firestoreId];
+const adjustedRevenue = (sale.totalAmount || 0) - (returnData ? returnData.refunded : 0);
+const returnedItemsPool = returnData ? { ...returnData.items } : {};
+let saleCost = (sale.items || []).reduce((costSum, item) => {
+let itemBuyPrice = parseFloat(item.buyPrice);
+if (isNaN(itemBuyPrice) || itemBuyPrice <= 0) {
+const product = allProducts.find(p => p.firestoreId === (item.productId || item.firestoreId || item.id));
+if (product) {
+const unit = (item.unit || 'pcs').toLowerCase();
+if (product.priceTiers && product.priceTiers[unit]) {
+itemBuyPrice = product.priceTiers[unit].buy;
+} else {
+itemBuyPrice = product.buyPrice;
+}
+itemBuyPrice = parseFloat(itemBuyPrice) || 0;
+}
+}
+const quantity = parseFloat(item.quantity) || 0;
+const pid = item.productId || item.firestoreId || item.id;
+let returnedQty = 0;
+if (returnedItemsPool[pid]) {
+returnedQty = Math.min(quantity, returnedItemsPool[pid]);
+returnedItemsPool[pid] -= returnedQty;
+}
+const actualQty = Math.max(0, quantity - returnedQty);
+return costSum + ((itemBuyPrice || 0) * actualQty);
+}, 0);
+if (returnData && !returnData.hasItems && sale.totalAmount > 0) {
+const refundRatio = Math.min(1, returnData.refunded / sale.totalAmount);
+saleCost = saleCost * (1 - refundRatio);
+}
+return profitSum + (adjustedRevenue - saleCost);
+}, 0);
+if(document.getElementById('totalRevenue')) document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+if(document.getElementById('totalPurchase')) document.getElementById('totalPurchase').textContent = formatCurrency(totalPurchaseCost);
+if(document.getElementById('totalDue')) document.getElementById('totalDue').textContent = formatCurrency(totalDue);
+if(document.getElementById('totalPurchaseDue')) document.getElementById('totalPurchaseDue').textContent = formatCurrency(totalPurchaseDue);
+const netProfitEl = document.getElementById('netProfit');
+if(netProfitEl) {
+const netProfitCard = netProfitEl.closest('.stat-card');
+const netProfitIcon = netProfitCard.querySelector('.icon-circle');
+netProfitEl.textContent = formatCurrency(netProfit);
+netProfitCard.classList.remove('bg-primary-subtle', 'text-primary-emphasis', 'bg-danger-subtle', 'text-danger-emphasis');
+netProfitIcon.classList.remove('bg-primary', 'bg-danger');
+netProfitCard.classList.add(netProfit < 0 ? 'bg-danger-subtle' : 'bg-primary-subtle', netProfit < 0 ? 'text-danger-emphasis' : 'text-primary-emphasis');
+netProfitIcon.classList.add(netProfit < 0 ? 'bg-danger' : 'bg-primary');
+}
+if(document.getElementById('totalPurchaseReturn')) document.getElementById('totalPurchaseReturn').textContent = formatCurrency(totalPurchaseReturnValue);
+if(document.getElementById('totalReturn')) document.getElementById('totalReturn').textContent = formatCurrency(totalSellReturnValue);
+}
+function loadTopSellingProducts() {
+if (!globalDataCache) return;
+const { allSalesRaw, allProducts } = globalDataCache;
+const allSales = allSalesRaw.filter(s => !(s.source === 'order' && ['Pending', 'Processing', 'Shipped', 'Cancelled'].includes(s.paymentStatus || 'Pending')));
+const recentProductsTableBody = document.getElementById('recentProductsTableBody');
+if(!recentProductsTableBody) return;
+recentProductsTableBody.innerHTML = '';
+const productSales = {};
+allSales.forEach(sale => {
+(sale.items || []).forEach(item => {
+const productId = item.firestoreId;
+productSales[productId] = (productSales[productId] || 0) + item.quantity;
+});
+});
+const topSellingProducts = Object.keys(productSales)
+.map(productId => {
+const product = allProducts.find(p => p.firestoreId === productId || p.id === productId);
+return { ...product, unitsSold: productSales[productId] };
+})
+.filter(p => p.firestoreId || p.id)
+.sort((a, b) => b.unitsSold - a.unitsSold)
+.slice(0, 5);
+if (topSellingProducts.length === 0) {
+recentProductsTableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">No sales data available.</td></tr>';
+} else {
+topSellingProducts.forEach(p => {
+const row = `<tr><td>${p.name || 'Unknown Product'}</td><td>${p.category || 'N/A'}</td><td class="text-end">${p.unitsSold}</td></tr>`;
+recentProductsTableBody.insertAdjacentHTML('beforeend', row);
+});
+}
+}
+function loadStockAlerts() {
+if (!globalDataCache) return;
+const { allProducts } = globalDataCache;
+const lowStockProducts = allProducts.filter(p => p.alertQuantity && p.quantity <= p.alertQuantity);
+const lowStockAlertCard = document.getElementById('lowStockAlert');
+const lowStockList = document.getElementById('lowStockList');
+if (lowStockAlertCard && lowStockList) {
+if (lowStockProducts.length > 0) {
+lowStockList.innerHTML = lowStockProducts.map(p => `<li>${p.name} (Qty: ${p.quantity}, Alert at: ${p.alertQuantity})</li>`).join('');
+lowStockAlertCard.style.display = 'block';
+} else {
+lowStockAlertCard.style.display = 'none';
+}
+}
+}
+function loadCategoryChart(chartBorderColor) {
+if (!globalDataCache) return;
+const { allProducts } = globalDataCache;
+const categoryData = allProducts.reduce((acc, product) => {
+const cat = product.category || 'Uncategorized';
+acc[cat] = (acc[cat] || 0) + 1;
+return acc;
+}, {});
+const canvas = document.getElementById('categoryChart');
+if(!canvas) return;
+if (categoryChart) {
+categoryChart.data.labels = Object.keys(categoryData);
+categoryChart.data.datasets[0].data = Object.values(categoryData);
+categoryChart.update('none'); 
+} else {
+categoryChart = new Chart(canvas, {
+type: 'doughnut',
+data: { labels: Object.keys(categoryData), datasets: [{ data: Object.values(categoryData), backgroundColor: chartColors, borderColor: chartBorderColor }] },
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+});
+}
+}
+function loadStockChart(chartBorderColor) {
+if (!globalDataCache) return;
+const { allProducts } = globalDataCache;
+const inStock = allProducts.filter(p => p.quantity > 0).length;
+const outOfStock = allProducts.length - inStock;
+const canvas = document.getElementById('stockChart');
+if(!canvas) return;
+if (stockChart) {
+stockChart.data.datasets[0].data = [inStock, outOfStock];
+stockChart.update('none');
+} else {
+stockChart = new Chart(canvas, {
+type: 'pie',
+data: { labels: ['In Stock', 'Out of Stock'], datasets: [{ data: [inStock, outOfStock], backgroundColor: [chartColors[4], chartColors[6]], borderColor: chartBorderColor }] },
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+});
+}
+}
+function load30DayCharts() {
+if (!globalDataCache) return;
+const { allSalesRaw, allPurchases, allSellReturns, allPurchaseReturns } = globalDataCache;
+const thirtyDaysAgo = new Date();
+thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+const thirtyDaysAgoSecs = thirtyDaysAgo.getTime() / 1000;
+const salesLast30Days = allSalesRaw.filter(s => s.date && s.date.seconds >= thirtyDaysAgoSecs && !(s.source === 'order' && ['Pending', 'Processing', 'Shipped', 'Cancelled'].includes(s.paymentStatus || 'Pending')));
+const purchaseLast30Days = allPurchases.filter(p => p.date && p.date.seconds >= thirtyDaysAgoSecs);
+const saleReturnsLast30Days = allSellReturns.filter(r => r.date && r.date.seconds >= thirtyDaysAgoSecs);
+const purchaseReturnsLast30Days = allPurchaseReturns.filter(r => r.date && r.date.seconds >= thirtyDaysAgoSecs);
+const labels30Days = [];
+for (let i = 29; i >= 0; i--) {
+const d = new Date(); d.setDate(d.getDate() - i);
+labels30Days.push(d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'));
+}
+const renderBarChart = (canvasId, chartInstance, label, dataMap, colorIdx) => {
+const canvas = document.getElementById(canvasId);
+if(!canvas) return null;
+const data = labels30Days.map(day => dataMap[day] || 0);
+if (chartInstance) {
+chartInstance.data.datasets[0].data = data;
+chartInstance.update('none');
+return chartInstance;
+} else {
+return new Chart(canvas, {
+type: 'bar',
+data: { labels: labels30Days, datasets: [{ label: label, data: data, backgroundColor: chartColors[colorIdx], borderColor: chartColors[colorIdx], borderWidth: 1 }] },
+options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+});
+}
+};
+const salesByDay = salesLast30Days.reduce((acc, sale) => {
+if (sale.date && sale.date.seconds) {
+const dateObj = new Date(sale.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+acc[day] = (acc[day] || 0) + (sale.totalAmount || 0);
+}
+return acc;
+}, {});
+thirtyDaySalesChart = renderBarChart('thirtyDaySalesChart', thirtyDaySalesChart, `Sales (${currency})`, salesByDay, 0);
+const dueByDay = salesLast30Days.reduce((acc, sale) => {
+if (sale.date && sale.date.seconds) {
+const dateObj = new Date(sale.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+const due = (sale.totalAmount || 0) - (sale.paidAmount || 0);
+if (due > 0) acc[day] = (acc[day] || 0) + due;
+}
+return acc;
+}, {});
+thirtyDaySaleDueChart = renderBarChart('thirtyDaySaleDueChart', thirtyDaySaleDueChart, `Sale Due (${currency})`, dueByDay, 3);
+const purchaseByDay = purchaseLast30Days.reduce((acc, purchase) => {
+if (purchase.date && purchase.date.seconds) {
+const dateObj = new Date(purchase.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+acc[day] = (acc[day] || 0) + (purchase.totalAmount || 0);
+}
+return acc;
+}, {});
+thirtyDayPurchaseChart = renderBarChart('thirtyDayPurchaseChart', thirtyDayPurchaseChart, `Purchase (${currency})`, purchaseByDay, 5);
+const purchaseDueByDay = purchaseLast30Days.reduce((acc, purchase) => {
+if (purchase.date && purchase.date.seconds) {
+const dateObj = new Date(purchase.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+const due = purchase.dueAmount || 0;
+if (due > 0) acc[day] = (acc[day] || 0) + due;
+}
+return acc;
+}, {});
+thirtyDayPurchaseDueChart = renderBarChart('thirtyDayPurchaseDueChart', thirtyDayPurchaseDueChart, `Purchase Due (${currency})`, purchaseDueByDay, 6);
+const saleReturnsByDay = saleReturnsLast30Days.reduce((acc, ret) => {
+if (ret.date && ret.date.seconds) {
+const dateObj = new Date(ret.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+acc[day] = (acc[day] || 0) + (ret.amountRefunded || 0);
+}
+return acc;
+}, {});
+thirtyDaySaleReturnChart = renderBarChart('thirtyDaySaleReturnChart', thirtyDaySaleReturnChart, `Sale Return (${currency})`, saleReturnsByDay, 3);
+const purchaseReturnsByDay = purchaseReturnsLast30Days.reduce((acc, ret) => {
+if (ret.date && ret.date.seconds) {
+const dateObj = new Date(ret.date.seconds * 1000);
+const day = dateObj.getFullYear() + '-' + String(dateObj.getMonth() + 1).padStart(2, '0') + '-' + String(dateObj.getDate()).padStart(2, '0');
+acc[day] = (acc[day] || 0) + (ret.amount || 0);
+}
+return acc;
+}, {});
+thirtyDayPurchaseReturnChart = renderBarChart('thirtyDayPurchaseReturnChart', thirtyDayPurchaseReturnChart, `Purchase Return (${currency})`, purchaseReturnsByDay, 2);
+}
+function loadFinancialYearCharts() {
+if (!globalDataCache) return;
+const { allSalesRaw, allPurchases, allSellReturns, allPurchaseReturns } = globalDataCache;
+const currentYear = new Date().getFullYear();
+const startYear = new Date().getMonth() < 6 ? currentYear - 1 : currentYear;
+const fyStartDate = new Date(`${startYear}-07-01T00:00:00`).getTime() / 1000;
+const fyEndDate = new Date(`${startYear + 1}-06-30T23:59:59`).getTime() / 1000;
+const fySales = allSalesRaw.filter(s => s.date && s.date.seconds >= fyStartDate && s.date.seconds <= fyEndDate && !(s.source === 'order' && ['Pending', 'Processing', 'Shipped', 'Cancelled'].includes(s.paymentStatus || 'Pending')));
+const fyPurchases = allPurchases.filter(p => p.date && p.date.seconds >= fyStartDate && p.date.seconds <= fyEndDate);
+const fySellReturns = allSellReturns.filter(r => r.date && r.date.seconds >= fyStartDate && r.date.seconds <= fyEndDate);
+const fyPurchaseReturns = allPurchaseReturns.filter(r => r.date && r.date.seconds >= fyStartDate && r.date.seconds <= fyEndDate);
+const monthLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const fyMonthLabels = [];
+for (let i = 0; i < 12; i++) {
+fyMonthLabels.push(monthLabels[(6 + i) % 12]);
+}
+const renderLineChart = (canvasId, chartInstance, label, dataMapArray, colorIdx, bgColor) => {
+const canvas = document.getElementById(canvasId);
+if(!canvas) return null;
+const data = [];
+for (let i = 0; i < 12; i++) data.push(dataMapArray[(6 + i) % 12] || 0);
+if (chartInstance) {
+chartInstance.data.datasets[0].data = data;
+chartInstance.update('none');
+return chartInstance;
+} else {
+return new Chart(canvas, {
+type: 'line',
+data: { labels: fyMonthLabels, datasets: [{ label: label, data: data, borderColor: chartColors[colorIdx], backgroundColor: bgColor, fill: true, tension: 0.3 }] },
+options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+});
+}
+};
+const salesByMonth = Array(12).fill(0);
+const saleDueByMonth = Array(12).fill(0);
+fySales.forEach(sale => {
+if (sale.date && sale.date.seconds) {
+const month = new Date(sale.date.seconds * 1000).getMonth();
+salesByMonth[month] += sale.totalAmount;
+saleDueByMonth[month] += (sale.dueAmount || 0);
+}
+});
+financialYearSalesChart = renderLineChart('financialYearSalesChart', financialYearSalesChart, `Sales for FY -${startYear + 1}`, salesByMonth, 1, 'rgba(139, 92, 246, 0.2)');
+financialYearSaleDueChart = renderLineChart('financialYearSaleDueChart', financialYearSaleDueChart, `Sale Due for FY -${startYear + 1}`, saleDueByMonth, 3, 'rgba(245, 158, 11, 0.2)');
+const purchaseByMonth = Array(12).fill(0);
+const purchaseDueByMonth = Array(12).fill(0);
+fyPurchases.forEach(purchase => {
+if (purchase.date && purchase.date.seconds) {
+const month = new Date(purchase.date.seconds * 1000).getMonth();
+purchaseByMonth[month] += (purchase.totalAmount || 0);
+if(purchase.dueAmount > 0) purchaseDueByMonth[month] += purchase.dueAmount;
+}
+});
+financialYearPurchaseChart = renderLineChart('financialYearPurchaseChart', financialYearPurchaseChart, `Purchase for FY -${startYear + 1}`, purchaseByMonth, 2, 'rgba(20, 184, 166, 0.2)');
+financialYearPurchaseDueChart = renderLineChart('financialYearPurchaseDueChart', financialYearPurchaseDueChart, `Purchase Due for FY -${startYear + 1}`, purchaseDueByMonth, 5, 'rgba(59, 130, 246, 0.2)');
+const sellReturnByMonth = Array(12).fill(0);
+fySellReturns.forEach(ret => {
+if (ret.date && ret.date.seconds) {
+sellReturnByMonth[new Date(ret.date.seconds * 1000).getMonth()] += (ret.amountRefunded || 0);
+}
+});
+financialYearSellReturnChart = renderLineChart('financialYearSellReturnChart', financialYearSellReturnChart, `Sell Return for FY -${startYear + 1}`, sellReturnByMonth, 6, 'rgba(239, 68, 68, 0.2)');
+const purchaseReturnByMonth = Array(12).fill(0);
+fyPurchaseReturns.forEach(ret => {
+if (ret.date && ret.date.seconds) {
+purchaseReturnByMonth[new Date(ret.date.seconds * 1000).getMonth()] += (ret.amount || 0);
+}
+});
+financialYearPurchaseReturnChart = renderLineChart('financialYearPurchaseReturnChart', financialYearPurchaseReturnChart, `Purchase Return for FY -${startYear + 1}`, purchaseReturnByMonth, 3, 'rgba(245, 158, 11, 0.2)');
+}
+function setupEventListeners() {
+const welcomeMessage = document.getElementById('welcomeMessage');
+if(welcomeMessage) welcomeMessage.textContent = `Welcome, ${currentUser.name.split(' ')[0]}`;
+const themeSwitcher = document.getElementById('theme-switcher');
+const htmlEl = document.documentElement;
+const applyTheme = (theme) => {
+const effectiveTheme = theme || 'light';
+htmlEl.setAttribute('data-bs-theme', effectiveTheme);
+updateSwitcherUI(effectiveTheme);
+};
+function updateSwitcherUI(theme) {
+const thumb = themeSwitcher.querySelector('.slider-thumb');
+const sunIcon = themeSwitcher.querySelector('.sun');
+const moonIcon = themeSwitcher.querySelector('.moon');
+if(thumb) thumb.style.transform = theme === 'dark' ? 'translateX(30px)' : 'translateX(0px)';
+if (sunIcon) sunIcon.style.display = theme === 'dark' ? 'block' : 'none';
+if (moonIcon) moonIcon.style.display = theme === 'dark' ? 'none' : 'block';
+}
+applyTheme(currentUser.theme);
+if(themeSwitcher) {
+themeSwitcher.addEventListener('click', async () => {
+const newTheme = htmlEl.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+applyTheme(newTheme);
+const userCol = currentUser._collection || "users";
+await updateDoc(userCol, currentUser.id, { theme: newTheme });
+currentUser.theme = newTheme;
+const chartFontColor = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? '#adb5bd' : '#495057';
+Chart.defaults.color = chartFontColor;
+const allCharts = [categoryChart, stockChart, thirtyDaySalesChart, thirtyDayPurchaseChart, financialYearSalesChart, financialYearPurchaseChart, thirtyDaySaleReturnChart, thirtyDayPurchaseReturnChart, thirtyDaySaleDueChart, thirtyDayPurchaseDueChart, financialYearSaleDueChart, financialYearSellReturnChart, financialYearPurchaseReturnChart, financialYearPurchaseDueChart];
+allCharts.forEach(chart => {
+if (chart) {
+if (chart.options.plugins.legend) {
+chart.options.plugins.legend.labels.color = chartFontColor;
+}
+if (chart.options.scales && chart.options.scales.x) {
+chart.options.scales.x.ticks.color = chartFontColor;
+chart.options.scales.y.ticks.color = chartFontColor;
+}
+chart.update();
+}
+});
+});
+}
+}
+async function initializeApp() {
+const isAuthenticatedBySession = sessionStorage.getItem('isAuthenticated') === 'true';
+const sessionUserId = sessionStorage.getItem('loggedInUserId');
+if (isAuthenticatedBySession && sessionUserId) {
+let userDocSnap = await getDoc("users", sessionUserId);
+let collectionName = "users";
+if (!userDocSnap.exists()) {
+userDocSnap = await getDoc("employees", sessionUserId);
+collectionName = "employees";
+}
+if (userDocSnap.exists()) {
+sessionStorage.removeItem('redirectCount');
+await onUserAuthenticated({ id: userDocSnap.id, ...userDocSnap.data(), _collection: collectionName });
+} else {
+const sess = JSON.parse(localStorage.getItem('userSession') || '{}');
+if (sess.role) {
+sessionStorage.removeItem('redirectCount');
+await onUserAuthenticated({ id: sessionUserId, role: sess.role, permissions: sess.permissions || [], _collection: 'users' });
+return;
+}
+let redirectCount = parseInt(sessionStorage.getItem('redirectCount') || '0');
+if (redirectCount >= 2) {
+sessionStorage.clear();
+localStorage.clear();
+} else {
+sessionStorage.setItem('redirectCount', (redirectCount + 1).toString());
+}
+window.location.href = 'index.html';
+}
+} else {
+let redirectCount = parseInt(sessionStorage.getItem('redirectCount') || '0');
+if (redirectCount >= 2) {
+sessionStorage.clear();
+localStorage.clear();
+} else {
+sessionStorage.setItem('redirectCount', (redirectCount + 1).toString());
+}
+window.location.href = 'index.html';
+}
+}
+async function onUserAuthenticated(userData) {
+currentUser = userData;
+if (!hasPermission(currentUser, 'dashboard')) {
+const firstAllowedPage = ['pos.html', 'all-product.html', 'all-sale-history.html', 'purchase-history.html'].find(page => {
+let perm = page.split('.')[0].replace(/-/g, '_');
+return hasPermission(currentUser, perm) || hasPermission(currentUser, perm.replace('_history', ''));
+});
+window.location.href = firstAllowedPage || 'index.html';
+return;
+}
+setupUI(currentUser);
+setupEventListeners();
+await loadDashboard();
+}
+initializeApp();
+});
+</script>
 </body>
 </html>
