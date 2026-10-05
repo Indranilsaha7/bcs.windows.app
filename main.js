@@ -1,36 +1,33 @@
-﻿const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-function createWindow () {
-  const win = new BrowserWindow({
-    width: 1200,
-    height: 768,
-    titleBarStyle: 'hidden',
-    titleBarOverlay: {
-      color: '#00000000', /* Transparent so the CSS glassmorphism shows through */
-      symbolColor: '#ffffff',
-      height: 48
-    },
-    icon: path.join(__dirname, 'al.png'),
+function createWindow() {
+  const mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    minWidth: 1024,
+    minHeight: 768,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
-    }
+    },
+    // icon: path.join(__dirname, 'al.png')
   });
 
-  win.loadFile('index.html');
+  mainWindow.loadFile('index.html');
+  
+  // Optional: mainWindow.webContents.openDevTools();
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  createWindow();
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.on('activate', function () {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
 });
 
-app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+app.on('window-all-closed', function () {
+  if (process.platform !== 'darwin') app.quit();
 });
+

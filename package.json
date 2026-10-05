@@ -6,18 +6,7 @@
   "scripts": {
     "start": "electron ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "electron": "^44.5.1"
-  },
   "dependencies": {
-    "argon2": "^0.45.1",
-    "hash-wasm": "^4.12.0"
-  },
-  "allowScripts": {
-    "argon2@0.45.1": true
+    "electron": "^31.3.1"
   }
 }
