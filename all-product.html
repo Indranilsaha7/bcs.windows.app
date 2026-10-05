@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
@@ -11,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="template/sidebar/sidebar.css">
-    <link rel="stylesheet" href="template/topbar/topbar.css">
-    <link rel="stylesheet" href="template/footer/footer.css">
+
+
+
     
     <style>
         /* macOS Sleek Glassmorphism Variables */
@@ -716,11 +716,11 @@
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Retail Price</div>
-                        <div class="detail-value">à§³${parseFloat(pPrice).toFixed(2)}</div>
+                        <div class="detail-value">৳${parseFloat(pPrice).toFixed(2)}</div>
                     </div>
                     <div class="detail-item">
                         <div class="detail-label">Wholesale Price</div>
-                        <div class="detail-value">à§³${parseFloat(wPrice).toFixed(2)}</div>
+                        <div class="detail-value">৳${parseFloat(wPrice).toFixed(2)}</div>
                     </div>
                 </div>
 
@@ -797,7 +797,7 @@
                         <div class="row g-2 text-sm">
                             <div class="col-6"><strong>Added Qty:</strong> ${lot.quantityAdded}</div>
                             <div class="col-6"><strong>Current Qty:</strong> ${lot.currentQuantity}</div>
-                            <div class="col-6"><strong>Buy Price:</strong> à§³${parseFloat(lot.buyPrice || 0).toFixed(2)}</div>
+                            <div class="col-6"><strong>Buy Price:</strong> ৳${parseFloat(lot.buyPrice || 0).toFixed(2)}</div>
                             <div class="col-6"><strong>Supplier:</strong> ${lot.supplier || 'N/A'}</div>
                         </div>
                     </div>
