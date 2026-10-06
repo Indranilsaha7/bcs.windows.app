@@ -577,7 +577,7 @@
                     if (qty <= 0) borderColor = '#ff1a1a'; 
                     else if (qty <= alertQty) borderColor = '#ffe600'; 
 
-                    const formatCurrency = (amt) => `৳${(amt||0).toFixed(2)}`;
+                    const formatCurrency = (amt) => `৳${Number(amt||0).toFixed(2)}`;
 
                     let pricingHtml = '';
                     if (p.priceTiers && p.priceTiers.pcs) {
@@ -694,11 +694,13 @@
         };
 
         window.openDetails = function(id) {
-            const p = allProducts.find(x => x.firestoreId === id);
-            if(!p) return;
-            const formatCurrency = (amt) => `৳${(amt||0).toFixed(2)}`;
+            console.log("Opening details", id);
+            try {
+                const p = allProducts.find(x => x.firestoreId === id);
+                if(!p) return;
+                const formatCurrency = (amt) => `৳${Number(amt||0).toFixed(2)}`;
 
-            let pricingHtml = '';
+                let pricingHtml = '';
             if (p.priceTiers) {
                 pricingHtml = '<h5 class="mt-4 border-bottom border-secondary pb-2">Pricing Details</h5><div class="row g-3">';
                 const units = ['box', 'pack', 'pcs', 'kg', 'gram', 'liter', 'ml'];
@@ -820,6 +822,10 @@
                 ${prodHtml}
             `;
             detailsModal.show();
+            } catch (err) {
+                console.error("Error in openDetails:", err);
+                alert("Failed to open details: " + err.message);
+            }
         };
 
         // Send to Admins (Mocked API call)
