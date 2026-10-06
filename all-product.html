@@ -579,12 +579,17 @@
 
                     const formatCurrency = (amt) => `৳${Number(amt||0).toFixed(2)}`;
 
+                    let priceTiersObj = p.priceTiers;
+                    if (typeof priceTiersObj === 'string') {
+                        try { priceTiersObj = JSON.parse(priceTiersObj); } catch(e) { priceTiersObj = null; }
+                    }
+
                     let pricingHtml = '';
-                    if (p.priceTiers && p.priceTiers.pcs) {
+                    if (priceTiersObj && priceTiersObj.pcs) {
                         pricingHtml = `
-                            <li class="list-group-item d-flex justify-content-between pt-3 border-secondary"><span>Buy (Pcs):</span> <strong>${formatCurrency(p.priceTiers.pcs.buy)}</strong></li>
-                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Wholesale:</span> <strong>${formatCurrency(p.priceTiers.pcs.wholesale)}</strong></li>
-                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Retail:</span> <strong>${formatCurrency(p.priceTiers.pcs.sell)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between pt-3 border-secondary"><span>Buy (Pcs):</span> <strong>${formatCurrency(priceTiersObj.pcs.buy)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Wholesale:</span> <strong>${formatCurrency(priceTiersObj.pcs.wholesale)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Retail:</span> <strong>${formatCurrency(priceTiersObj.pcs.sell)}</strong></li>
                         `;
                     } else {
                         pricingHtml = `
@@ -701,62 +706,73 @@
                 const formatCurrency = (amt) => `৳${Number(amt||0).toFixed(2)}`;
 
                 let pricingHtml = '';
-            if (p.priceTiers) {
-                pricingHtml = '<h5 class="mt-4 border-bottom border-secondary pb-2">Pricing Details</h5><div class="row g-3">';
-                const units = ['box', 'pack', 'pcs', 'kg', 'gram', 'liter', 'ml'];
-                units.forEach(unit => {
-                    if (p.priceTiers[unit]) {
-                        const tier = p.priceTiers[unit];
-                        pricingHtml += `
-                            <div class="col-12">
-                                <div class="card bg-dark border-secondary">
-                                    <div class="card-header py-1 small fw-bold text-uppercase bg-secondary text-white">${unit}</div>
-                                    <div class="card-body p-2">
-                                        <div class="d-flex justify-content-center mb-2 pb-2 border-bottom border-secondary">
-                                            <span class="badge bg-primary fs-6">Buy Price: ${formatCurrency(tier.buy)}</span>
-                                        </div>
-                                        <div class="row text-center">
-                                            <div class="col-6 border-end border-secondary">
-                                                <div class="text-info small fw-bold mb-1">Normal Customer</div>
-                                                <div class="d-flex justify-content-between px-3">
-                                                    <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.wholesale)}</span>
-                                                </div>
-                                                <div class="d-flex justify-content-between px-3">
-                                                    <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.sell)}</span>
-                                                </div>
+                let priceTiersObj = p.priceTiers;
+                if (typeof priceTiersObj === 'string') {
+                    try { priceTiersObj = JSON.parse(priceTiersObj); } catch(e) { priceTiersObj = null; }
+                }
+
+                if (priceTiersObj) {
+                    pricingHtml = '<h5 class="mt-4 border-bottom border-secondary pb-2">Pricing Details</h5><div class="row g-3">';
+                    const units = ['box', 'pack', 'pcs', 'kg', 'gram', 'liter', 'ml'];
+                    units.forEach(unit => {
+                        if (priceTiersObj[unit]) {
+                            const tier = priceTiersObj[unit];
+                            pricingHtml += `
+                                <div class="col-12">
+                                    <div class="card bg-dark border-secondary">
+                                        <div class="card-header py-1 small fw-bold text-uppercase bg-secondary text-white">${unit}</div>
+                                        <div class="card-body p-2">
+                                            <div class="d-flex justify-content-center mb-2 pb-2 border-bottom border-secondary">
+                                                <span class="badge bg-primary fs-6">Buy Price: ${formatCurrency(tier.buy)}</span>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="text-warning small fw-bold mb-1">Shop Customer</div>
-                                                <div class="d-flex justify-content-between px-3">
-                                                    <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.shop_wholesale)}</span>
+                                            <div class="row text-center">
+                                                <div class="col-6 border-end border-secondary">
+                                                    <div class="text-info small fw-bold mb-1">Normal Customer</div>
+                                                    <div class="d-flex justify-content-between px-3">
+                                                        <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.wholesale)}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between px-3">
+                                                        <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.sell)}</span>
+                                                    </div>
                                                 </div>
-                                                <div class="d-flex justify-content-between px-3">
-                                                    <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.shop_sell)}</span>
+                                                <div class="col-6">
+                                                    <div class="text-warning small fw-bold mb-1">Shop Customer</div>
+                                                    <div class="d-flex justify-content-between px-3">
+                                                        <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.shop_wholesale)}</span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-between px-3">
+                                                        <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.shop_sell)}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>`;
-                    }
-                });
-                pricingHtml += '</div>';
-            } else {
-                pricingHtml = `
-                    <h5 class="mt-4 border-bottom border-secondary pb-2">Pricing</h5>
-                    <div class="row text-center">
-                        <div class="col-4"><div class="p-3 bg-danger-subtle text-danger-emphasis rounded-3 border border-danger"><h6>Buy Price</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.buyPrice)}</p></div></div>
-                        <div class="col-4"><div class="p-3 bg-primary-subtle text-primary-emphasis rounded-3 border border-primary"><h6>Wholesale</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.wholesalePrice)}</p></div></div>
-                        <div class="col-4"><div class="p-3 bg-success-subtle text-success-emphasis rounded-3 border border-success"><h6>Retail</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.sellPrice)}</p></div></div>
-                    </div>`;
-            }
+                                </div>`;
+                        }
+                    });
+                    pricingHtml += '</div>';
+                } else {
+                    pricingHtml = `
+                        <h5 class="mt-4 border-bottom border-secondary pb-2">Pricing</h5>
+                        <div class="row text-center">
+                            <div class="col-4"><div class="p-3 bg-danger-subtle text-danger-emphasis rounded-3 border border-danger"><h6>Buy Price</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.buyPrice)}</p></div></div>
+                            <div class="col-4"><div class="p-3 bg-primary-subtle text-primary-emphasis rounded-3 border border-primary"><h6>Wholesale</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.wholesalePrice)}</p></div></div>
+                            <div class="col-4"><div class="p-3 bg-success-subtle text-success-emphasis rounded-3 border border-success"><h6>Retail</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.sellPrice)}</p></div></div>
+                        </div>`;
+                }
 
-            let lotRows = '';
-            if (p.lots && p.lots.length > 0) {
-                lotRows = p.lots.map(lot => `<tr><td>${lot.lotNumber}</td><td class="text-center">${lot.quantity}</td><td class="text-end">${formatCurrency(lot.buyPrice)}</td></tr>`).join('');
-            } else {
-                lotRows = `<tr><td>Default Lot</td><td class="text-center">${p.quantity || 0}</td><td class="text-end">${formatCurrency(p.buyPrice)}</td></tr>`;
-            }
+                let lotRows = '';
+                let lotsArr = p.lots;
+                if (typeof lotsArr === 'string') {
+                    try { lotsArr = JSON.parse(lotsArr); } catch(e) { lotsArr = []; }
+                }
+                if (!Array.isArray(lotsArr)) lotsArr = [];
+
+                if (lotsArr.length > 0) {
+                    lotRows = lotsArr.map(lot => `<tr><td>${lot.lotNumber}</td><td class="text-center">${lot.quantity}</td><td class="text-end">${formatCurrency(lot.buyPrice)}</td></tr>`).join('');
+                } else {
+                    lotRows = `<tr><td>Default Lot</td><td class="text-center">${p.quantity || 0}</td><td class="text-end">${formatCurrency(p.buyPrice)}</td></tr>`;
+                }
 
             const lotInfoHtml = `
                 <h5 class="mt-4 border-bottom border-secondary pb-2">Lot Information</h5>
