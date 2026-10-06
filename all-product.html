@@ -195,6 +195,85 @@
         }
 
         @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+            /* Custom Alert Cards */
+        #custom-alert-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .custom-alert {
+            min-width: 300px;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--bs-body-bg);
+            border-left: 4px solid var(--bs-success);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: slideIn 0.3s ease-out forwards;
+            position: relative;
+        }
+
+        .custom-alert.error {
+            border-left-color: var(--bs-danger);
+        }
+
+        .custom-alert .icon {
+            color: var(--bs-success);
+            flex-shrink: 0;
+            display: flex;
+        }
+
+        .custom-alert.error .icon {
+            color: var(--bs-danger);
+        }
+
+        .custom-alert .content {
+            flex-grow: 1;
+        }
+
+        .custom-alert .title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 2px;
+            color: var(--bs-body-color);
+        }
+
+        .custom-alert .message {
+            font-size: 0.85rem;
+            color: var(--bs-secondary-color);
+        }
+
+        .custom-alert .close-btn {
+            background: none;
+            border: none;
+            color: var(--bs-secondary-color);
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .custom-alert .close-btn:hover {
+            color: var(--bs-body-color);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -204,6 +283,7 @@
         renderSidebar('products', 'all-product');
     </script>
 
+    <div id="custom-alert-container"></div>
     <main class="main-content">
         <div class="container-fluid px-0">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4 border-bottom border-secondary pb-3">
@@ -370,6 +450,25 @@
     <script type="module">
         import { getCollection, addDocument, updateDocument, deleteDocument, fetchAPI } from './script/api.js';
         
+        
+        window.showCustomAlert = function(title, message, type = 'success') {
+            const container = document.getElementById('custom-alert-container');
+            const alert = document.createElement('div');
+            alert.className = `custom-alert ${type === 'failed' ? 'error' : type}`;
+            
+            let iconSvg = type === 'success' 
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg>`;
+
+            alert.innerHTML = `<div class="icon">${iconSvg}</div><div class="content"><div class="title">${title}</div><div class="message">${message}</div></div><button class="close-btn" onclick="this.parentElement.remove()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646-2.647a.5.5 0 0 1-.708-.708L8 7.293 5.354 4.646z"/></svg></button>`;
+
+            container.appendChild(alert);
+            setTimeout(() => {
+                alert.style.animation = 'slideOut 0.3s ease-in forwards';
+                alert.addEventListener('animationend', () => alert.remove());
+            }, 3000);
+        };
+
         let viewTrashMode = false;
         let allProducts = [];
         let filteredProducts = [];
@@ -606,10 +705,10 @@
 
         window.deleteProd = async function(id) {
             if(confirm("Are you sure you want to move this product to the trash? It will be permanently deleted after 2 days.")) {
-                // Optimistic UI Update
                 const p = allProducts.find(x => x.firestoreId === id);
                 if (p) p.isDeleted = true;
-                filterAndSortProducts(); // Instant UI refresh
+                filterAndSortProducts();
+                showCustomAlert('Deleted', 'Product moved to the trash successfully.');
                 
                 try {
                     await addDocument('deleted_products', { 
@@ -618,19 +717,19 @@
                         deletedAt: new Date().toISOString() 
                     });
                 } catch(e) { 
-                    if (p) p.isDeleted = false; // rollback on failure
+                    if (p) p.isDeleted = false;
                     filterAndSortProducts();
-                    alert("Error: " + e.message); 
+                    showCustomAlert('Error', 'Failed to delete product: ' + e.message, 'failed');
                 }
             }
         };
 
         window.restoreProd = async function(id) {
             if(confirm("Restore this product from the trash?")) {
-                // Optimistic UI Update
                 const p = allProducts.find(x => x.firestoreId === id);
                 if (p) p.isDeleted = false;
-                filterAndSortProducts(); // Instant UI refresh
+                filterAndSortProducts();
+                showCustomAlert('Restored', 'Product successfully restored to active inventory.');
                 
                 try {
                     const deletedRes = await getCollection('deleted_products');
@@ -639,9 +738,9 @@
                         await deleteDocument('deleted_products', deletedDoc.id);
                     }
                 } catch(e) { 
-                    if (p) p.isDeleted = true; // rollback on failure
+                    if (p) p.isDeleted = true;
                     filterAndSortProducts();
-                    alert("Error: " + e.message); 
+                    showCustomAlert('Error', 'Failed to restore product: ' + e.message, 'failed');
                 }
             }
         };
