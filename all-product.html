@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <script>
@@ -8,110 +8,212 @@
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products | BCS Enterprise POS</title>
-    
-    <!-- Bootstrap 5 CSS -->
+    <title>All Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #0f172a;
+        /* macOS Sleek Glassmorphism Variables */
+        :root {
+            --bs-primary-rgb: 99, 102, 241;
+            --bs-primary: #6366f1;
+            --bs-body-font-family: 'Inter', sans-serif;
+            --glass-bg: rgba(255, 255, 255, 0.65);
+            --glass-bg-hover: rgba(255, 255, 255, 0.85);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.8);
+            --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            --glass-shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.08);
+            --glass-blur: blur(16px);
+            --page-bg: #f3f4f6;
+            --orb-1: rgba(99, 102, 241, 0.3);
+            --orb-2: rgba(168, 85, 247, 0.25);
+        }
+
+        [data-bs-theme="dark"] {
+            --glass-bg: rgba(30, 30, 30, 0.55);
+            --glass-bg-hover: rgba(45, 45, 45, 0.65);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --glass-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --glass-shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.4);
+            --page-bg: #0f172a;
+            --orb-1: rgba(99, 102, 241, 0.15);
+            --orb-2: rgba(168, 85, 247, 0.15);
             color: #f8fafc;
+        }
+
+        body {
+            font-family: var(--bs-body-font-family);
+            background: var(--page-bg) !important;
+            background-attachment: fixed !important;
+            display: flex;
+            flex-direction: column;
             min-height: 100vh;
-            margin: 0;
+            position: relative;
+            z-index: 0;
             overflow-x: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        body::before {
+            width: 500px;
+            height: 500px;
+            background: var(--orb-1);
+            top: -150px;
+            left: -100px;
+        }
+
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: var(--orb-2);
+            bottom: -50px;
+            right: -50px;
         }
 
         .main-content {
             margin-left: 250px; /* Sidebar width */
-            padding: 80px 30px 30px 30px; /* Topbar offset */
-            transition: all 0.3s ease;
+            padding: 80px 30px 40px 30px; /* Topbar offset */
+            flex-grow: 1;
         }
 
-        .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            padding: 24px;
+        .product-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border) !important;
+            box-shadow: var(--glass-shadow) !important;
+            transition: all 0.3s ease-in-out;
+            border-radius: 20px;
+            overflow: hidden;
         }
 
-        .glass-table {
-            color: #f8fafc;
-            vertical-align: middle;
+        .product-card:hover {
+            transform: translateY(-4px);
+            background: var(--glass-bg-hover) !important;
+            box-shadow: var(--glass-shadow-hover) !important;
+        }
+
+        .stat-card {
+            background: var(--glass-bg) !important;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: var(--glass-border) !important;
+            border-radius: .75rem;
+            box-shadow: var(--glass-shadow) !important;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            background: var(--glass-bg-hover) !important;
+            box-shadow: var(--glass-shadow-hover) !important;
+        }
+
+        .stat-card .card-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: transparent !important;
+        }
+
+        .stat-card .icon-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            border: var(--glass-border);
+            box-shadow: var(--glass-shadow) !important;
+        }
+
+        .product-card img {
+            height: 200px;
+            object-fit: contain;
+            background-color: #ffffff;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+        }
+
+        [data-bs-theme="dark"] .product-card img {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .product-card .card-body {
+            position: relative;
+            padding: 1.5rem;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        .product-card:hover .card-actions {
+            opacity: 1;
+        }
+
+        .card-actions .btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .list-group-item {
+            background-color: transparent !important;
+            border-color: rgba(255,255,255,0.1) !important;
+            padding-left: 0;
+            padding-right: 0;
+            color: inherit;
         }
         
-        .glass-table th {
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: var(--glass-border);
+            color: inherit;
+        }
+        
+        .form-control, .form-select {
             background: rgba(15, 23, 42, 0.6);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
         }
-
-        .glass-table td {
-            background: transparent;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 16px;
+        .form-control:focus, .form-select:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: var(--bs-primary);
+            color: white;
         }
-
-        .glass-table tbody tr:hover td {
-            background: rgba(255, 255, 255, 0.03);
-        }
-
+        
         .btn-gradient {
             background: linear-gradient(135deg, #6366f1, #a855f7);
             border: none;
             color: white;
             transition: opacity 0.2s;
         }
-        
         .btn-gradient:hover {
             opacity: 0.9;
-            color: white;
-        }
-
-        .action-btn {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 8px;
-            transition: all 0.2s;
-        }
-
-        /* Modal Styling */
-        .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-        }
-        .modal-header {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .modal-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .form-control {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-        .form-control:focus {
-            background: rgba(15, 23, 42, 0.8);
-            border-color: #6366f1;
-            box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
             color: white;
         }
     </style>
@@ -125,76 +227,158 @@
         renderSidebar('products');
     </script>
 
-    <div class="main-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold mb-1">Products Inventory</h2>
-                <p class="text-muted mb-0">Manage your store's products, pricing, and stock.</p>
+    <main class="main-content">
+        <div class="container-fluid px-0">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Products Inventory</h2>
+                <div>
+                    <button class="btn btn-secondary me-2" onclick="window.print()">
+                        <i class="bi bi-printer-fill me-2"></i>Print Full List
+                    </button>
+                    <button class="btn btn-gradient px-4 py-2 rounded-3 fw-semibold shadow-sm" onclick="openProductModal()">
+                        <i class="bi bi-plus-lg me-2"></i> Add Product
+                    </button>
+                </div>
             </div>
-            <button class="btn btn-gradient px-4 py-2 rounded-3 fw-semibold shadow-sm" onclick="openProductModal()">
-                <i class="bi bi-plus-lg me-2"></i> Add Product
-            </button>
-        </div>
 
-        <div class="glass-card">
-            <div class="table-responsive">
-                <table class="table glass-table mb-0" id="productsTable">
-                    <thead>
-                        <tr>
-                            <th>Product Name</th>
-                            <th>Category</th>
-                            <th>Sell Price</th>
-                            <th>Stock Qty</th>
-                            <th class="text-end">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="productsTableBody">
-                        <tr>
-                            <td colspan="5" class="text-center py-4 text-muted">
-                                <div class="spinner-border spinner-border-sm me-2" role="status"></div> Loading products...
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Stats Row -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card bg-primary-subtle text-primary-emphasis h-100">
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title text-uppercase small">Total Products</h6>
+                                <h3 class="fw-bold mb-0" id="totalProductsCard">0</h3>
+                            </div>
+                            <div class="icon-circle bg-primary text-white"><i class="bi bi-box-seam"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card bg-success-subtle text-success-emphasis h-100">
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title text-uppercase small">In Stock</h6>
+                                <h3 class="fw-bold mb-0" id="inStockCountCard">0</h3>
+                            </div>
+                            <div class="icon-circle bg-success text-white"><i class="bi bi-check-circle"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card bg-danger-subtle text-danger-emphasis h-100">
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title text-uppercase small">Out of Stock</h6>
+                                <h3 class="fw-bold mb-0" id="outOfStockCountCard">0</h3>
+                            </div>
+                            <div class="icon-circle bg-danger text-white"><i class="bi bi-x-circle"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="card stat-card bg-warning-subtle text-warning-emphasis h-100">
+                        <div class="card-body">
+                            <div>
+                                <h6 class="card-title text-uppercase small">Low Stock Alert</h6>
+                                <h3 class="fw-bold mb-0" id="stockAlertCountCard">0</h3>
+                            </div>
+                            <div class="icon-circle bg-warning text-white"><i class="bi bi-exclamation-triangle"></i></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="row mb-4">
+                <div class="col-lg-10 offset-lg-1">
+                    <div class="input-group input-group-lg" style="box-shadow: var(--glass-shadow); border-radius: 12px; overflow: hidden; border: var(--glass-border);">
+                        <select id="sortBy" class="form-select border-0" style="max-width: 220px; background: var(--glass-bg); backdrop-filter: var(--glass-blur);">
+                            <option value="name-asc" selected>Sort by Name (A-Z)</option>
+                            <option value="name-desc">Sort by Name (Z-A)</option>
+                            <option value="in-stock-only">Only In Stock</option>
+                            <option value="out-of-stock-only">Out of Stock</option>
+                            <option value="price-asc">Sell Price (Low-High)</option>
+                            <option value="price-desc">Sell Price (High-Low)</option>
+                        </select>
+                        <input type="search" id="productSearch" class="form-control border-0" placeholder="Search by name, category, or brand..." style="background: var(--glass-bg); backdrop-filter: var(--glass-blur);">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products Grid Container -->
+            <div class="row" id="productList">
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-muted">Loading your beautiful products...</p>
+                </div>
+            </div>
+
+            <div id="noProductsMessage" class="text-center py-5" style="display: none;">
+                <i class="bi bi-box-seam text-muted" style="font-size: 4rem;"></i>
+                <h3 class="mt-3">No Products Found</h3>
+                <p class="lead text-muted">Click "Add Product" to get started.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Product Details Modal (vCard style) -->
+    <div class="modal fade" id="productDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-bottom border-secondary">
+                    <h5 class="modal-title fw-bold" id="productDetailsModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4" id="productDetailsContainer">
+                    <!-- Dynamic Details Rendered Here -->
+                </div>
+                <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Add/Edit Product Modal -->
-    <div class="modal fade" id="productModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="productFormModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header border-bottom border-secondary">
                     <h5 class="modal-title fw-bold" id="productModalTitle">Add New Product</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
                     <form id="productForm">
                         <input type="hidden" id="productId">
                         <div class="mb-3">
                             <label class="form-label text-muted small text-uppercase fw-bold">Product Name</label>
-                            <input type="text" class="form-control" id="productName" required placeholder="e.g. Logitech MX Master 3">
+                            <input type="text" class="form-control" id="productName" required>
                         </div>
                         <div class="mb-3">
                             <label class="form-label text-muted small text-uppercase fw-bold">Category</label>
-                            <input type="text" class="form-control" id="productCategory" required placeholder="e.g. Electronics">
+                            <input type="text" class="form-control" id="productCategory" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Brand</label>
+                            <input type="text" class="form-control" id="productBrand">
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small text-uppercase fw-bold">Sell Price</label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-dark border-secondary text-light">৳</span>
-                                    <input type="number" step="0.01" class="form-control" id="productPrice" required placeholder="0.00">
+                                    <input type="number" step="0.01" class="form-control" id="productPrice" required>
                                 </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label text-muted small text-uppercase fw-bold">Stock Quantity</label>
-                                <input type="number" class="form-control" id="productQty" required placeholder="0">
+                                <input type="number" class="form-control" id="productQty" required>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top border-secondary">
                     <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-gradient rounded-3 px-4 fw-semibold" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
                 </div>
@@ -202,147 +386,212 @@
         </div>
     </div>
 
-    <!-- Bootstrap JS Bundle -->
+    <!-- Bootstrap & Logic -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Main Logic -->
     <script type="module">
         import { getCollection, addDocument, updateDocument, deleteDocument } from './script/api.js';
-        import { logoutUser } from './script/auth.js';
-        window.logoutUser = logoutUser;
+        
+        let allProducts = [];
+        let formModal = null;
+        let detailsModal = null;
 
-        let currentProducts = [];
-        let productModalInstance = null;
+        document.addEventListener('DOMContentLoaded', () => {
+            formModal = new bootstrap.Modal(document.getElementById('productFormModal'));
+            detailsModal = new bootstrap.Modal(document.getElementById('productDetailsModal'));
+            loadProducts();
 
-        // Make functions globally available for inline event handlers
-        window.openProductModal = function(id = null) {
-            const modalEl = document.getElementById('productModal');
-            if (!productModalInstance) {
-                productModalInstance = new bootstrap.Modal(modalEl);
+            document.getElementById('productSearch').addEventListener('input', renderProducts);
+            document.getElementById('sortBy').addEventListener('change', renderProducts);
+        });
+
+        async function loadProducts() {
+            try {
+                const res = await getCollection('products');
+                allProducts = res.docs.map(d => ({ id: d.id, ...d.data() }));
+                updateStats();
+                renderProducts();
+            } catch (error) {
+                console.error("Error loading products:", error);
+                document.getElementById('productList').innerHTML = `<div class="col-12 text-center text-danger py-5">Failed to load products: ${error.message}</div>`;
             }
-            
-            const form = document.getElementById('productForm');
-            const title = document.getElementById('productModalTitle');
-            
-            form.reset();
+        }
+
+        function updateStats() {
+            document.getElementById('totalProductsCard').textContent = allProducts.length;
+            document.getElementById('inStockCountCard').textContent = allProducts.filter(p => (p.quantity || 0) > 0).length;
+            document.getElementById('outOfStockCountCard').textContent = allProducts.filter(p => (p.quantity || 0) <= 0).length;
+            document.getElementById('stockAlertCountCard').textContent = allProducts.filter(p => (p.quantity || 0) <= 5 && (p.quantity || 0) > 0).length;
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('productList');
+            const noMsg = document.getElementById('noProductsMessage');
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+            const sortBy = document.getElementById('sortBy').value;
+
+            // Filter
+            let filtered = allProducts.filter(p => {
+                const searchStr = `${p.name} ${p.category} ${p.brand}`.toLowerCase();
+                if (searchTerm && !searchStr.includes(searchTerm)) return false;
+                
+                if (sortBy === 'in-stock-only' && (p.quantity || 0) <= 0) return false;
+                if (sortBy === 'out-of-stock-only' && (p.quantity || 0) > 0) return false;
+                
+                return true;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                if (sortBy === 'name-asc') return (a.name || '').localeCompare(b.name || '');
+                if (sortBy === 'name-desc') return (b.name || '').localeCompare(a.name || '');
+                if (sortBy === 'price-asc') return (a.sellPrice || 0) - (b.sellPrice || 0);
+                if (sortBy === 'price-desc') return (b.sellPrice || 0) - (a.sellPrice || 0);
+                return 0;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = '';
+                noMsg.style.display = 'block';
+                return;
+            }
+
+            noMsg.style.display = 'none';
+            container.innerHTML = filtered.map(p => {
+                const qty = p.quantity || 0;
+                let borderColor = '#32cd32'; // Green
+                if (qty <= 0) borderColor = '#ff1a1a'; // Red
+                else if (qty <= 5) borderColor = '#ffe600'; // Yellow
+
+                return `
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="card product-card h-100" style="border: 1px solid ${borderColor}50 !important; box-shadow: 0 8px 32px ${borderColor}15 !important;">
+                        <div class="position-relative text-center pt-4">
+                            <i class="bi bi-box-seam" style="font-size: 5rem; color: rgba(255,255,255,0.1);"></i>
+                        </div>
+                        <div class="card-body d-flex flex-column mt-2">
+                            <div class="card-actions">
+                                <button class="btn btn-success" onclick="openDetails('${p.id}')"><i class="bi bi-eye-fill"></i></button>
+                                <button class="btn btn-warning" onclick="openProductModal('${p.id}')"><i class="bi bi-pencil-square"></i></button>
+                                <button class="btn btn-danger" onclick="deleteProd('${p.id}')"><i class="bi bi-trash3-fill"></i></button>
+                            </div>
+                            <h5 class="card-title fw-bold mb-1">${p.name}</h5>
+                            <p class="card-text text-muted small mb-3">${p.brand || p.category || 'General'}</p>
+                            
+                            <ul class="list-group list-group-flush mt-auto">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Stock:</span> 
+                                    <strong class="${qty > 0 ? 'text-success' : 'text-danger'}">${qty} Pcs</strong>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <span>Price:</span> 
+                                    <strong class="text-info">৳${(p.sellPrice || 0).toFixed(2)}</strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        window.openProductModal = function(id = null) {
+            document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
+            document.getElementById('productModalTitle').textContent = 'Add New Product';
 
             if (id) {
-                title.textContent = 'Edit Product';
-                const product = currentProducts.find(p => p.id === id);
-                if (product) {
-                    document.getElementById('productId').value = product.id;
-                    document.getElementById('productName').value = product.name;
-                    document.getElementById('productCategory').value = product.category;
-                    document.getElementById('productPrice').value = product.sellPrice;
-                    document.getElementById('productQty').value = product.quantity;
+                const p = allProducts.find(x => x.id === id);
+                if (p) {
+                    document.getElementById('productModalTitle').textContent = 'Edit Product';
+                    document.getElementById('productId').value = p.id;
+                    document.getElementById('productName').value = p.name || '';
+                    document.getElementById('productCategory').value = p.category || '';
+                    document.getElementById('productBrand').value = p.brand || '';
+                    document.getElementById('productPrice').value = p.sellPrice || 0;
+                    document.getElementById('productQty').value = p.quantity || 0;
                 }
-            } else {
-                title.textContent = 'Add New Product';
             }
-            
-            productModalInstance.show();
+            formModal.show();
         };
 
         window.saveProduct = async function() {
             const id = document.getElementById('productId').value;
-            const name = document.getElementById('productName').value;
-            const category = document.getElementById('productCategory').value;
-            const sellPrice = parseFloat(document.getElementById('productPrice').value) || 0;
-            const quantity = parseInt(document.getElementById('productQty').value) || 0;
+            const data = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                brand: document.getElementById('productBrand').value,
+                sellPrice: parseFloat(document.getElementById('productPrice').value) || 0,
+                quantity: parseInt(document.getElementById('productQty').value) || 0
+            };
 
-            if (!name || !category) {
-                alert("Name and Category are required!");
-                return;
-            }
+            if (!data.name || !data.category) return alert("Name and Category required.");
 
             const btn = document.getElementById('saveProductBtn');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-            btn.disabled = true;
+            btn.innerHTML = 'Saving...'; btn.disabled = true;
 
             try {
-                const productData = { name, category, sellPrice, quantity };
-                
-                if (id) {
-                    await updateDocument('products', id, productData);
-                } else {
-                    // Generate a simple ID for new products
-                    productData.id = 'PROD-' + Date.now();
-                    await addDocument('products', productData);
+                if (id) await updateDocument('products', id, data);
+                else {
+                    data.id = 'PROD-' + Date.now();
+                    await addDocument('products', data);
                 }
-
-                productModalInstance.hide();
-                await loadProducts(); // Refresh table
-            } catch (error) {
-                alert("Error saving product: " + error.message);
+                formModal.hide();
+                await loadProducts();
+            } catch (e) {
+                alert("Error: " + e.message);
             } finally {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
+                btn.innerHTML = 'Save Product'; btn.disabled = false;
             }
         };
 
-        window.deleteProduct = async function(id) {
-            if (confirm("Are you sure you want to delete this product?")) {
+        window.deleteProd = async function(id) {
+            if(confirm("Permanently delete this product?")) {
                 try {
                     await deleteDocument('products', id);
                     await loadProducts();
-                } catch (error) {
-                    alert("Error deleting product: " + error.message);
-                }
+                } catch(e) { alert("Error: " + e.message); }
             }
         };
 
-        async function loadProducts() {
-            const tbody = document.getElementById('productsTableBody');
-            try {
-                const res = await getCollection('products');
-                currentProducts = res.docs.map(d => ({ id: d.id, ...d.data() }));
+        window.openDetails = function(id) {
+            const p = allProducts.find(x => x.id === id);
+            if(!p) return;
 
-                if (currentProducts.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="5" class="text-center py-5 text-muted">
-                        <i class="bi bi-box-seam fs-1 d-block mb-2"></i>
-                        No products found. Click "Add Product" to create one.
-                    </td></tr>`;
-                    return;
-                }
-
-                tbody.innerHTML = currentProducts.map(p => `
-                    <tr>
-                        <td class="fw-semibold">
-                            <div class="d-flex align-items-center gap-3">
-                                <div class="bg-dark rounded p-2 border border-secondary" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-box" style="color: #6366f1;"></i>
+            document.getElementById('productDetailsContainer').innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <div class="bg-dark rounded-4 p-4 d-flex align-items-center justify-content-center h-100" style="border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="bi bi-box-seam" style="font-size: 6rem; color: rgba(255,255,255,0.2);"></i>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mt-3 mt-md-0">
+                        <h3 class="fw-bold mb-1">${p.name}</h3>
+                        <p class="text-muted mb-4">${p.brand || 'No Brand'} &bull; ${p.category}</p>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-6">
+                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
+                                    <h6 class="text-muted small text-uppercase mb-1">Current Stock</h6>
+                                    <h4 class="mb-0 ${p.quantity > 0 ? 'text-success' : 'text-danger'}">${p.quantity || 0}</h4>
                                 </div>
-                                ${p.name || 'Unnamed'}
                             </div>
-                        </td>
-                        <td><span class="badge bg-dark border border-secondary text-light px-2 py-1">${p.category || '-'}</span></td>
-                        <td class="text-success fw-bold">৳${(p.sellPrice || 0).toFixed(2)}</td>
-                        <td>
-                            <span class="badge ${p.quantity > 5 ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger'} rounded-pill px-3">
-                                ${p.quantity || 0} in stock
-                            </span>
-                        </td>
-                        <td class="text-end">
-                            <button class="btn btn-outline-info action-btn me-1" onclick="openProductModal('${p.id}')">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-outline-danger action-btn" onclick="deleteProduct('${p.id}')">
-                                <i class="bi bi-trash3"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-
-            } catch (error) {
-                console.error(error);
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger py-4"><i class="bi bi-exclamation-triangle"></i> Error loading products: ${error.message}</td></tr>`;
-            }
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', loadProducts);
+                            <div class="col-6">
+                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
+                                    <h6 class="text-muted small text-uppercase mb-1">Selling Price</h6>
+                                    <h4 class="mb-0 text-info">৳${(p.sellPrice || 0).toFixed(2)}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h6 class="fw-bold border-bottom border-secondary pb-2">Technical Details</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between"><span>Product ID:</span> <strong class="font-monospace small">${p.id}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between"><span>Category:</span> <strong>${p.category || 'N/A'}</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            detailsModal.show();
+        };
     </script>
 </body>
 </html>
