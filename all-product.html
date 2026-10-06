@@ -416,8 +416,20 @@
 
         async function loadProducts() {
             try {
+                
                 const res = await getCollection('products');
+                const deletedRes = await getCollection('deleted_products');
+                const deletedIds = deletedRes.docs.map(d => d.data().productId);
+
+                
                 allProducts = res.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+                // Flag items as deleted if they exist in deleted_products
+                allProducts.forEach(p => {
+                    if (deletedIds.includes(p.firestoreId)) {
+                        p.isDeleted = true;
+                    }
+                });
+
                 
                 // Populate AI Supplier Dropdown
                 const suppliers = [...new Set(allProducts.map(p => p.brand).filter(s => s))].sort();
@@ -595,7 +607,13 @@
         window.deleteProd = async function(id) {
             if(confirm("Are you sure you want to move this product to the trash? It will be permanently deleted after 2 days.")) {
                 try {
-                    await updateDocument('products', id, { deleteScheduledAt: new Date().toISOString() });
+                    
+                    const productToDel = allProducts.find(x => x.firestoreId === id);
+                    await addDocument('deleted_products', { 
+                        productId: id, 
+                        barcode: productToDel ? productToDel.barcode : '',
+                        deletedAt: new Date().toISOString() 
+                    });
                     await loadProducts();
                 } catch(e) { alert("Error: " + e.message); }
             }
@@ -604,7 +622,12 @@
         window.restoreProd = async function(id) {
             if(confirm("Restore this product from the trash?")) {
                 try {
-                    await updateDocument('products', id, { deleteScheduledAt: null });
+                    
+                    const deletedRes = await getCollection('deleted_products');
+                    const deletedDoc = deletedRes.docs.find(d => d.data().productId === id);
+                    if (deletedDoc) {
+                        await deleteDocument('deleted_products', deletedDoc.id);
+                    }
                     await loadProducts();
                 } catch(e) { alert("Error: " + e.message); }
             }
