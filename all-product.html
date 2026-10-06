@@ -606,30 +606,43 @@
 
         window.deleteProd = async function(id) {
             if(confirm("Are you sure you want to move this product to the trash? It will be permanently deleted after 2 days.")) {
+                // Optimistic UI Update
+                const p = allProducts.find(x => x.firestoreId === id);
+                if (p) p.isDeleted = true;
+                filterAndSortProducts(); // Instant UI refresh
+                
                 try {
-                    
-                    const productToDel = allProducts.find(x => x.firestoreId === id);
                     await addDocument('deleted_products', { 
                         productId: id, 
-                        barcode: productToDel ? productToDel.barcode : '',
+                        barcode: p ? p.barcode : '',
                         deletedAt: new Date().toISOString() 
                     });
-                    await loadProducts();
-                } catch(e) { alert("Error: " + e.message); }
+                } catch(e) { 
+                    if (p) p.isDeleted = false; // rollback on failure
+                    filterAndSortProducts();
+                    alert("Error: " + e.message); 
+                }
             }
         };
 
         window.restoreProd = async function(id) {
             if(confirm("Restore this product from the trash?")) {
+                // Optimistic UI Update
+                const p = allProducts.find(x => x.firestoreId === id);
+                if (p) p.isDeleted = false;
+                filterAndSortProducts(); // Instant UI refresh
+                
                 try {
-                    
                     const deletedRes = await getCollection('deleted_products');
                     const deletedDoc = deletedRes.docs.find(d => d.data().productId === id);
                     if (deletedDoc) {
                         await deleteDocument('deleted_products', deletedDoc.id);
                     }
-                    await loadProducts();
-                } catch(e) { alert("Error: " + e.message); }
+                } catch(e) { 
+                    if (p) p.isDeleted = true; // rollback on failure
+                    filterAndSortProducts();
+                    alert("Error: " + e.message); 
+                }
             }
         };
 
