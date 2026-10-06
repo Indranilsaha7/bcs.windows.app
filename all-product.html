@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
     <script>
@@ -11,13 +11,10 @@
     <title>All Products</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* macOS Sleek Glassmorphism Variables */
         :root {
-            --bs-primary-rgb: 99, 102, 241;
             --bs-primary: #6366f1;
             --bs-body-font-family: 'Inter', sans-serif;
             --glass-bg: rgba(255, 255, 255, 0.65);
@@ -81,15 +78,14 @@
         }
 
         .main-content {
-            margin-left: 250px; /* Sidebar width */
-            padding: 80px 30px 40px 30px; /* Topbar offset */
+            margin-left: 250px;
+            padding: 80px 30px 40px 30px;
             flex-grow: 1;
         }
 
         .product-card {
             background: var(--glass-bg) !important;
             backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
             border: var(--glass-border) !important;
             box-shadow: var(--glass-shadow) !important;
             transition: all 0.3s ease-in-out;
@@ -106,7 +102,6 @@
         .stat-card {
             background: var(--glass-bg) !important;
             backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
             border: var(--glass-border) !important;
             border-radius: .75rem;
             box-shadow: var(--glass-shadow) !important;
@@ -115,7 +110,6 @@
 
         .stat-card:hover {
             transform: translateY(-3px);
-            background: var(--glass-bg-hover) !important;
             box-shadow: var(--glass-shadow-hover) !important;
         }
 
@@ -123,7 +117,6 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background-color: transparent !important;
         }
 
         .stat-card .icon-circle {
@@ -139,7 +132,7 @@
         }
 
         .product-card img {
-            height: 200px;
+            height: 180px;
             object-fit: contain;
             background-color: #ffffff;
             border-radius: 20px 20px 0 0;
@@ -150,10 +143,7 @@
             background-color: rgba(255,255,255,0.05);
         }
 
-        .product-card .card-body {
-            position: relative;
-            padding: 1.5rem;
-        }
+        .product-card .card-body { position: relative; padding: 1.5rem; }
 
         .card-actions {
             position: absolute;
@@ -165,9 +155,7 @@
             transition: opacity 0.2s ease-in-out;
         }
 
-        .product-card:hover .card-actions {
-            opacity: 1;
-        }
+        .product-card:hover .card-actions { opacity: 1; }
 
         .card-actions .btn {
             width: 32px;
@@ -205,22 +193,11 @@
             border-color: var(--bs-primary);
             color: white;
         }
-        
-        .btn-gradient {
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            border: none;
-            color: white;
-            transition: opacity 0.2s;
-        }
-        .btn-gradient:hover {
-            opacity: 0.9;
-            color: white;
-        }
+
+        @keyframes slideIn { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
-
-    <!-- Load Layout Microservices -->
     <script src="template/layout.js"></script>
     <script>
         renderTopbar();
@@ -229,19 +206,21 @@
 
     <main class="main-content">
         <div class="container-fluid px-0">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4">
-                <h2 class="fw-bold mb-0">Products Inventory</h2>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-4 border-bottom border-secondary pb-3">
+                <h2 class="fw-bold mb-0">Product List</h2>
                 <div>
-                    <button class="btn btn-secondary me-2" onclick="window.print()">
-                        <i class="bi bi-printer-fill me-2"></i>Print Full List
+                    <button class="btn btn-outline-primary me-2">
+                        <i class="bi bi-clock-history me-1"></i> Stock History
                     </button>
-                    <button class="btn btn-gradient px-4 py-2 rounded-3 fw-semibold shadow-sm" onclick="openProductModal()">
+                    <button id="printFullReportBtn" class="btn btn-secondary me-2">
+                        <i class="bi bi-printer-fill me-2"></i> Print Full List
+                    </button>
+                    <button class="btn btn-success rounded-3 fw-semibold shadow-sm" onclick="openProductModal()">
                         <i class="bi bi-plus-lg me-2"></i> Add Product
                     </button>
                 </div>
             </div>
 
-            <!-- Stats Row -->
             <div class="row mb-4">
                 <div class="col-md-3 mb-3">
                     <div class="card stat-card bg-primary-subtle text-primary-emphasis h-100">
@@ -291,26 +270,66 @@
 
             <!-- Search and Filter Bar -->
             <div class="row mb-4">
-                <div class="col-lg-10 offset-lg-1">
+                <div class="col-lg-12">
                     <div class="input-group input-group-lg" style="box-shadow: var(--glass-shadow); border-radius: 12px; overflow: hidden; border: var(--glass-border);">
                         <select id="sortBy" class="form-select border-0" style="max-width: 220px; background: var(--glass-bg); backdrop-filter: var(--glass-blur);">
                             <option value="name-asc" selected>Sort by Name (A-Z)</option>
                             <option value="name-desc">Sort by Name (Z-A)</option>
                             <option value="in-stock-only">Only In Stock</option>
                             <option value="out-of-stock-only">Out of Stock</option>
+                            <option value="alert-only">Low Stock Alerts</option>
                             <option value="price-asc">Sell Price (Low-High)</option>
                             <option value="price-desc">Sell Price (High-Low)</option>
+                            <option value="qty-asc">Quantity (Low-High)</option>
+                            <option value="qty-desc">Quantity (High-Low)</option>
                         </select>
-                        <input type="search" id="productSearch" class="form-control border-0" placeholder="Search by name, category, or brand..." style="background: var(--glass-bg); backdrop-filter: var(--glass-blur);">
+                        <input type="search" id="productSearch" class="form-control border-0" placeholder="Search by name, barcode, category, or brand..." style="background: var(--glass-bg); backdrop-filter: var(--glass-blur);">
+                        <button class="btn btn-primary px-4 d-flex align-items-center gap-2 text-white fw-bold" id="aiSearchBtn" type="button" style="background: linear-gradient(135deg, #6366f1, #a855f7); border: none;">
+                            <i class="bi bi-stars"></i> AI Search
+                        </button>
+                    </div>
+                    
+                    <!-- Advanced AI Filters Panel -->
+                    <div id="aiSearchPanel" class="mt-3 p-4" style="display: none; background: var(--glass-bg); backdrop-filter: var(--glass-blur); border-radius: 12px; border: var(--glass-border); box-shadow: var(--glass-shadow); animation: slideIn 0.3s ease-out;">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 d-flex align-items-center gap-2 text-primary">
+                                <i class="bi bi-robot"></i> Advanced AI Filters
+                            </h5>
+                            <button id="clearAiFiltersBtn" class="btn btn-sm btn-outline-danger rounded-pill">
+                                <i class="bi bi-x-circle"></i> Clear Filters
+                            </button>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Brand</label>
+                                <select id="aiSupplier" class="form-select bg-dark text-light border-secondary">
+                                    <option value="">All Brands</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Stock Status</label>
+                                <select id="aiStockStatus" class="form-select bg-dark text-light border-secondary">
+                                    <option value="all">All Products</option>
+                                    <option value="in-stock">Only In Stock</option>
+                                    <option value="out-of-stock">Only Out of Stock</option>
+                                    <option value="alert">Low Stock Alert</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label small fw-bold">Price Range</label>
+                                <div class="d-flex gap-2">
+                                    <input type="number" id="aiMinPrice" class="form-control bg-dark text-light border-secondary" placeholder="Min">
+                                    <input type="number" id="aiMaxPrice" class="form-control bg-dark text-light border-secondary" placeholder="Max">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Products Grid Container -->
             <div class="row" id="productList">
                 <div class="col-12 text-center py-5">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">Loading your beautiful products...</p>
                 </div>
             </div>
 
@@ -322,9 +341,9 @@
         </div>
     </main>
 
-    <!-- Product Details Modal (vCard style) -->
+    <!-- Detailed Product Modal -->
     <div class="modal fade" id="productDetailsModal" tabindex="-1">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header border-bottom border-secondary">
                     <h5 class="modal-title fw-bold" id="productDetailsModalLabel">Product Details</h5>
@@ -334,6 +353,9 @@
                     <!-- Dynamic Details Rendered Here -->
                 </div>
                 <div class="modal-footer border-top border-secondary">
+                    <button type="button" class="btn btn-info text-white" id="sendToAdminsBtn">
+                        <i class="bi bi-send-fill me-2"></i> Send to Admins
+                    </button>
                     <button type="button" class="btn btn-secondary rounded-3" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -363,24 +385,35 @@
                             <label class="form-label text-muted small text-uppercase fw-bold">Brand</label>
                             <input type="text" class="form-control" id="productBrand">
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small text-uppercase fw-bold">Barcode</label>
+                            <input type="text" class="form-control" id="productBarcode">
+                        </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Sell Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-dark border-secondary text-light">৳</span>
-                                    <input type="number" step="0.01" class="form-control" id="productPrice" required>
-                                </div>
+                                <label class="form-label text-muted small text-uppercase fw-bold">Buy Price</label>
+                                <input type="number" step="0.01" class="form-control" id="productBuyPrice" required>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Stock Quantity</label>
+                                <label class="form-label text-muted small text-uppercase fw-bold">Sell Price</label>
+                                <input type="number" step="0.01" class="form-control" id="productSellPrice" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Stock Qty</label>
                                 <input type="number" class="form-control" id="productQty" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label text-muted small text-uppercase fw-bold">Unit</label>
+                                <input type="text" class="form-control" id="productUnit" placeholder="e.g. Pcs, Box, Kg">
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer border-top border-secondary">
                     <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-gradient rounded-3 px-4 fw-semibold" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
+                    <button type="button" class="btn btn-primary rounded-3 px-4 fw-semibold" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
                 </div>
             </div>
         </div>
@@ -392,27 +425,72 @@
         import { getCollection, addDocument, updateDocument, deleteDocument } from './script/api.js';
         
         let allProducts = [];
+        let filteredProducts = [];
+        let allPurchases = [];
+        let allProductions = [];
+        
         let formModal = null;
         let detailsModal = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             formModal = new bootstrap.Modal(document.getElementById('productFormModal'));
             detailsModal = new bootstrap.Modal(document.getElementById('productDetailsModal'));
-            loadProducts();
+            
+            // Toggle AI Panel
+            document.getElementById('aiSearchBtn').addEventListener('click', () => {
+                const panel = document.getElementById('aiSearchPanel');
+                panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            });
+            
+            document.getElementById('clearAiFiltersBtn').addEventListener('click', () => {
+                document.getElementById('aiSupplier').value = '';
+                document.getElementById('aiStockStatus').value = 'all';
+                document.getElementById('aiMinPrice').value = '';
+                document.getElementById('aiMaxPrice').value = '';
+                filterAndSortProducts();
+            });
 
-            document.getElementById('productSearch').addEventListener('input', renderProducts);
-            document.getElementById('sortBy').addEventListener('change', renderProducts);
+            document.getElementById('productSearch').addEventListener('input', filterAndSortProducts);
+            document.getElementById('sortBy').addEventListener('change', filterAndSortProducts);
+            document.getElementById('aiSupplier').addEventListener('change', filterAndSortProducts);
+            document.getElementById('aiStockStatus').addEventListener('change', filterAndSortProducts);
+            document.getElementById('aiMinPrice').addEventListener('input', filterAndSortProducts);
+            document.getElementById('aiMaxPrice').addEventListener('input', filterAndSortProducts);
+
+            document.getElementById('printFullReportBtn').addEventListener('click', () => window.print());
+
+            loadProducts();
+            loadHistoryMock(); // Mocks since tables don't exist yet
         });
 
         async function loadProducts() {
             try {
                 const res = await getCollection('products');
-                allProducts = res.docs.map(d => ({ id: d.id, ...d.data() }));
+                allProducts = res.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
+                
+                // Populate AI Supplier Dropdown
+                const suppliers = [...new Set(allProducts.map(p => p.brand).filter(s => s))].sort();
+                document.getElementById('aiSupplier').innerHTML = '<option value="">All Brands</option>' + 
+                    suppliers.map(s => `<option value="${s}">${s}</option>`).join('');
+
                 updateStats();
-                renderProducts();
+                filterAndSortProducts();
             } catch (error) {
                 console.error("Error loading products:", error);
                 document.getElementById('productList').innerHTML = `<div class="col-12 text-center text-danger py-5">Failed to load products: ${error.message}</div>`;
+            }
+        }
+
+        async function loadHistoryMock() {
+            // Safe fallback since purchase/production tables don't exist in our schema yet
+            try {
+                const purRes = await getCollection('purchases').catch(() => ({ docs: [] }));
+                allPurchases = purRes.docs.map(d => d.data());
+                
+                const prodRes = await getCollection('productions').catch(() => ({ docs: [] }));
+                allProductions = prodRes.docs.map(d => d.data());
+            } catch (e) {
+                console.log("History tables missing, defaulting to empty");
             }
         }
 
@@ -420,77 +498,134 @@
             document.getElementById('totalProductsCard').textContent = allProducts.length;
             document.getElementById('inStockCountCard').textContent = allProducts.filter(p => (p.quantity || 0) > 0).length;
             document.getElementById('outOfStockCountCard').textContent = allProducts.filter(p => (p.quantity || 0) <= 0).length;
-            document.getElementById('stockAlertCountCard').textContent = allProducts.filter(p => (p.quantity || 0) <= 5 && (p.quantity || 0) > 0).length;
+            document.getElementById('stockAlertCountCard').textContent = allProducts.filter(p => (p.quantity || 0) <= (p.alertQuantity || 5) && (p.quantity || 0) > 0).length;
         }
 
-        function renderProducts() {
-            const container = document.getElementById('productList');
-            const noMsg = document.getElementById('noProductsMessage');
-            const searchTerm = document.getElementById('productSearch').value.toLowerCase();
+        function filterAndSortProducts() {
+            const searchTerm = document.getElementById('productSearch').value.toLowerCase().trim();
             const sortBy = document.getElementById('sortBy').value;
+            const aiBrand = document.getElementById('aiSupplier').value.toLowerCase();
+            const aiStatus = document.getElementById('aiStockStatus').value;
+            const aiMin = parseFloat(document.getElementById('aiMinPrice').value) || 0;
+            const aiMax = parseFloat(document.getElementById('aiMaxPrice').value) || Infinity;
 
-            // Filter
-            let filtered = allProducts.filter(p => {
-                const searchStr = `${p.name} ${p.category} ${p.brand}`.toLowerCase();
+            filteredProducts = allProducts.filter(p => {
+                const searchStr = `${p.name} ${p.category} ${p.brand} ${p.barcode}`.toLowerCase();
                 if (searchTerm && !searchStr.includes(searchTerm)) return false;
                 
-                if (sortBy === 'in-stock-only' && (p.quantity || 0) <= 0) return false;
-                if (sortBy === 'out-of-stock-only' && (p.quantity || 0) > 0) return false;
+                if (aiBrand && (p.brand || '').toLowerCase() !== aiBrand) return false;
+                
+                const qty = p.quantity || 0;
+                const alertQty = p.alertQuantity || 5;
+                if (aiStatus === 'in-stock' && qty <= 0) return false;
+                if (aiStatus === 'out-of-stock' && qty > 0) return false;
+                if (aiStatus === 'alert' && (qty <= 0 || qty > alertQty)) return false;
+                
+                if (sortBy === 'in-stock-only' && qty <= 0) return false;
+                if (sortBy === 'out-of-stock-only' && qty > 0) return false;
+                if (sortBy === 'alert-only' && (qty <= 0 || qty > alertQty)) return false;
+
+                const price = p.sellPrice || 0;
+                if (price < aiMin || price > aiMax) return false;
                 
                 return true;
             });
 
-            // Sort
-            filtered.sort((a, b) => {
-                if (sortBy === 'name-asc') return (a.name || '').localeCompare(b.name || '');
-                if (sortBy === 'name-desc') return (b.name || '').localeCompare(a.name || '');
-                if (sortBy === 'price-asc') return (a.sellPrice || 0) - (b.sellPrice || 0);
-                if (sortBy === 'price-desc') return (b.sellPrice || 0) - (a.sellPrice || 0);
-                return 0;
-            });
+            if (!['in-stock-only', 'out-of-stock-only', 'alert-only'].includes(sortBy)) {
+                filteredProducts.sort((a, b) => {
+                    if (sortBy === 'name-asc') return (a.name || '').localeCompare(b.name || '');
+                    if (sortBy === 'name-desc') return (b.name || '').localeCompare(a.name || '');
+                    if (sortBy === 'price-asc') return (a.sellPrice || 0) - (b.sellPrice || 0);
+                    if (sortBy === 'price-desc') return (b.sellPrice || 0) - (a.sellPrice || 0);
+                    if (sortBy === 'qty-asc') return (a.quantity || 0) - (b.quantity || 0);
+                    if (sortBy === 'qty-desc') return (b.quantity || 0) - (a.quantity || 0);
+                    return 0;
+                });
+            }
 
-            if (filtered.length === 0) {
-                container.innerHTML = '';
+            renderProductsLazy();
+        }
+
+        // Lazy Rendering Implementation
+        let renderTimeoutId = null;
+        function renderProductsLazy() {
+            const container = document.getElementById('productList');
+            const noMsg = document.getElementById('noProductsMessage');
+            
+            if (renderTimeoutId) clearTimeout(renderTimeoutId);
+            container.innerHTML = '';
+
+            if (filteredProducts.length === 0) {
                 noMsg.style.display = 'block';
                 return;
             }
-
             noMsg.style.display = 'none';
-            container.innerHTML = filtered.map(p => {
-                const qty = p.quantity || 0;
-                let borderColor = '#32cd32'; // Green
-                if (qty <= 0) borderColor = '#ff1a1a'; // Red
-                else if (qty <= 5) borderColor = '#ffe600'; // Yellow
 
-                return `
-                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
-                    <div class="card product-card h-100" style="border: 1px solid ${borderColor}50 !important; box-shadow: 0 8px 32px ${borderColor}15 !important;">
-                        <div class="position-relative text-center pt-4">
-                            <i class="bi bi-box-seam" style="font-size: 5rem; color: rgba(255,255,255,0.1);"></i>
-                        </div>
-                        <div class="card-body d-flex flex-column mt-2">
-                            <div class="card-actions">
-                                <button class="btn btn-success" onclick="openDetails('${p.id}')"><i class="bi bi-eye-fill"></i></button>
-                                <button class="btn btn-warning" onclick="openProductModal('${p.id}')"><i class="bi bi-pencil-square"></i></button>
-                                <button class="btn btn-danger" onclick="deleteProd('${p.id}')"><i class="bi bi-trash3-fill"></i></button>
+            let index = 0;
+            const chunkSize = 20;
+
+            function processChunk() {
+                let cardsHtml = '';
+                const end = Math.min(index + chunkSize, filteredProducts.length);
+
+                for (; index < end; index++) {
+                    const p = filteredProducts[index];
+                    const qty = p.quantity || 0;
+                    const alertQty = p.alertQuantity || 5;
+
+                    let borderColor = '#32cd32'; 
+                    if (qty <= 0) borderColor = '#ff1a1a'; 
+                    else if (qty <= alertQty) borderColor = '#ffe600'; 
+
+                    const formatCurrency = (amt) => `৳${(amt||0).toFixed(2)}`;
+
+                    let pricingHtml = '';
+                    if (p.priceTiers && p.priceTiers.pcs) {
+                        pricingHtml = `
+                            <li class="list-group-item d-flex justify-content-between pt-3 border-secondary"><span>Buy (Pcs):</span> <strong>${formatCurrency(p.priceTiers.pcs.buy)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Wholesale:</span> <strong>${formatCurrency(p.priceTiers.pcs.wholesale)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Retail:</span> <strong>${formatCurrency(p.priceTiers.pcs.sell)}</strong></li>
+                        `;
+                    } else {
+                        pricingHtml = `
+                            <li class="list-group-item d-flex justify-content-between pt-3 border-secondary"><span>Buy Price:</span> <strong>${formatCurrency(p.buyPrice)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Wholesale:</span> <strong>${formatCurrency(p.wholesalePrice)}</strong></li>
+                            <li class="list-group-item d-flex justify-content-between border-secondary"><span>Sell Price:</span> <strong>${formatCurrency(p.sellPrice)}</strong></li>
+                        `;
+                    }
+
+                    cardsHtml += `
+                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                        <div class="card product-card h-100" style="border: 2px solid ${borderColor} !important; box-shadow: 0 8px 32px ${borderColor}30 !important;">
+                            <div class="position-relative text-center pt-4">
+                                <i class="bi bi-box-seam" style="font-size: 5rem; color: rgba(255,255,255,0.1);"></i>
                             </div>
-                            <h5 class="card-title fw-bold mb-1">${p.name}</h5>
-                            <p class="card-text text-muted small mb-3">${p.brand || p.category || 'General'}</p>
-                            
-                            <ul class="list-group list-group-flush mt-auto">
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <span>Stock:</span> 
-                                    <strong class="${qty > 0 ? 'text-success' : 'text-danger'}">${qty} Pcs</strong>
-                                </li>
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <span>Price:</span> 
-                                    <strong class="text-info">৳${(p.sellPrice || 0).toFixed(2)}</strong>
-                                </li>
-                            </ul>
+                            <div class="card-body d-flex flex-column mt-2">
+                                <div class="card-actions">
+                                    <button class="btn btn-success" onclick="openDetails('${p.firestoreId}')"><i class="bi bi-eye-fill"></i></button>
+                                    <button class="btn btn-warning" onclick="openProductModal('${p.firestoreId}')"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-danger" onclick="deleteProd('${p.firestoreId}')"><i class="bi bi-trash3-fill"></i></button>
+                                </div>
+                                <h5 class="card-title fw-bold mb-1">${p.name}</h5>
+                                <p class="card-text text-muted small mb-3">${p.brand || 'No Brand'} &bull; ${p.category}</p>
+                                
+                                <ul class="list-group list-group-flush mt-auto">
+                                    <li class="list-group-item d-flex justify-content-between border-secondary"><span>Barcode:</span> <strong>${p.barcode || 'N/A'}</strong></li>
+                                    <li class="list-group-item d-flex justify-content-between border-secondary">
+                                        <span>Quantity:</span> 
+                                        <strong class="${qty > 0 ? 'text-success' : 'text-danger'}">${qty} ${p.unit || 'Pcs'}</strong>
+                                    </li>
+                                    ${pricingHtml}
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                </div>`;
-            }).join('');
+                    </div>`;
+                }
+
+                container.insertAdjacentHTML('beforeend', cardsHtml);
+                if (index < filteredProducts.length) renderTimeoutId = setTimeout(processChunk, 10);
+            }
+            processChunk();
         }
 
         window.openProductModal = function(id = null) {
@@ -499,15 +634,18 @@
             document.getElementById('productModalTitle').textContent = 'Add New Product';
 
             if (id) {
-                const p = allProducts.find(x => x.id === id);
+                const p = allProducts.find(x => x.firestoreId === id);
                 if (p) {
                     document.getElementById('productModalTitle').textContent = 'Edit Product';
-                    document.getElementById('productId').value = p.id;
+                    document.getElementById('productId').value = p.firestoreId;
                     document.getElementById('productName').value = p.name || '';
                     document.getElementById('productCategory').value = p.category || '';
                     document.getElementById('productBrand').value = p.brand || '';
-                    document.getElementById('productPrice').value = p.sellPrice || 0;
+                    document.getElementById('productBarcode').value = p.barcode || '';
+                    document.getElementById('productBuyPrice').value = p.buyPrice || 0;
+                    document.getElementById('productSellPrice').value = p.sellPrice || 0;
                     document.getElementById('productQty').value = p.quantity || 0;
+                    document.getElementById('productUnit').value = p.unit || 'Pcs';
                 }
             }
             formModal.show();
@@ -519,8 +657,11 @@
                 name: document.getElementById('productName').value,
                 category: document.getElementById('productCategory').value,
                 brand: document.getElementById('productBrand').value,
-                sellPrice: parseFloat(document.getElementById('productPrice').value) || 0,
-                quantity: parseInt(document.getElementById('productQty').value) || 0
+                barcode: document.getElementById('productBarcode').value,
+                buyPrice: parseFloat(document.getElementById('productBuyPrice').value) || 0,
+                sellPrice: parseFloat(document.getElementById('productSellPrice').value) || 0,
+                quantity: parseInt(document.getElementById('productQty').value) || 0,
+                unit: document.getElementById('productUnit').value || 'Pcs'
             };
 
             if (!data.name || !data.category) return alert("Name and Category required.");
@@ -544,7 +685,7 @@
         };
 
         window.deleteProd = async function(id) {
-            if(confirm("Permanently delete this product?")) {
+            if(confirm("Are you sure you want to permanently delete this product? This action cannot be undone.")) {
                 try {
                     await deleteDocument('products', id);
                     await loadProducts();
@@ -553,13 +694,103 @@
         };
 
         window.openDetails = function(id) {
-            const p = allProducts.find(x => x.id === id);
+            const p = allProducts.find(x => x.firestoreId === id);
             if(!p) return;
+            const formatCurrency = (amt) => `৳${(amt||0).toFixed(2)}`;
+
+            let pricingHtml = '';
+            if (p.priceTiers) {
+                pricingHtml = '<h5 class="mt-4 border-bottom border-secondary pb-2">Pricing Details</h5><div class="row g-3">';
+                const units = ['box', 'pack', 'pcs', 'kg', 'gram', 'liter', 'ml'];
+                units.forEach(unit => {
+                    if (p.priceTiers[unit]) {
+                        const tier = p.priceTiers[unit];
+                        pricingHtml += `
+                            <div class="col-12">
+                                <div class="card bg-dark border-secondary">
+                                    <div class="card-header py-1 small fw-bold text-uppercase bg-secondary text-white">${unit}</div>
+                                    <div class="card-body p-2">
+                                        <div class="d-flex justify-content-center mb-2 pb-2 border-bottom border-secondary">
+                                            <span class="badge bg-primary fs-6">Buy Price: ${formatCurrency(tier.buy)}</span>
+                                        </div>
+                                        <div class="row text-center">
+                                            <div class="col-6 border-end border-secondary">
+                                                <div class="text-info small fw-bold mb-1">Normal Customer</div>
+                                                <div class="d-flex justify-content-between px-3">
+                                                    <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.wholesale)}</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between px-3">
+                                                    <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.sell)}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-warning small fw-bold mb-1">Shop Customer</div>
+                                                <div class="d-flex justify-content-between px-3">
+                                                    <span class="small text-muted">Wholesale:</span><span class="small fw-bold">${formatCurrency(tier.shop_wholesale)}</span>
+                                                </div>
+                                                <div class="d-flex justify-content-between px-3">
+                                                    <span class="small text-muted">Retail:</span><span class="small fw-bold">${formatCurrency(tier.shop_sell)}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>`;
+                    }
+                });
+                pricingHtml += '</div>';
+            } else {
+                pricingHtml = `
+                    <h5 class="mt-4 border-bottom border-secondary pb-2">Pricing</h5>
+                    <div class="row text-center">
+                        <div class="col-4"><div class="p-3 bg-danger-subtle text-danger-emphasis rounded-3 border border-danger"><h6>Buy Price</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.buyPrice)}</p></div></div>
+                        <div class="col-4"><div class="p-3 bg-primary-subtle text-primary-emphasis rounded-3 border border-primary"><h6>Wholesale</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.wholesalePrice)}</p></div></div>
+                        <div class="col-4"><div class="p-3 bg-success-subtle text-success-emphasis rounded-3 border border-success"><h6>Retail</h6><p class="fs-4 mb-0 fw-bold">${formatCurrency(p.sellPrice)}</p></div></div>
+                    </div>`;
+            }
+
+            let lotRows = '';
+            if (p.lots && p.lots.length > 0) {
+                lotRows = p.lots.map(lot => `<tr><td>${lot.lotNumber}</td><td class="text-center">${lot.quantity}</td><td class="text-end">${formatCurrency(lot.buyPrice)}</td></tr>`).join('');
+            } else {
+                lotRows = `<tr><td>Default Lot</td><td class="text-center">${p.quantity || 0}</td><td class="text-end">${formatCurrency(p.buyPrice)}</td></tr>`;
+            }
+
+            const lotInfoHtml = `
+                <h5 class="mt-4 border-bottom border-secondary pb-2">Lot Information</h5>
+                <div class="table-responsive" style="max-height: 200px;">
+                    <table class="table table-sm table-dark table-striped align-middle">
+                        <thead><tr><th>Lot #</th><th class="text-center">Quantity</th><th class="text-end">Buy Price</th></tr></thead>
+                        <tbody>${lotRows}</tbody>
+                    </table>
+                </div>`;
+
+            // Filter mocked history arrays
+            const pPurchases = allPurchases.filter(pur => pur.items && pur.items.some(i => i.productId === id));
+            const pProds = allProductions.filter(prod => prod.finishedProductId === id);
+
+            const purchaseHtml = pPurchases.length > 0 ? `
+                <h5 class="mt-4 border-bottom border-secondary pb-2">Purchase History</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark table-striped">
+                        <thead><tr><th>Date</th><th>Supplier</th><th class="text-end">Cost</th></tr></thead>
+                        <tbody>${pPurchases.map(r => `<tr><td>${new Date(r.date).toLocaleDateString()}</td><td>${r.supplier}</td><td class="text-end">${formatCurrency(r.totalCost)}</td></tr>`).join('')}</tbody>
+                    </table>
+                </div>` : '<p class="text-muted mt-3">No purchase history found.</p>';
+
+            const prodHtml = pProds.length > 0 ? `
+                <h5 class="mt-4 border-bottom border-secondary pb-2">Production History</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm table-dark table-striped">
+                        <thead><tr><th>Date</th><th>Batch</th><th class="text-center">Qty</th></tr></thead>
+                        <tbody>${pProds.map(r => `<tr><td>${new Date(r.date).toLocaleDateString()}</td><td>${r.batchNumber}</td><td class="text-center">${r.quantityProduced}</td></tr>`).join('')}</tbody>
+                    </table>
+                </div>` : '';
 
             document.getElementById('productDetailsContainer').innerHTML = `
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <div class="bg-dark rounded-4 p-4 d-flex align-items-center justify-content-center h-100" style="border: 1px solid rgba(255,255,255,0.1);">
+                        <div class="bg-dark rounded-4 p-4 d-flex align-items-center justify-content-center h-100 border border-secondary">
                             <i class="bi bi-box-seam" style="font-size: 6rem; color: rgba(255,255,255,0.2);"></i>
                         </div>
                     </div>
@@ -571,27 +802,40 @@
                             <div class="col-6">
                                 <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
                                     <h6 class="text-muted small text-uppercase mb-1">Current Stock</h6>
-                                    <h4 class="mb-0 ${p.quantity > 0 ? 'text-success' : 'text-danger'}">${p.quantity || 0}</h4>
+                                    <h4 class="mb-0 ${p.quantity > 0 ? 'text-success' : 'text-danger'}">${p.quantity || 0} ${p.unit || 'Pcs'}</h4>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
-                                    <h6 class="text-muted small text-uppercase mb-1">Selling Price</h6>
-                                    <h4 class="mb-0 text-info">৳${(p.sellPrice || 0).toFixed(2)}</h4>
+                                    <h6 class="text-muted small text-uppercase mb-1">Barcode</h6>
+                                    <h4 class="mb-0 text-info font-monospace">${p.barcode || 'N/A'}</h4>
                                 </div>
                             </div>
                         </div>
-                        
-                        <h6 class="fw-bold border-bottom border-secondary pb-2">Technical Details</h6>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between"><span>Product ID:</span> <strong class="font-monospace small">${p.id}</strong></li>
-                            <li class="list-group-item d-flex justify-content-between"><span>Category:</span> <strong>${p.category || 'N/A'}</strong></li>
-                        </ul>
                     </div>
                 </div>
+                ${pricingHtml}
+                ${lotInfoHtml}
+                ${purchaseHtml}
+                ${prodHtml}
             `;
             detailsModal.show();
         };
+
+        // Send to Admins (Mocked API call)
+        document.getElementById('sendToAdminsBtn').addEventListener('click', function() {
+            const btn = this;
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Sending...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert("Product Details sent to Admin successfully!");
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }, 1000);
+        });
+
     </script>
 </body>
 </html>
