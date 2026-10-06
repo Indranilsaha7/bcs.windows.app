@@ -201,7 +201,7 @@
     <script src="template/layout.js"></script>
     <script>
         renderTopbar();
-        renderSidebar('products');
+        renderSidebar('products', 'all-product');
     </script>
 
     <main class="main-content">
@@ -215,7 +215,7 @@
                     <button id="printFullReportBtn" class="btn btn-secondary me-2">
                         <i class="bi bi-printer-fill me-2"></i> Print Full List
                     </button>
-                    <button class="btn btn-success rounded-3 fw-semibold shadow-sm" onclick="openProductModal()">
+                    <button class="btn btn-success rounded-3 fw-semibold shadow-sm" onclick="window.location.href='add-product.html'">
                         <i class="bi bi-plus-lg me-2"></i> Add Product
                     </button>
                 </div>
@@ -362,63 +362,6 @@
         </div>
     </div>
 
-    <!-- Add/Edit Product Modal -->
-    <div class="modal fade" id="productFormModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header border-bottom border-secondary">
-                    <h5 class="modal-title fw-bold" id="productModalTitle">Add New Product</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="productForm">
-                        <input type="hidden" id="productId">
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Product Name</label>
-                            <input type="text" class="form-control" id="productName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Category</label>
-                            <input type="text" class="form-control" id="productCategory" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Brand</label>
-                            <input type="text" class="form-control" id="productBrand">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label text-muted small text-uppercase fw-bold">Barcode</label>
-                            <input type="text" class="form-control" id="productBarcode">
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Buy Price</label>
-                                <input type="number" step="0.01" class="form-control" id="productBuyPrice" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Sell Price</label>
-                                <input type="number" step="0.01" class="form-control" id="productSellPrice" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Stock Qty</label>
-                                <input type="number" class="form-control" id="productQty" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label text-muted small text-uppercase fw-bold">Unit</label>
-                                <input type="text" class="form-control" id="productUnit" placeholder="e.g. Pcs, Box, Kg">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer border-top border-secondary">
-                    <button type="button" class="btn btn-outline-secondary rounded-3 px-4" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary rounded-3 px-4 fw-semibold" id="saveProductBtn" onclick="saveProduct()">Save Product</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Bootstrap & Logic -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module">
@@ -429,11 +372,11 @@
         let allPurchases = [];
         let allProductions = [];
         
-        let formModal = null;
+        
         let detailsModal = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            formModal = new bootstrap.Modal(document.getElementById('productFormModal'));
+            
             detailsModal = new bootstrap.Modal(document.getElementById('productDetailsModal'));
             
             // Toggle AI Panel
@@ -608,7 +551,7 @@
                             <div class="card-body d-flex flex-column mt-2">
                                 <div class="card-actions">
                                     <button class="btn btn-success" onclick="openDetails('${p.firestoreId}')"><i class="bi bi-eye-fill"></i></button>
-                                    <button class="btn btn-warning" onclick="openProductModal('${p.firestoreId}')"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="btn btn-warning" onclick="editProduct('${p.firestoreId}')"><i class="bi bi-pencil-square"></i></button>
                                     <button class="btn btn-danger" onclick="deleteProd('${p.firestoreId}')"><i class="bi bi-trash3-fill"></i></button>
                                 </div>
                                 <h5 class="card-title fw-bold mb-1">${p.name}</h5>
@@ -633,60 +576,9 @@
             processChunk();
         }
 
-        window.openProductModal = function(id = null) {
-            document.getElementById('productForm').reset();
-            document.getElementById('productId').value = '';
-            document.getElementById('productModalTitle').textContent = 'Add New Product';
-
-            if (id) {
-                const p = allProducts.find(x => x.firestoreId === id);
-                if (p) {
-                    document.getElementById('productModalTitle').textContent = 'Edit Product';
-                    document.getElementById('productId').value = p.firestoreId;
-                    document.getElementById('productName').value = p.name || '';
-                    document.getElementById('productCategory').value = p.category || '';
-                    document.getElementById('productBrand').value = p.brand || '';
-                    document.getElementById('productBarcode').value = p.barcode || '';
-                    document.getElementById('productBuyPrice').value = p.buyPrice || 0;
-                    document.getElementById('productSellPrice').value = p.sellPrice || 0;
-                    document.getElementById('productQty').value = p.quantity || 0;
-                    document.getElementById('productUnit').value = p.unit || 'Pcs';
-                }
-            }
-            formModal.show();
-        };
-
-        window.saveProduct = async function() {
-            const id = document.getElementById('productId').value;
-            const data = {
-                name: document.getElementById('productName').value,
-                category: document.getElementById('productCategory').value,
-                brand: document.getElementById('productBrand').value,
-                barcode: document.getElementById('productBarcode').value,
-                buyPrice: parseFloat(document.getElementById('productBuyPrice').value) || 0,
-                sellPrice: parseFloat(document.getElementById('productSellPrice').value) || 0,
-                quantity: parseInt(document.getElementById('productQty').value) || 0,
-                unit: document.getElementById('productUnit').value || 'Pcs'
-            };
-
-            if (!data.name || !data.category) return alert("Name and Category required.");
-
-            const btn = document.getElementById('saveProductBtn');
-            btn.innerHTML = 'Saving...'; btn.disabled = true;
-
-            try {
-                if (id) await updateDocument('products', id, data);
-                else {
-                    data.id = 'PROD-' + Date.now();
-                    await addDocument('products', data);
-                }
-                formModal.hide();
-                await loadProducts();
-            } catch (e) {
-                alert("Error: " + e.message);
-            } finally {
-                btn.innerHTML = 'Save Product'; btn.disabled = false;
-            }
+        window.editProduct = function(id) {
+            localStorage.setItem('editProductId', id);
+            window.location.href = 'add-product.html';
         };
 
         window.deleteProd = async function(id) {

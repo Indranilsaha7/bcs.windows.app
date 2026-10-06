@@ -1,4 +1,4 @@
-function loadCss(name) {
+﻿function loadCss(name) {
     if (!document.querySelector(`link[href*="template/${name}/${name}.css"]`)) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -27,8 +27,8 @@ window.renderTopbar = async function() {
     if (window._renderTopbarImpl) window._renderTopbarImpl();
 };
 
-window.renderSidebar = async function(activeMenu) {
+window.renderSidebar = async function(activeMenu, activeSubMenu = null) {
     loadCss('sidebar');
     await loadScript('sidebar');
-    if (window._renderSidebarImpl) window._renderSidebarImpl(activeMenu);
+    if (window._renderSidebarImpl) window._renderSidebarImpl(activeMenu, activeSubMenu);
 };
