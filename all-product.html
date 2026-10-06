@@ -836,6 +836,7 @@
                 ${lotInfoHtml}
                 ${purchaseHtml}
                 ${prodHtml}
+                ${p.lastEditedBy ? `<div class="mt-4 text-end text-muted small fst-italic">Last Edited By: <span class="fw-bold">${p.lastEditedBy}</span></div>` : ''}
             `;
             detailsModal.show();
             } catch (err) {
