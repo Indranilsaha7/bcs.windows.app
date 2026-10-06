@@ -79,7 +79,7 @@
 </head>
 <body>
     <script>
-        if (localStorage.getItem('isAuthenticated') !== 'true') {
+        if (localStorage.getItem('isAuthenticated') !== 'true' || !localStorage.getItem('sessionId') || !localStorage.getItem('sessionPort')) {
             window.location.href = 'index.html';
         }
     </script>
@@ -202,10 +202,10 @@
             try {
                 // Fetch data in parallel for maximum speed!
                 const [productsRes, customersRes, salesRes, usersRes] = await Promise.all([
-                    getCollection('products'),
-                    getCollection('customers'),
-                    getCollection('sales'),
-                    getCollection('users')
+                    getCollection('products').catch(() => ({ docs: [] })),
+                    getCollection('customers').catch(() => ({ docs: [] })),
+                    getCollection('sales').catch(() => ({ docs: [] })),
+                    getCollection('users').catch(() => ({ docs: [] }))
                 ]);
 
                 const products = productsRes.docs.map(d => d.data());
@@ -247,4 +247,6 @@
     </script>
 </body>
 </html>
+
+
 

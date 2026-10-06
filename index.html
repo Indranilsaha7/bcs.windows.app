@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
 <head>
+
+    <script>
+        if (localStorage.getItem("isAuthenticated") === "true" && localStorage.getItem("sessionId") && localStorage.getItem("sessionPort")) {
+            window.location.replace("dashboard.html");
+        }
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | BCS Enterprise POS</title>
@@ -239,6 +246,7 @@
 </body>
 
 </html>
+
 
 
 

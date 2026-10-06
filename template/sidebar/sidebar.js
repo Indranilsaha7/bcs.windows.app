@@ -7,7 +7,7 @@ window._renderSidebarImpl = function(activeMenu) {
 
     let menuHtml = menus.map(m => `
         <a href="${m.href}" class="menu-item ${activeMenu === m.id ? 'active' : ''}">
-            <svg width="20" height="20" viewBox="0 0 24 24"><path d="${m.icon}"/></svg> 
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">${m.icon}</svg> 
             ${m.text}
         </a>
     `).join('');
@@ -28,3 +28,4 @@ window._renderSidebarImpl = function(activeMenu) {
         document.body.insertAdjacentHTML('afterbegin', SIDEBAR_HTML);
     }
 };
+

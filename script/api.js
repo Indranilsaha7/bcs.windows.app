@@ -14,6 +14,17 @@ export async function fetchAPI(endpoint, options = {}) {
 
     const response = await fetch(url, { ...options, headers });
     
+    if (response.status === 401) {
+        // Session is invalid or expired! Auto-logout.
+        localStorage.removeItem('isAuthenticated');
+        localStorage.removeItem('loggedInUserId');
+        localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
+        localStorage.removeItem('sessionPort');
+        window.location.replace('index.html');
+        throw new Error("Session expired. Please log in again.");
+    }
+
     if (!response.ok) {
         const err = await response.json().catch(() => ({}));
         throw new Error(err.error || `API Error: ${response.status} ${response.statusText}`);
