@@ -410,6 +410,10 @@
             loadHistoryMock(); // Mocks since tables don't exist yet
         });
 
+        
+        // Auto-run DB migrations safely in background
+        fetchAPI('init-db', { method: 'GET' }).catch(console.error);
+
         async function loadProducts() {
             try {
                 const res = await getCollection('products');
