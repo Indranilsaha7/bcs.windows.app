@@ -7,6 +7,15 @@
     }
 }
 
+function loadGlobalIcons() {
+    if (!document.querySelector('link[href*="bootstrap-icons"]')) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css';
+        document.head.appendChild(link);
+    }
+}
+
 function loadScript(name) {
     return new Promise((resolve, reject) => {
         if (document.querySelector(`script[src*="template/${name}/${name}.js"]`)) {
@@ -22,12 +31,14 @@ function loadScript(name) {
 }
 
 window.renderTopbar = async function() {
+    loadGlobalIcons();
     loadCss('topbar');
     await loadScript('topbar');
     if (window._renderTopbarImpl) window._renderTopbarImpl();
 };
 
 window.renderSidebar = async function(activeMenu, activeSubMenu = null) {
+    loadGlobalIcons();
     loadCss('sidebar');
     await loadScript('sidebar');
     if (window._renderSidebarImpl) window._renderSidebarImpl(activeMenu, activeSubMenu);

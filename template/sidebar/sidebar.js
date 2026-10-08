@@ -30,12 +30,14 @@
                     <i class="bi bi-chevron-down chevron"></i>
                 </button>
                 <div class="submenu">
-                    <a href="all-product.html" class="submenu-item ${activeSubMenu === 'all-product' ? 'active' : ''}">
-                        <div class="submenu-dot"></div> All Products
-                    </a>
-                    <a href="add-product.html" class="submenu-item ${activeSubMenu === 'add-product' ? 'active' : ''}">
-                        <div class="submenu-dot"></div> Add Product
-                    </a>
+                    <div class="submenu-inner">
+                        <a href="all-product.html" class="submenu-item ${activeSubMenu === 'all-product' ? 'active' : ''}">
+                            <div class="submenu-dot"></div> All Products
+                        </a>
+                        <a href="add-product.html" class="submenu-item ${activeSubMenu === 'add-product' ? 'active' : ''}">
+                            <div class="submenu-dot"></div> Add Product
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -65,30 +67,41 @@
     if (!document.querySelector('.sidebar')) {
         document.body.insertAdjacentHTML('afterbegin', SIDEBAR_HTML);
         
-        // Populate user details from localStorage
-        const userName = localStorage.getItem('loggedInUserName') || 'Admin';
-        const userRole = localStorage.getItem('userRole') || 'Administrator';
-        document.getElementById('sidebarUserName').textContent = userName;
-        document.getElementById('sidebarUserRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+        try {
+            // Populate user details from localStorage
+            let userName = localStorage.getItem('loggedInUserName');
+            if (!userName || userName === 'null') userName = 'Admin';
+            
+            let userRole = localStorage.getItem('userRole');
+            if (!userRole || userRole === 'null') userRole = 'administrator';
+            
+            const nameEl = document.getElementById('sidebarUserName');
+            const roleEl = document.getElementById('sidebarUserRole');
+            
+            if (nameEl) nameEl.textContent = userName;
+            if (roleEl) roleEl.textContent = String(userRole).charAt(0).toUpperCase() + String(userRole).slice(1);
 
-        // Bind submenu toggle logic native to sidebar
-        const submenuToggles = document.querySelectorAll('.has-submenu');
-        submenuToggles.forEach(toggle => {
-            toggle.addEventListener('click', function(e) {
-                e.preventDefault();
-                const group = this.closest('.menu-group');
-                group.classList.toggle('open');
+            // Bind submenu toggle logic native to sidebar
+            const submenuToggles = document.querySelectorAll('.has-submenu');
+            submenuToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const group = this.closest('.menu-group');
+                    if (group) group.classList.toggle('open');
+                });
             });
-        });
-        
-        // Define global logout function if not exists
-        if (!window.logout) {
-            window.logout = function() {
-                localStorage.removeItem('isAuthenticated');
-                localStorage.removeItem('sessionId');
-                localStorage.removeItem('sessionPort');
-                window.location.replace('index.html');
-            };
+            
+            // Define global logout function if not exists
+            if (!window.logout) {
+                window.logout = function() {
+                    localStorage.removeItem('isAuthenticated');
+                    localStorage.removeItem('sessionId');
+                    localStorage.removeItem('sessionPort');
+                    window.location.replace('index.html');
+                };
+            }
+        } catch (err) {
+            console.error('Sidebar initialization error:', err);
         }
     }
 };
