@@ -1,4 +1,4 @@
-﻿const API_BASE_URL = 'https://backend.bcs.bcsdeveloper.com/api';
+const API_BASE_URL = 'https://backend.bcs.bcsdeveloper.com/api';
 
 const DB_NAME = 'bcs_api_cache';
 const STORE_NAME = 'collections';
@@ -97,7 +97,7 @@ export async function getCollection(collectionName, forceRefresh = false) {
         
         if (isStale && !activeFetches[collectionName]) {
             // Background fetch to silently update cache for next time
-            activeFetches[collectionName] = fetchAPI(`database/data-manager?table=${collectionName}`)
+            activeFetches[collectionName] = fetchAPI(`database/read?table=${collectionName}`)
                 .then(data => {
                     if (data && data.success && data.data) {
                         setCache(collectionName, { timestamp: Date.now(), data: data.data });
@@ -115,7 +115,7 @@ export async function getCollection(collectionName, forceRefresh = false) {
     }
 
     // No cache (or forced refresh), must await network
-    const data = await fetchAPI(`database/data-manager?table=${collectionName}`);
+    const data = await fetchAPI(`database/read?table=${collectionName}`);
     if (data && data.success && data.data) {
         await setCache(collectionName, { timestamp: Date.now(), data: data.data });
         return {
@@ -136,7 +136,8 @@ export async function getDocument(collectionName, id) {
 }
 
 export async function addDocument(collectionName, data) {
-    const result = await fetchAPI(`database/data-manager?table=${collectionName}`, {
+    const endpoint = `database/add?table=${collectionName}`;
+    const result = await fetchAPI(endpoint, {
         method: 'POST',
         body: JSON.stringify(data)
     });
@@ -146,7 +147,7 @@ export async function addDocument(collectionName, data) {
 }
 
 export async function updateDocument(collectionName, id, data) {
-    const result = await fetchAPI(`database/data-manager?table=${collectionName}&id=${id}`, {
+    const result = await fetchAPI(`database/update?table=${collectionName}&id=${id}`, {
         method: 'PUT',
         body: JSON.stringify(data)
     });
@@ -155,9 +156,11 @@ export async function updateDocument(collectionName, id, data) {
 }
 
 export async function deleteDocument(collectionName, id) {
-    const result = await fetchAPI(`database/data-manager?table=${collectionName}&id=${id}`, {
+    const result = await fetchAPI(`database/delete?table=${collectionName}&id=${id}`, {
         method: 'DELETE'
     });
     await deleteCache(collectionName);
     return result;
 }
+
+

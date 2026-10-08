@@ -26,8 +26,12 @@
   - `mail/`: Email logic.
   - `cron/`: Scheduled tasks.
   - `init-db.js`: Initializes database tables.
-
+- **more details**: [see](backend/before-action-read-me.md)
 ---
+---
+## for deployment
+- `frontend` : https://github.com/Indranilsaha7/bcs.windows.app
+- `backend`  : https://github.com/Indranilsaha7/backend-bcs-pos
 
 ## Rules for Editing Files
 

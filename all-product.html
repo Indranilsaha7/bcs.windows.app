@@ -276,7 +276,7 @@
         }
     </style>
 </head>
-<body>
+<body style="background-color: #212529;">
     <script src="template/layout.js"></script>
     <script>
         renderTopbar();
@@ -292,8 +292,13 @@
                     <button class="btn btn-outline-primary me-2">
                         <i class="bi bi-clock-history me-1"></i> Stock History
                     </button>
+                    <div id="bulkActions" class="d-inline-block me-2" style="display: none !important;">
+                         <span id="selectedCount" class="me-2 fw-bold text-warning">0 selected</span>
+                         <button id="bulkDeleteBtn" class="btn btn-danger" onclick="bulkDelete()"><i class="bi bi-trash-fill"></i> Delete</button>
+                         <button id="bulkRestoreBtn" class="btn btn-success" onclick="bulkRestore()" style="display:none;"><i class="bi bi-arrow-counterclockwise"></i> Restore</button>
+                    </div>
                     <button id="printFullReportBtn" class="btn btn-secondary me-2">
-                        <i class="bi bi-printer-fill me-2"></i> Print Full List
+                        <i class="bi bi-printer-fill me-2"></i> Print
                     </button>
                     <button id="trashToggleBtn" class="btn btn-outline-danger rounded-3 fw-semibold shadow-sm me-2" onclick="toggleTrashMode()">
                         <i class="bi bi-trash3 me-2"></i> View Trash
@@ -450,6 +455,28 @@
     <script type="module">
         import { getCollection, addDocument, updateDocument, deleteDocument, fetchAPI } from './script/api.js';
         
+        window.onerror = function(msg, url, lineNo, columnNo, error) {
+            alert(`JS Error: ${msg}\nLine: ${lineNo}:${columnNo}`);
+            return false;
+        };
+        window.addEventListener('unhandledrejection', function(event) {
+            alert(`Promise Error: ${event.reason}`);
+        });
+
+        function generateUUID() {
+            if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        let selectedProductIds = new Set();
+        
+        
         
         window.showCustomAlert = function(title, message, type = 'success') {
             const container = document.getElementById('custom-alert-container');
@@ -497,6 +524,8 @@
             });
 
             document.getElementById('productSearch').addEventListener('input', filterAndSortProducts);
+            document.getElementById('productSearch').addEventListener('keyup', filterAndSortProducts);
+            document.getElementById('productSearch').addEventListener('search', filterAndSortProducts);
             document.getElementById('sortBy').addEventListener('change', filterAndSortProducts);
             document.getElementById('aiSupplier').addEventListener('change', filterAndSortProducts);
             document.getElementById('aiStockStatus').addEventListener('change', filterAndSortProducts);
@@ -521,12 +550,16 @@
                 const deletedIds = deletedRes.docs.map(d => d.data().productId);
 
                 
-                allProducts = res.docs.map(d => ({ firestoreId: d.id, ...d.data() }));
-                // Flag items as deleted if they exist in deleted_products
-                allProducts.forEach(p => {
-                    if (deletedIds.includes(p.firestoreId)) {
-                        p.isDeleted = true;
-                    }
+                allProducts = res.docs.map(d => {
+                    const data = d.data();
+                    return {
+                        firestoreId: d.id,
+                        isDeleted: !!data.deleteScheduledAt,
+                        ...data,
+                        buyPrice: data.buyPrice || data.buy_price || 0,
+                        sellPrice: data.sellPrice || data.sell_price || 0,
+                        wholesalePrice: data.wholesalePrice || data.wholesale_price || 0
+                    };
                 });
 
                 
@@ -572,8 +605,8 @@
             const aiMax = parseFloat(document.getElementById('aiMaxPrice').value) || Infinity;
 
             filteredProducts = allProducts.filter(p => {
-                const searchStr = `${p.name} ${p.category} ${p.brand} ${p.barcode}`.toLowerCase();
-                if (searchTerm && !searchStr.includes(searchTerm)) return false;
+                if (viewTrashMode && !p.isDeleted) return false;
+                if (!viewTrashMode && p.isDeleted) return false;
                 
                 if (aiBrand && (p.brand || '').toLowerCase() !== aiBrand) return false;
                 
@@ -589,21 +622,51 @@
 
                 const price = p.sellPrice || 0;
                 if (price < aiMin || price > aiMax) return false;
+
+                p._searchScore = 0;
+                if (searchTerm) {
+                    const name = (p.name || '').toLowerCase();
+                    const brand = (p.brand || '').toLowerCase();
+                    const category = (p.category || '').toLowerCase();
+                    const barcode = (p.barcode || '').toLowerCase();
+                    const fullStr = `${name} ${category} ${brand} ${barcode}`;
+                    
+                    const terms = searchTerm.split(/\s+/);
+                    
+                    for (const term of terms) {
+                        if (!fullStr.includes(term)) return false;
+                    }
+                    
+                    // Smart Scoring
+                    if (barcode === searchTerm) p._searchScore += 100;
+                    else if (name === searchTerm) p._searchScore += 80;
+                    else if (name.startsWith(searchTerm)) p._searchScore += 60;
+                    else if (name.includes(searchTerm)) p._searchScore += 40;
+                    
+                    for (const term of terms) {
+                        if (name.includes(term)) p._searchScore += 10;
+                        if (brand.includes(term)) p._searchScore += 5;
+                        if (category.includes(term)) p._searchScore += 2;
+                    }
+                }
                 
                 return true;
             });
 
-            if (!['in-stock-only', 'out-of-stock-only', 'alert-only'].includes(sortBy)) {
-                filteredProducts.sort((a, b) => {
-                    if (sortBy === 'name-asc') return (a.name || '').localeCompare(b.name || '');
-                    if (sortBy === 'name-desc') return (b.name || '').localeCompare(a.name || '');
-                    if (sortBy === 'price-asc') return (a.sellPrice || 0) - (b.sellPrice || 0);
-                    if (sortBy === 'price-desc') return (b.sellPrice || 0) - (a.sellPrice || 0);
-                    if (sortBy === 'qty-asc') return (a.quantity || 0) - (b.quantity || 0);
-                    if (sortBy === 'qty-desc') return (b.quantity || 0) - (a.quantity || 0);
-                    return 0;
-                });
-            }
+            filteredProducts.sort((a, b) => {
+                if (searchTerm && (b._searchScore || 0) !== (a._searchScore || 0)) {
+                    return (b._searchScore || 0) - (a._searchScore || 0);
+                }
+                
+                if (sortBy === 'name-asc') return (a.name || '').localeCompare(b.name || '');
+                if (sortBy === 'name-desc') return (b.name || '').localeCompare(a.name || '');
+                if (sortBy === 'price-asc') return (a.sellPrice || 0) - (b.sellPrice || 0);
+                if (sortBy === 'price-desc') return (b.sellPrice || 0) - (a.sellPrice || 0);
+                if (sortBy === 'qty-asc') return (a.quantity || 0) - (b.quantity || 0);
+                if (sortBy === 'qty-desc') return (b.quantity || 0) - (a.quantity || 0);
+                
+                return 0;
+            });
 
             renderProductsLazy();
         }
@@ -658,19 +721,24 @@
                             <li class="list-group-item d-flex justify-content-between pt-3 border-secondary"><span>Buy Price:</span> <strong>${formatCurrency(p.buyPrice)}</strong></li>
                             <li class="list-group-item d-flex justify-content-between border-secondary"><span>Wholesale:</span> <strong>${formatCurrency(p.wholesalePrice)}</strong></li>
                             <li class="list-group-item d-flex justify-content-between border-secondary"><span>Sell Price:</span> <strong>${formatCurrency(p.sellPrice)}</strong></li>
-                        `;
-                    }
+                        `;}
+                    const isSelected = typeof selectedProductIds !== 'undefined' && selectedProductIds.has(p.firestoreId);
+                    const selectedBg = isSelected ? 'rgba(0, 123, 255, 0.1)' : '';
 
                     cardsHtml += `
-                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
-                        <div class="card product-card h-100" style="border: 2px solid ${borderColor} !important; box-shadow: 0 8px 32px ${borderColor}30 !important;">
-                            <div class="position-relative text-center pt-4">
-                                <i class="bi bi-box-seam" style="font-size: 5rem; color: rgba(255,255,255,0.1);"></i>
+                    <div class="col-md-6 col-lg-4 col-xl-3 mb-4" id="card-col-${p.firestoreId}">
+                        <div class="card product-card h-100" id="card-${p.firestoreId}" onclick="handleCardClick(event, '${p.firestoreId}')" style="border: 2px solid ${borderColor} !important; box-shadow: 0 8px 32px ${borderColor}30 !important; cursor: pointer; background-color: ${selectedBg};">
+                            <div class="position-relative text-center ${p.imageUrl ? '' : 'pt-4'}">
+                                <div class="form-check position-absolute top-0 start-0 m-2" style="z-index: 10;">
+                                    <input class="form-check-input product-select-cb" type="checkbox" id="cb-${p.firestoreId}" value="${p.firestoreId}" ${isSelected ? 'checked' : ''} style="transform: scale(1.5); cursor: pointer;">
+                                </div>
+                                ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" class="w-100" style="pointer-events: none;">` : `<i class="bi bi-box-seam" style="font-size: 5rem; color: rgba(255,255,255,0.1); pointer-events: none;"></i>`}
                             </div>
                             <div class="card-body d-flex flex-column mt-2">
                                 <div class="card-actions">
         ${viewTrashMode ? 
-            `<button class="btn btn-success" onclick="restoreProd('${p.firestoreId}')" title="Restore Product"><i class="bi bi-arrow-counterclockwise"></i> Restore</button>` :
+            `<button class="btn btn-success me-2" onclick="restoreProd('${p.firestoreId}')" title="Restore Product"><i class="bi bi-arrow-counterclockwise"></i> Restore</button>
+             <button class="btn btn-danger" onclick="hardDeleteProd('${p.firestoreId}')" title="Delete Permanently"><i class="bi bi-trash-fill"></i></button>` :
             `<button class="btn btn-success" onclick="openDetails('${p.firestoreId}')"><i class="bi bi-eye-fill"></i></button>
              <button class="btn btn-warning" onclick="editProduct('${p.firestoreId}')"><i class="bi bi-pencil-square"></i></button>
              <button class="btn btn-danger" onclick="deleteProd('${p.firestoreId}')"><i class="bi bi-trash3-fill"></i></button>`
@@ -702,6 +770,158 @@
             localStorage.setItem('editProductId', id);
             window.location.href = 'add-product.html';
         };
+        window.hardDeleteProd = async function(id) {
+            if(confirm("Are you sure you want to permanently delete this product? This action CANNOT be undone.")) {
+                try {
+                    await deleteDocument('products', id);
+                    
+                    // Cleanup from tracking table if it exists
+                    const deletedRes = await getCollection('deleted_products');
+                    const deletedDoc = deletedRes.docs.find(d => d.data().productId === id);
+                    if (deletedDoc) {
+                        await deleteDocument('deleted_products', deletedDoc.id);
+                    }
+                    
+                    allProducts = allProducts.filter(x => x.firestoreId !== id);
+                    filterAndSortProducts();
+                    showCustomAlert('Deleted Permanently', 'The product has been completely removed from the database.');
+                } catch(e) {
+                    showCustomAlert('Error', 'Failed to permanently delete product: ' + e.message, 'failed');
+                }
+            }
+        };
+
+        window.handleCardClick = function(event, id) {
+            // If they clicked a button inside the card, ignore
+            if (event.target.tagName === 'BUTTON' || event.target.closest('button')) {
+                return;
+            }
+
+            // If they clicked the checkbox directly, or clicked the card with Ctrl/Shift
+            const cb = document.getElementById('cb-' + id);
+            if (!cb) return;
+
+            if (event.target === cb) {
+                // Checkbox clicked
+                if (cb.checked) selectedProductIds.add(id);
+                else selectedProductIds.delete(id);
+            } else if (event.ctrlKey || event.metaKey) {
+                // Ctrl/Cmd + click anywhere on card
+                cb.checked = !cb.checked;
+                if (cb.checked) selectedProductIds.add(id);
+                else selectedProductIds.delete(id);
+            } else {
+                // Normal click without Ctrl - optionally do nothing or open details
+                return;
+            }
+            
+            // Visual highlight
+            const card = document.getElementById('card-' + id);
+            if (cb.checked) {
+                card.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+            } else {
+                card.style.backgroundColor = '';
+            }
+
+            updateBulkActionsUI();
+        };
+
+        function updateBulkActionsUI() {
+            const bulkActions = document.getElementById('bulkActions');
+            const selectedCountSpan = document.getElementById('selectedCount');
+            const bulkRestoreBtn = document.getElementById('bulkRestoreBtn');
+            const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+
+            if (selectedProductIds.size > 0) {
+                bulkActions.style.setProperty('display', 'inline-block', 'important');
+                selectedCountSpan.textContent = selectedProductIds.size + ' selected';
+                
+                if (viewTrashMode) {
+                    bulkRestoreBtn.style.display = 'inline-block';
+                    bulkDeleteBtn.innerHTML = '<i class="bi bi-trash-fill"></i> Delete Permanently';
+                } else {
+                    bulkRestoreBtn.style.display = 'none';
+                    bulkDeleteBtn.innerHTML = '<i class="bi bi-trash-fill"></i> Move to Trash';
+                }
+            } else {
+                bulkActions.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        window.bulkDelete = async function() {
+            if (selectedProductIds.size === 0) return;
+            
+            const msg = viewTrashMode 
+                ? `Permanently delete ${selectedProductIds.size} selected products? CANNOT BE UNDONE.` 
+                : `Move ${selectedProductIds.size} products to the trash?`;
+                
+            if (!confirm(msg)) return;
+            
+            const ids = Array.from(selectedProductIds);
+            let successCount = 0;
+            
+            showCustomAlert('Processing', `Deleting ${ids.length} products... please wait.`, 'info');
+            
+            for (const id of ids) {
+                try {
+                    if (viewTrashMode) {
+                        await deleteDocument('products', id);
+                        const deletedRes = await getCollection('deleted_products');
+                        const deletedDoc = deletedRes.docs.find(d => d.data().productId === id);
+                        if (deletedDoc) await deleteDocument('deleted_products', deletedDoc.id);
+                        allProducts = allProducts.filter(x => x.firestoreId !== id);
+                    } else {
+                        const p = allProducts.find(x => x.firestoreId === id);
+                        if (p) {
+                            await addDocument('deleted_products', { 
+                                id: generateUUID(), productId: id, barcode: p.barcode || '', deletedAt: new Date().toISOString() 
+                            });
+                            await updateDocument('products', id, { deleteScheduledAt: new Date().toISOString() });
+                            p.isDeleted = true;
+                        }
+                    }
+                    successCount++;
+                } catch (e) {
+                    console.error("Failed to delete", id, e);
+                }
+            }
+            
+            selectedProductIds.clear();
+            updateBulkActionsUI();
+            filterAndSortProducts();
+            showCustomAlert('Completed', `Successfully deleted ${successCount} products.`);
+        };
+
+        window.bulkRestore = async function() {
+            if (selectedProductIds.size === 0 || !viewTrashMode) return;
+            if (!confirm(`Restore ${selectedProductIds.size} products to active inventory?`)) return;
+            
+            const ids = Array.from(selectedProductIds);
+            let successCount = 0;
+            
+            showCustomAlert('Processing', `Restoring ${ids.length} products... please wait.`, 'info');
+            
+            for (const id of ids) {
+                try {
+                    const p = allProducts.find(x => x.firestoreId === id);
+                    if (p) {
+                        const deletedRes = await getCollection('deleted_products');
+                        const deletedDoc = deletedRes.docs.find(d => d.data().productId === id);
+                        if (deletedDoc) await deleteDocument('deleted_products', deletedDoc.id);
+                        await updateDocument('products', id, { deleteScheduledAt: null });
+                        p.isDeleted = false;
+                        successCount++;
+                    }
+                } catch (e) {
+                    console.error("Failed to restore", id, e);
+                }
+            }
+            
+            selectedProductIds.clear();
+            updateBulkActionsUI();
+            filterAndSortProducts();
+            showCustomAlert('Completed', `Successfully restored ${successCount} products.`);
+        };
 
         window.deleteProd = async function(id) {
             if(confirm("Are you sure you want to move this product to the trash? It will be permanently deleted after 2 days.")) {
@@ -712,10 +932,12 @@
                 
                 try {
                     await addDocument('deleted_products', { 
+                        id: generateUUID(),
                         productId: id, 
                         barcode: p ? p.barcode : '',
                         deletedAt: new Date().toISOString() 
                     });
+                    await updateDocument('products', id, { deleteScheduledAt: new Date().toISOString() });
                 } catch(e) { 
                     if (p) p.isDeleted = false;
                     filterAndSortProducts();
@@ -737,6 +959,7 @@
                     if (deletedDoc) {
                         await deleteDocument('deleted_products', deletedDoc.id);
                     }
+                    await updateDocument('products', id, { deleteScheduledAt: null });
                 } catch(e) { 
                     if (p) p.isDeleted = true;
                     filterAndSortProducts();
@@ -747,19 +970,22 @@
 
         window.toggleTrashMode = function() {
             viewTrashMode = !viewTrashMode;
+            selectedProductIds.clear();
+            updateBulkActionsUI();
             const btn = document.getElementById('trashToggleBtn');
+            const titleEl = document.querySelector('h2.fw-bold');
             if (viewTrashMode) {
                 btn.innerHTML = '<i class="bi bi-arrow-left-circle me-2"></i> Exit Trash';
                 btn.classList.remove('btn-outline-danger');
                 btn.classList.add('btn-danger');
-                document.querySelector('h1.h2').innerHTML = 'Deleted Products <span class="badge bg-danger fs-6 ms-2">Trash</span>';
+                if (titleEl) titleEl.innerHTML = 'Deleted Products <span class="badge bg-danger fs-6 ms-2">Trash</span>';
             } else {
                 btn.innerHTML = '<i class="bi bi-trash3 me-2"></i> View Trash';
                 btn.classList.remove('btn-danger');
                 btn.classList.add('btn-outline-danger');
-                document.querySelector('h1.h2').innerHTML = 'All Products';
+                if (titleEl) titleEl.innerHTML = 'Product List';
             }
-            applyFilters();
+            filterAndSortProducts();
         };
 
         window.openDetails = function(id) {
@@ -872,8 +1098,8 @@
             document.getElementById('productDetailsContainer').innerHTML = `
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <div class="bg-dark rounded-4 p-4 d-flex align-items-center justify-content-center h-100 border border-secondary">
-                            <i class="bi bi-box-seam" style="font-size: 6rem; color: rgba(255,255,255,0.2);"></i>
+                        <div class="bg-dark rounded-4 p-4 d-flex align-items-center justify-content-center h-100 border border-secondary" style="overflow: hidden;">
+                            ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.name}" style="max-width: 100%; max-height: 250px; object-fit: contain;">` : `<i class="bi bi-box-seam" style="font-size: 6rem; color: rgba(255,255,255,0.2);"></i>`}
                         </div>
                     </div>
                     <div class="col-md-8 mt-3 mt-md-0">
@@ -881,19 +1107,37 @@
                         <p class="text-muted mb-4">${p.brand || 'No Brand'} &bull; ${p.category}</p>
                         
                         <div class="row g-3 mb-4">
-                            <div class="col-6">
-                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
+                            <div class="col-4">
+                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center h-100 d-flex flex-column justify-content-center">
                                     <h6 class="text-muted small text-uppercase mb-1">Current Stock</h6>
                                     <h4 class="mb-0 ${p.quantity > 0 ? 'text-success' : 'text-danger'}">${p.quantity || 0} ${p.unit || 'Pcs'}</h4>
                                 </div>
                             </div>
-                            <div class="col-6">
-                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center">
+                            <div class="col-4">
+                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center h-100 d-flex flex-column justify-content-center">
+                                    <h6 class="text-muted small text-uppercase mb-1">Alert Qty</h6>
+                                    <h4 class="mb-0 text-warning">${p.alertQuantity || 0}</h4>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="p-3 bg-dark rounded-3 border border-secondary text-center h-100 d-flex flex-column justify-content-center">
                                     <h6 class="text-muted small text-uppercase mb-1">Barcode</h6>
-                                    <h4 class="mb-0 text-info font-monospace">${p.barcode || 'N/A'}</h4>
+                                    <h5 class="mb-0 text-info font-monospace text-truncate" title="${p.barcode || 'N/A'}">${p.barcode || 'N/A'}</h5>
                                 </div>
                             </div>
                         </div>
+
+                        ${p.description ? `<div class="mb-4"><h6 class="text-muted small text-uppercase mb-2">Description</h6><p class="text-light" style="font-size: 0.95rem;">${p.description}</p></div>` : ''}
+                        
+                        ${(p.packetPerBox || p.pcsPerBox || p.pcsPerPacket) ? `
+                        <div class="mb-4">
+                            <h6 class="text-muted small text-uppercase mb-2">Packaging Details</h6>
+                            <ul class="list-group list-group-flush border-top border-secondary">
+                                ${p.packetPerBox ? `<li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between px-0"><span>Packets per Box:</span> <strong>${p.packetPerBox}</strong></li>` : ''}
+                                ${p.pcsPerBox ? `<li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between px-0"><span>Pcs per Box:</span> <strong>${p.pcsPerBox}</strong></li>` : ''}
+                                ${p.pcsPerPacket ? `<li class="list-group-item bg-transparent text-light border-secondary d-flex justify-content-between px-0"><span>Pcs per Packet:</span> <strong>${p.pcsPerPacket}</strong></li>` : ''}
+                            </ul>
+                        </div>` : ''}
                     </div>
                 </div>
                 ${pricingHtml}
@@ -923,6 +1167,100 @@
             }, 1000);
         });
 
+        // Rubber Band Selection (Google Drive Style)
+        let isSelecting = false;
+        let startX = 0, startY = 0;
+        let initialSelectedIds = new Set();
+        
+        const selectionBox = document.createElement('div');
+        selectionBox.id = 'selection-box';
+        selectionBox.style.cssText = 'position: absolute; display: none; background: rgba(0, 123, 255, 0.2); border: 1px solid #007bff; pointer-events: none; z-index: 9999;';
+        document.body.appendChild(selectionBox);
+
+        document.addEventListener('mousedown', function(e) {
+            if (e.button !== 0) return;
+            if (e.target.closest('.card') || e.target.closest('button') || e.target.closest('input') || e.target.closest('select') || e.target.closest('.modal')) {
+                return;
+            }
+
+            isSelecting = true;
+            startX = e.pageX;
+            startY = e.pageY;
+            
+            initialSelectedIds = new Set(selectedProductIds);
+            if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                initialSelectedIds.clear();
+                selectedProductIds.clear();
+                document.querySelectorAll('.product-select-cb').forEach(cb => {
+                    cb.checked = false;
+                    document.getElementById('card-' + cb.value).style.backgroundColor = '';
+                });
+                updateBulkActionsUI();
+            }
+            
+            selectionBox.style.left = startX + 'px';
+            selectionBox.style.top = startY + 'px';
+            selectionBox.style.width = '0px';
+            selectionBox.style.height = '0px';
+            selectionBox.style.display = 'block';
+        });
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isSelecting) return;
+            e.preventDefault();
+
+            const currentX = e.pageX;
+            const currentY = e.pageY;
+
+            const x = Math.min(startX, currentX);
+            const y = Math.min(startY, currentY);
+            const w = Math.abs(currentX - startX);
+            const h = Math.abs(currentY - startY);
+
+            selectionBox.style.left = x + 'px';
+            selectionBox.style.top = y + 'px';
+            selectionBox.style.width = w + 'px';
+            selectionBox.style.height = h + 'px';
+
+            const selectionRect = { left: x, top: y, right: x + w, bottom: y + h };
+
+            document.querySelectorAll('.product-card').forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardLeft = rect.left + window.scrollX;
+                const cardTop = rect.top + window.scrollY;
+                const cardRight = cardLeft + rect.width;
+                const cardBottom = cardTop + rect.height;
+
+                const intersects = !(selectionRect.right < cardLeft || 
+                                     selectionRect.left > cardRight || 
+                                     selectionRect.bottom < cardTop || 
+                                     selectionRect.top > cardBottom);
+
+                const id = card.id.replace('card-', '');
+                if (intersects) {
+                    selectedProductIds.add(id);
+                } else {
+                    if (initialSelectedIds.has(id)) {
+                        selectedProductIds.add(id);
+                    } else {
+                        selectedProductIds.delete(id);
+                    }
+                }
+                
+                const cb = document.getElementById('cb-' + id);
+                if (cb) cb.checked = selectedProductIds.has(id);
+                card.style.backgroundColor = selectedProductIds.has(id) ? 'rgba(0, 123, 255, 0.1)' : '';
+            });
+            updateBulkActionsUI();
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            if (isSelecting) {
+                isSelecting = false;
+                selectionBox.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
+        

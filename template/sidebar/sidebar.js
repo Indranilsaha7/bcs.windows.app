@@ -1,4 +1,4 @@
-﻿window._renderSidebarImpl = function(activeMenu, activeSubMenu = null) {
+window._renderSidebarImpl = function(activeMenu, activeSubMenu = null) {
     const SIDEBAR_HTML = `
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -33,6 +33,9 @@
                     <div class="submenu-inner">
                         <a href="all-product.html" class="submenu-item ${activeSubMenu === 'all-product' ? 'active' : ''}">
                             <div class="submenu-dot"></div> All Products
+                        </a>
+                        <a href="add-production-product.html" class="submenu-item ${activeSubMenu === 'add-production-product' ? 'active' : ''}">
+                            <div class="submenu-dot"></div> Add Production Product
                         </a>
                         <a href="add-product.html" class="submenu-item ${activeSubMenu === 'add-product' ? 'active' : ''}">
                             <div class="submenu-dot"></div> Add Product
@@ -105,3 +108,4 @@
         }
     }
 };
+

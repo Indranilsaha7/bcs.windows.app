@@ -1,31 +1,32 @@
-﻿{
-    "name":  "windows-app",
-    "version":  "1.0.0",
-    "description":  "BCS Enterprise POS",
-    "main":  "main.js",
-    "scripts":  {
-                    "start":  "electron ."
-                },
-    "dependencies":  {
-                         "electron":  "^31.3.1"
-                     },
-    "devDependencies":  {
-                            "electron-builder":  "^26.15.3",
-                            "electron-updater":  "^6.8.9"
-                        },
-    "repository":  {
-                       "type":  "git",
-                       "url":  "https://github.com/Indranilsaha7/bcs.windows.app"
-                   },
-    "build":  {
-                  "appId":  "com.bcsdeveloper.pos",
-                  "productName":  "BCS Enterprise POS",
-                  "publish":  [
-                                  {
-                                      "provider":  "github",
-                                      "owner":  "Indranilsaha7",
-                                      "repo":  "bcs.windows.app"
-                                  }
-                              ]
-              }
+{
+    "name": "BCS Enterprise POS PRO Max Application",
+    "version": "1.9.5",
+    "description": "BCS Enterprise POS PRO Max",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron ."
+    },
+    "dependencies": {
+        "acorn": "^8.19.0",
+        "electron": "^31.3.1"
+    },
+    "devDependencies": {
+        "electron-builder": "^26.15.3",
+        "electron-updater": "^6.8.9"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Indranilsaha7/bcs.windows.app"
+    },
+    "build": {
+        "appId": "com.bcsdeveloper.pos",
+        "productName": "BCS Enterprise POS PRO Max",
+        "publish": [
+            {
+                "provider": "github",
+                "owner": "Indranilsaha7",
+                "repo": "bcs.windows.app"
+            }
+        ]
+    }
 }

@@ -10,6 +10,7 @@ function createWindow() {
     height: 800,
     minWidth: 1024,
     minHeight: 768,
+    backgroundColor: '#212529',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -52,3 +53,4 @@ autoUpdater.on('update-downloaded', (info) => {
 ipcMain.on('restart_app', () => {
   autoUpdater.quitAndInstall();
 });
+
