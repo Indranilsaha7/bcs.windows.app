@@ -34,6 +34,12 @@ window._renderSidebarImpl = function(activeMenu, activeSubMenu = null) {
                         <a href="all-product.html" class="submenu-item ${activeSubMenu === 'all-product' ? 'active' : ''}">
                             <div class="submenu-dot"></div> All Products
                         </a>
+                                                <a href="add-production.html" class="submenu-item ${activeSubMenu === 'add-production' ? 'active' : ''}">
+                            <div class="submenu-dot"></div> Add Production
+                        </a>
+                        <a href="production-history.html" class="submenu-item ${activeSubMenu === 'production-history' ? 'active' : ''}">
+                            <div class="submenu-dot"></div> Production History
+                        </a>
                         <a href="add-production-product.html" class="submenu-item ${activeSubMenu === 'add-production-product' ? 'active' : ''}">
                             <div class="submenu-dot"></div> Add Production Product
                         </a>
@@ -108,4 +114,7 @@ window._renderSidebarImpl = function(activeMenu, activeSubMenu = null) {
         }
     }
 };
+
+
+
 
