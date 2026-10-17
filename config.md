@@ -107,6 +107,19 @@ When collaborating on this project, please adhere to the following rules:
 
 ---
 
+### Custom Domain Email System (No @gmail.com)
+The backend email pipeline (`mail/queue.js` and `cron/daily-report.js`) uses your professional custom domain emails:
+
+- **Cloudflare Environment Variables**:
+  - `FROM_EMAIL`: Custom sender address (e.g. `support@bcsdeveloper.com`, `reports@bcs.bcsdeveloper.com`).
+  - `FROM_NAME`: Official sender display name (`Baroda Computers And Sales`).
+  - `ADMIN_EMAIL`: Custom domain administrator recipient for daily reports (e.g. `admin@bcsdeveloper.com`).
+  - `REPLY_TO`: Custom domain reply-to address (e.g. `support@bcsdeveloper.com`).
+  - `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`: Google Workspace OAuth credentials with custom domain alias permission.
+- **Rule**: All email headers (`From`, `Reply-To`, `To`) are sanitized and dynamically driven by environment variables. No `@gmail.com` addresses are hardcoded in application code.
+
+---
+
 ### Windows Defender & SmartScreen Compliance
 To prevent Windows Defender / SmartScreen from false-flagging the app:
 
