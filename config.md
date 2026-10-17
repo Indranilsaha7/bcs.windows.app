@@ -98,7 +98,7 @@ To prevent Windows Defender / SmartScreen from false-flagging the app:
 1. **PE Metadata & Permissions (Configured in `package.json`)**:
    - `requestedExecutionLevel: "asInvoker"`: Runs with standard user rights without demanding UAC elevation, avoiding high-risk heuristic triggers.
    - `perMachine: false`: Installs to `%LOCALAPPDATA%\Programs\` rather than system folders, preventing system modification alerts.
-   - Populated Publisher, Legal Trademarks, Copyright, and high-resolution `build/icon.ico`.
+   - Populated Publisher (`bcsdeveloper`), Legal Trademarks, Copyright, and high-resolution `assets/icon.ico`.
    - Excluded internal backend and markdown docs from the packaged `.asar` to keep binary clean and small.
 
 2. **Authenticode Code Signing (Optional / Recommended)**:

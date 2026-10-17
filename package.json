@@ -23,7 +23,7 @@
     "build": {
         "appId": "com.bcsdeveloper.pos",
         "productName": "BCS Enterprise POS PRO Max",
-        "copyright": "Copyright © 2026 Baroda Computer And Sales. All rights reserved.",
+        "copyright": "Copyright © 2026 bcsdeveloper. All rights reserved.",
         "directories": {
             "output": "dist",
             "buildResources": "assets"
@@ -44,8 +44,8 @@
                 }
             ],
             "icon": "assets/icon.ico",
-            "publisherName": "Baroda Computer And Sales",
-            "legalTrademarks": "BCS Enterprise POS is a trademark of Baroda Computer And Sales",
+            "publisherName": "bcsdeveloper",
+            "legalTrademarks": "BCS Enterprise POS is a trademark of bcsdeveloper",
             "requestedExecutionLevel": "asInvoker",
             "verifyUpdateCodeSignature": false,
             "rfc3161TimeStampServer": "http://timestamp.digicert.com"
