@@ -89,3 +89,26 @@ When collaborating on this project, please adhere to the following rules:
      ```
   3. GitHub Actions (`.github/workflows/build-release.yml`) builds Windows binaries and publishes the release on GitHub.
   4. Installed client instances automatically download and prompt users to restart.
+
+---
+
+### Windows Defender & SmartScreen Compliance
+To prevent Windows Defender / SmartScreen from false-flagging the app:
+
+1. **PE Metadata & Permissions (Configured in `package.json`)**:
+   - `requestedExecutionLevel: "asInvoker"`: Runs with standard user rights without demanding UAC elevation, avoiding high-risk heuristic triggers.
+   - `perMachine: false`: Installs to `%LOCALAPPDATA%\Programs\` rather than system folders, preventing system modification alerts.
+   - Populated Publisher, Legal Trademarks, Copyright, and high-resolution `build/icon.ico`.
+   - Excluded internal backend and markdown docs from the packaged `.asar` to keep binary clean and small.
+
+2. **Authenticode Code Signing (Optional / Recommended)**:
+   - If you have an Authenticode certificate (`.pfx`), add two repository secrets in GitHub (`Settings -> Secrets and variables -> Actions`):
+     - `CSC_LINK`: Base64 encoded content of the `.pfx` file.
+     - `CSC_KEY_PASSWORD`: Password for the `.pfx` file.
+   - `electron-builder` will automatically sign the `.exe` and the uninstaller.
+
+3. **Microsoft Security Intelligence Whitelisting (Free & Instant)**:
+   - For any new release binary, submit the installer `.exe` directly to Microsoft's developer portal:
+     👉 [https://www.microsoft.com/en-us/wdsi/filesubmission](https://www.microsoft.com/en-us/wdsi/filesubmission)
+   - Select **"Software Developer"** -> Category: **"Incorrectly detected as malware (false positive)"**.
+   - Microsoft's automated security pipeline scans the binary, clears Defender definitions, and pushes cloud exclusion within 1–2 hours worldwide.

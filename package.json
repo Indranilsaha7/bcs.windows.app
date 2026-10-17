@@ -23,6 +23,44 @@
     "build": {
         "appId": "com.bcsdeveloper.pos",
         "productName": "BCS Enterprise POS PRO Max",
+        "copyright": "Copyright © 2026 Baroda Computer And Sales. All rights reserved.",
+        "directories": {
+            "output": "dist",
+            "buildResources": "assets"
+        },
+        "files": [
+            "**/*",
+            "!backend/**",
+            "!*.md",
+            "!.github/**"
+        ],
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": [
+                        "x64"
+                    ]
+                }
+            ],
+            "icon": "assets/icon.ico",
+            "publisherName": "Baroda Computer And Sales",
+            "legalTrademarks": "BCS Enterprise POS is a trademark of Baroda Computer And Sales",
+            "requestedExecutionLevel": "asInvoker",
+            "verifyUpdateCodeSignature": false,
+            "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": false,
+            "allowToChangeInstallationDirectory": true,
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true,
+            "shortcutName": "BCS Enterprise POS",
+            "uninstallDisplayName": "BCS Enterprise POS",
+            "runAfterFinish": true,
+            "differentialPackage": false
+        },
         "publish": [
             {
                 "provider": "github",
