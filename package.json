@@ -2,6 +2,7 @@
     "name": "bcs-enterprise-pos",
     "version": "1.9.5",
     "description": "BCS Enterprise POS PRO Max",
+    "author": "bcsdeveloper",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
@@ -10,11 +11,11 @@
     },
     "dependencies": {
         "acorn": "^8.19.0",
-        "electron": "^31.3.1"
+        "electron-updater": "^6.8.9"
     },
     "devDependencies": {
-        "electron-builder": "^26.15.3",
-        "electron-updater": "^6.8.9"
+        "electron": "^31.3.1",
+        "electron-builder": "^26.15.3"
     },
     "repository": {
         "type": "git",
@@ -44,11 +45,13 @@
                 }
             ],
             "icon": "assets/icon.ico",
-            "publisherName": "bcsdeveloper",
             "legalTrademarks": "BCS Enterprise POS is a trademark of bcsdeveloper",
             "requestedExecutionLevel": "asInvoker",
             "verifyUpdateCodeSignature": false,
-            "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+            "signtoolOptions": {
+                "publisherName": "bcsdeveloper",
+                "rfc3161TimeStampServer": "http://timestamp.digicert.com"
+            }
         },
         "nsis": {
             "oneClick": false,
