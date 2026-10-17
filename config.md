@@ -5,15 +5,15 @@
 **Frontend: Electron App**
 - **Type**: Desktop POS application (Windows).
 - **Core Technology**: Electron, HTML, CSS, Vanilla JavaScript.
-- **Views**: `index.html` (Login/Entry), `dashboard.html`, `pos.html`, `all-product.html`, `add-product.html`, `add-production.html`, `production-history.html`, `add-production-product.html`.
+- **Views**: `index.html` (Login/Entry), `dashboard.html`, `pos.html`, `all-product.html`, `add-product.html`, `add-production.html`, `production-history.html`, `add-production-product.html`, `settings.html`.
 - **Scripts**: 
-  - `main.js`: Main Electron process.
+  - `main.js`: Main Electron process and auto-update IPC coordinator.
   - `script/api.js`: Handles API calls to the backend with IndexedDB caching and optimistic updates.
   - `script/auth.js`: Handles user authentication and security.
   - `script/add-alerts.js`, `script/opt-ui.js`: UI logic and alert handling.
   - `script/argon2-bundle.js`: Hashing/encryption logic on the client side.
 - **Templates**: Reusable UI components (`sidebar`, `topbar`) and a layout manager (`layout.js`).
-- **Build/Release**: Uses `electron-builder` and `.github/workflows` to build and publish updates to GitHub (`Indranilsaha7/bcs.windows.app`).
+- **Build/Release**: Uses `electron-builder` and `.github/workflows/build-release.yml` to build and publish updates to GitHub (`Indranilsaha7/bcs.windows.app`).
 
 **Backend: Cloudflare Functions / Workers (D1 Database)**
 - **Type**: Serverless API.
@@ -68,6 +68,24 @@ When collaborating on this project, please adhere to the following rules:
 - **Sales**: `id`, `total`, `date`.
 - **Deleted Products**: Tracks soft-deleted or removed products for auditing (`productId`, `barcode`, `deletedAt`).
 
-### Deployment
-- Changes pushed to the GitHub repository automatically trigger a GitHub Actions workflow to build the Electron `.exe` using `electron-builder`.
-- Auto-updates are configured via `electron-updater` checking the GitHub Releases page.
+### System Update System & Deployment Pipeline
+- **Auto-Updater Integration**:
+  - `electron-updater` monitors GitHub Releases for `Indranilsaha7/bcs.windows.app`.
+  - Background silent check executes on startup (`autoUpdater.checkForUpdatesAndNotify()`).
+  - IPC lifecycle events bridge `main.js` with renderer views (`template/topbar/topbar.js` and `settings.html`):
+    - `checking_for_update`: Displays spinner indicator.
+    - `update_available`: Triggers automated background download.
+    - `download_progress`: Relays real-time percentage, speed (MB/s), and transferred bytes to UI progress bars.
+    - `update_downloaded`: Activates green "Restart to Install" button and modal actions.
+    - `update_not_available`: Confirms latest version status.
+    - `update_error`: Displays retry alerts.
+- **Publishing a New App Version**:
+  1. Increment version in `package.json` (e.g. `1.9.6`).
+  2. Commit and tag:
+     ```bash
+     git commit -am "chore: release v1.9.6"
+     git tag v1.9.6
+     git push origin main --tags
+     ```
+  3. GitHub Actions (`.github/workflows/build-release.yml`) builds Windows binaries and publishes the release on GitHub.
+  4. Installed client instances automatically download and prompt users to restart.

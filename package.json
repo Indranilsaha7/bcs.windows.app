@@ -1,10 +1,12 @@
 {
-    "name": "BCS Enterprise POS PRO Max Application",
+    "name": "bcs-enterprise-pos",
     "version": "1.9.5",
     "description": "BCS Enterprise POS PRO Max",
     "main": "main.js",
     "scripts": {
-        "start": "electron ."
+        "start": "electron .",
+        "build": "electron-builder --win",
+        "release": "electron-builder --win --publish always"
     },
     "dependencies": {
         "acorn": "^8.19.0",
