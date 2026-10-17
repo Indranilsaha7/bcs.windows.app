@@ -29,8 +29,10 @@
 ---
 ---
 ## for deployment
-- `frontend` : https://github.com/Indranilsaha7/bcs.windows.app
-- `backend`  : https://github.com/Indranilsaha7/backend-bcs-pos
+- `frontend` (App Repo) : https://github.com/Indranilsaha7/bcs.windows.app
+- `backend` (Functions) : https://github.com/Indranilsaha7/backend-bcs-pos
+- `live API Endpoint`   : https://backend.bcs.bcsdeveloper.com/api
+- `API Master Key`      : `backend-bcs-pos` (`x-api-key` header)
 
 ## Rules for Editing Files
 
