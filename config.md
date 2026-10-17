@@ -2,18 +2,24 @@
 
 ## What We Have
 
-**Frontend: Electron App**
+**1. Desktop POS App (`pos app/`)**
 - **Type**: Desktop POS application (Windows).
-- **Core Technology**: Electron, HTML, CSS, Vanilla JavaScript.
-- **Views**: `index.html` (Login/Entry), `dashboard.html`, `pos.html`, `all-product.html`, `add-product.html`, `add-production.html`, `production-history.html`, `add-production-product.html`, `settings.html`.
+- **Core Technology**: Electron 31, HTML5, CSS3, Vanilla JavaScript, NSIS.
+- **Views**: `pos app/index.html` (Login/Entry), `pos app/dashboard.html`, `pos app/pos.html`, `pos app/all-product.html`, `pos app/add-product.html`, `pos app/add-production.html`, `pos app/production-history.html`, `pos app/add-production-product.html`, `pos app/settings.html`.
 - **Scripts**: 
-  - `main.js`: Main Electron process and auto-update IPC coordinator.
-  - `script/api.js`: Handles API calls to the backend with IndexedDB caching and optimistic updates.
-  - `script/auth.js`: Handles user authentication and security.
-  - `script/add-alerts.js`, `script/opt-ui.js`: UI logic and alert handling.
-  - `script/argon2-bundle.js`: Hashing/encryption logic on the client side.
-- **Templates**: Reusable UI components (`sidebar`, `topbar`) and a layout manager (`layout.js`).
-- **Build/Release**: Uses `electron-builder` and `.github/workflows/build-release.yml` to build and publish updates to GitHub (`Indranilsaha7/bcs.windows.app`).
+  - `pos app/main.js`: Main Electron process and auto-update IPC coordinator.
+  - `pos app/script/api.js`: Handles API calls to backend with IndexedDB caching and optimistic updates.
+  - `pos app/script/auth.js`: Handles user authentication and security.
+- **Templates**: Reusable UI components (`pos app/template/sidebar/`, `pos app/template/topbar/`) and layout manager (`pos app/template/layout.js`).
+- **Build/Release**: `npm run build:pos` or `npm --prefix "pos app" run build`.
+
+**2. Customer Portal & E-Commerce (`customer+e-com/`)**
+- **Type**: 2-in-1 Customer Account Portal + Online Storefront.
+- **Security**: Public read-only catalog (`/api/ecommerce/products`), server-validated checkout (`/api/ecommerce/order`).
+
+**3. Delivery Portal (`delivery/`)**
+- **Type**: Logistics and delivery driver dispatch web application.
+- **Features**: Driver assignments, order route tracking, and OTP verification upon delivery.
 
 **Backend: Cloudflare Functions / Workers (D1 Database)**
 - **Type**: Serverless API.
