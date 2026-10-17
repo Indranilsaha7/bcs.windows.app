@@ -34,11 +34,13 @@
 - **more details**: [see](backend/before-action-read-me.md)
 ---
 ---
-## for deployment
-- `frontend` (App Repo) : https://github.com/Indranilsaha7/bcs.windows.app
-- `backend` (Functions) : https://github.com/Indranilsaha7/backend-bcs-pos
-- `live API Endpoint`   : https://backend.bcs.bcsdeveloper.com/api
-- `API Master Key`      : `backend-bcs-pos` (`x-api-key` header)
+## Official GitHub Repositories (`barodacomputerandsales`)
+- **1. Desktop POS App (`pos app/`)**: https://github.com/barodacomputerandsales/pos
+- **2. Customer Portal & E-Commerce (`customer+e-com/`)**: https://github.com/barodacomputerandsales/e-com-customer-portal
+- **3. Delivery Portal (`delivery/`)**: https://github.com/barodacomputerandsales/delivery
+- **4. Backend Serverless API (`backend/`)**: https://github.com/barodacomputerandsales/backend
+- **Live Backend Serverless API**: https://backend.bcs.bcsdeveloper.com/api
+- **API Master Key**: `backend-bcs-pos` (`x-api-key` header)
 
 ## Rules for Editing Files
 
