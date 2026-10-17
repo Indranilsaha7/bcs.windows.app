@@ -68,6 +68,11 @@ When collaborating on this project, please adhere to the following rules:
 - **Productions**: `id`, `batchNumber`, `finishedProductId`, `productName`, `barcode`, `category`, `quantityProduced`, `unit`, `materialsUsed` (JSON array of consumed items), `materialCost`, `overheadCost`, `totalCost`, `costPerUnit`, `date`, `producedBy`, `notes`, `createdAt`.
 - **Customers**: `id`, `name`, `phone`.
 - **Sales**: `id`, `total`, `date`.
+- **Purchases**: `id`, `items`, `total`, `date`.
+- **Orders (E-Commerce & Delivery)**: `id`, `orderNumber`, `customerId`, `customerName`, `customerPhone`, `shippingAddress`, `items` (JSON), `subtotal`, `tax`, `discount`, `deliveryFee`, `total`, `paymentMethod`, `paymentStatus`, `orderStatus`, `orderSource`, `createdAt`.
+- **Deliveries (Logistics & Dispatch)**: `id`, `orderId`, `driverId`, `driverName`, `driverPhone`, `pickupAddress`, `deliveryAddress`, `deliveryStatus`, `otpCode`, `deliveryNotes`, `dispatchedAt`, `deliveredAt`.
+- **Delivery Agents**: `id`, `name`, `phone`, `vehicleType`, `status`, `activeOrderId`.
+- **Customer Accounts (Portal)**: `id`, `customerId`, `email`, `password_hash`, `loyaltyPoints`, `savedAddresses` (JSON), `createdAt`.
 - **Deleted Products**: Tracks soft-deleted or removed products for auditing (`productId`, `barcode`, `deletedAt`).
 
 ### System Update System & Deployment Pipeline
