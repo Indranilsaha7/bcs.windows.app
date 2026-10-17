@@ -5,10 +5,10 @@
 **Frontend: Electron App**
 - **Type**: Desktop POS application (Windows).
 - **Core Technology**: Electron, HTML, CSS, Vanilla JavaScript.
-- **Views**: `index.html` (Login/Entry), `dashboard.html`, `pos.html`, `add-product.html`, `all-product.html`.
+- **Views**: `index.html` (Login/Entry), `dashboard.html`, `pos.html`, `all-product.html`, `add-product.html`, `add-production.html`, `production-history.html`, `add-production-product.html`.
 - **Scripts**: 
   - `main.js`: Main Electron process.
-  - `script/api.js`: Handles API calls to the backend.
+  - `script/api.js`: Handles API calls to the backend with IndexedDB caching and optimistic updates.
   - `script/auth.js`: Handles user authentication and security.
   - `script/add-alerts.js`, `script/opt-ui.js`: UI logic and alert handling.
   - `script/argon2-bundle.js`: Hashing/encryption logic on the client side.
@@ -19,13 +19,12 @@
 - **Type**: Serverless API.
 - **Location**: `backend/functions/api/`
 - **Database**: SQLite using Cloudflare D1 (`context.env.DB`).
-- **Core Tables**: `users`, `products`, `customers`, `sales`, `deleted_products`.
+- **Core Tables**: `users`, `products`, `productions`, `customers`, `sales`, `purchases`, `deleted_products`.
 - **Key Modules**:
   - `auth/`: Handles session, login, and registration.
-  - `database/`: Database operations and queries.
-  - `mail/`: Email logic.
-  - `cron/`: Scheduled tasks.
-  - `init-db.js`: Initializes database tables.
+  - `database/`: Dynamic microservices (`add.js`, `read.js`, `update.js`, `delete.js`, `data-manager.js`).
+  - `mail/`: Email logic queue.
+  - `cron/`: Scheduled tasks (e.g. 48h purge of soft-deleted products).
 - **more details**: [see](backend/before-action-read-me.md)
 ---
 ---
@@ -44,8 +43,9 @@ When collaborating on this project, please adhere to the following rules:
 
 2. **Backend Changes (Cloudflare Functions)**:
    - All backend API endpoints should reside inside `backend/functions/api/`.
-   - Ensure standard CORS headers are attached to all responses (`Access-Control-Allow-Origin: *`, etc.) as seen in `init-db.js`.
-   - Use parameterized queries with `context.env.DB.prepare()` to avoid SQL injection when interacting with the database.
+   - Ensure standard CORS headers are attached to all responses (`Access-Control-Allow-Origin: *`, etc.).
+   - Use parameterized queries with `context.env.DB.prepare()` and `.bind()` to prevent SQL injection when interacting with the database.
+   - Table names must always be sanitized (`table.replace(/[^a-zA-Z0-9_]/g, '')`).
 
 3. **General Best Practices**:
    - Do not commit secrets (like `gmail.json` or API keys) directly.
@@ -62,7 +62,8 @@ When collaborating on this project, please adhere to the following rules:
 
 ### Database Schema Overview
 - **Users**: `id`, `username`, `password_hash`, `security_code`, `session_id`, `trusted_port`, `role`, `permissions`.
-- **Products**: `id`, `name`, `category`, `sellPrice`, `quantity`.
+- **Products**: `id`, `name`, `barcode`, `barcodeType`, `unit`, `brand`, `category`, `sellPrice`, `buyPrice`, `wholesalePrice`, `quantity`, `alertQuantity`, `isProduction`, `priceTiers`, `imageUrl`, `description`, `deleteScheduledAt`.
+- **Productions**: `id`, `batchNumber`, `finishedProductId`, `productName`, `barcode`, `category`, `quantityProduced`, `unit`, `materialsUsed` (JSON array of consumed items), `materialCost`, `overheadCost`, `totalCost`, `costPerUnit`, `date`, `producedBy`, `notes`, `createdAt`.
 - **Customers**: `id`, `name`, `phone`.
 - **Sales**: `id`, `total`, `date`.
 - **Deleted Products**: Tracks soft-deleted or removed products for auditing (`productId`, `barcode`, `deletedAt`).
