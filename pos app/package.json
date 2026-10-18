@@ -19,7 +19,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/Indranilsaha7/bcs.windows.app"
+        "url": "https://github.com/barodacomputerandsales/pos"
     },
     "build": {
         "appId": "com.bcsdeveloper.pos",
@@ -67,8 +67,8 @@
         "publish": [
             {
                 "provider": "github",
-                "owner": "Indranilsaha7",
-                "repo": "bcs.windows.app"
+                "owner": "barodacomputerandsales",
+                "repo": "pos"
             }
         ]
     }

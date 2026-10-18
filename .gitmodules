@@ -1,0 +1,6 @@
+[submodule "automation"]
+	path = automation
+	url = https://github.com/barodacomputerandsales/automation.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/barodacomputerandsales/backend.git
